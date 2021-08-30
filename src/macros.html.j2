@@ -1,0 +1,19 @@
+{# Formatting macros #}
+{%- macro formatEmail(email) -%}
+  <span class="contact-email"><a href="mailto:{{ email }}">{{ email }}</a></span>
+{%- endmacro -%}
+
+{%- macro formatOrcid(orcid) -%}
+  <span class="contact-orcid"><span class="mini-orcid-icon-16"></span> {{ orcid }}</span>
+{%- endmacro -%}
+
+{%- macro integrationValue(reply, questionUuid) -%}
+  {%- if reply and reply.value.value.type == "IntegrationType" -%}
+    {%- set question = km.entities.questions[questionUuid] -%}
+    {%- set integration = km.entities.integrations[question.integrationUuid] -%}
+    {%- set integrationLink = integration.itemUrl|replace("${id}", reply.value.value.id) -%}
+    <a href="{{ integrationLink }}" target="_blank">{{ reply.value.value.value }}</a>
+  {%- elif reply %}
+    {{ reply.value.value.value }}
+  {%- endif -%}
+{%- endmacro -%}

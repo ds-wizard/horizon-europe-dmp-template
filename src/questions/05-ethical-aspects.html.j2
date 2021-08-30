@@ -1,0 +1,74 @@
+<div id="q-ethical-aspects" class="question">
+  <div class="answer">
+
+    {# Produced datasets #}
+    {%- set producedDataPath = [uuids.preservingCUuid, uuids.producedDataQUuid]|reply_path -%}
+    {%- set producedDataItems = repliesMap[producedDataPath]|reply_items -%}
+    {%- if producedDataItems|length > 0 -%}
+      <p>For the data we produce, the ethical aspects are as followsS:
+      <ul>
+      {%- for i in producedDataItems -%}
+        {%- set pathPrefix = [producedDataPath, i]|reply_path -%}
+        {%- set producedDataName = repliesMap[[pathPrefix, uuids.producedDataNameQUuid]|reply_path]|reply_str_value -%}
+        {%- set containPersonal = repliesMap[[pathPrefix, uuids.containPersonalQUuid]|reply_path]|reply_str_value -%}
+        {%- set containSensitive = repliesMap[[pathPrefix, uuids.containSensitiveQUuid]|reply_path]|reply_str_value -%}
+        <li>
+          <strong>{{ producedDataName if producedDataName else "(no name given)" }}</strong>
+          {%- if containPersonal or containSensitive -%}
+            <ul>
+            {%- if containPersonal == uuids.containPersonalNoAUuid -%}
+              <li>It does not contain personal data.</li>
+            {%- elif containPersonal == uuids.containPersonalYesAUuid -%}
+              <li>It contains personal data.</li>
+            {%- endif -%}
+            {%- if containSensitive == uuids.containSensitiveNoAUuid -%}
+              <li>It does not contain sensitive data.</li>
+            {%- elif containSensitive == uuids.containSensitiveYesAUuid -%}
+              <li>It contains sensitive data.</li>
+            {%- endif -%}
+            </ul>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+      </ul>
+      </p>
+    {%- endif -%}
+
+
+    {# Collected data #}
+    {%- set needConsentPath = [uuids.creatingCUuid, uuids.needConsentQUuid]|reply_path -%}
+    {%- set needConsentAUuid = repliesMap[needConsentPath]|reply_str_value -%}
+    {%- if needConsentAUuid -%}
+      <p>
+      {%- if needConsentAUuid == uuids.needConsentNoNotCollectAUuid -%}
+        We don't need any consent for collected data because those are not personal.
+      {%- elif needConsentAUuid == uuids.needConsentNoAnotherLegalAUuid -%}
+        Our work on personal data can be done without consent using another legal base
+        {%- set legalBasePath = [needConsentPath, uuids.needConsentNoAnotherLegalAUuid, uuids.legalBaseQUuid]|reply_path -%}
+        {%- set legalBaseAUuid = repliesMap[legalBasePath]|reply_str_value -%}
+        {%- if legalBaseAUuid == uuids.legalBaseComplianceAUuid %}
+          <span class="separator">&ndash;</span> compliance with a legal obligation.
+        {%- elif legalBaseAUuid == uuids.legalBaseContractAUuid %}
+          <span class="separator">&ndash;</span> contractual performance.
+        {%- elif legalBaseAUuid == uuids.legalBaseVitalInterestsAUuid %}
+          <span class="separator">&ndash;</span> vital interests.
+        {%- elif legalBaseAUuid == uuids.legalBasePublicInterestsAUuid %}
+          <span class="separator">&ndash;</span> public interest or acting under official public authority.
+        {%- elif legalBaseAUuid == uuids.legalBaseLegitimateInterestsAUuid %}
+          <span class="separator">&ndash;</span> legitimate interests.
+        {%- elif legalBaseAUuid == uuids.legalBaseOtherAUuid -%}
+          {%- set legalBaseOtherPath = [legalBasePath, uuids.legalBaseOtherAUuid, uuids.legalBaseOtherQUuid]|reply_path -%}
+          {%- set legalBaseOther = repliesMap[legalBaseOtherPath]|reply_str_value -%}
+          {{ ": " ~ legalBaseOther|dot if legalBaseOther else " (not further specified)."}}
+        {%- else %} (not further specified).{%- endif -%}
+      {%- elif needConsentAUuid == uuids.needConsentYesSpecificAUuid -%}
+        We will collect consent for our specific use of the data.
+      {%- elif needConsentAUuid == uuids.needConsentYesReuseAUuid -%}
+        We will collect consent for our use as well as reuse of the data.
+      {%- elif needConsentAUuid == uuids.needConsentYesAnonymizeAUuid -%}
+        We will collect consent for our use of the data, and will anonymize the data afterwards for reuse.
+      {%- endif -%}
+      </p>
+    {%- endif -%}
+  </div>
+</div>

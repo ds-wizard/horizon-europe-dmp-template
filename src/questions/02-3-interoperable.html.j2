@@ -1,0 +1,87 @@
+<div id="q-interoperable" class="question">
+  {# Format/Type with volume #}
+  {%- set formatsPath = [uuids.creatingCUuid, uuids.formatsQUuid]|reply_path -%}
+  {%- set formatsItems = repliesMap[formatsPath]|reply_items -%}
+  {%- if formatsItems|length > 0 -%}
+    <div>We will be using the following data formats and types:
+    <ul>
+      {%- for formatItem in formatsItems -%}
+        {%- set formatPrefix = [formatsPath, formatItem]|reply_path -%}
+        {%- set formatNameReply = repliesMap[[formatPrefix, uuids.formatsNameQUuid]|reply_path] -%}
+        {%- set formatsIsStandardPath = [formatPrefix, uuids.formatsIsStandardQUuid]|reply_path -%}
+        {%- set formatsIsStandardAUuid = repliesMap[formatsIsStandardPath]|reply_str_value -%}
+        {%- set formatsIsLTSuitablePath = [formatPrefix, uuids.formatsIsLTSuitableQUuid]|reply_path -%}
+        {%- set formatsIsLTSuitableAUuid = repliesMap[formatsIsLTSuitablePath]|reply_str_value -%}
+        {%- set formatsVolumePath = [formatPrefix, uuids.formatsVolumeQUuid]|reply_path -%}
+        {%- set formatsVolumeAUuid = repliesMap[formatsVolumePath]|reply_str_value -%}
+        <li>
+          {# identification #}
+          <strong>{{ macros.integrationValue(formatNameReply, uuids.formatsNameQUuid) }}</strong>
+          {%- if formatsIsStandardAUuid or formatsIsLTSuitableAUuid or formatsVolumeAUuid -%}
+            <p>
+            {# standard? #}
+            {%- if formatsIsStandardAUuid == uuids.formatsIsStandardYesAUuid %}
+              It is a standardized format.
+            {%- elif formatsIsStandardAUuid == uuids.formatsIsStandardNoAUuid -%}
+              {%- set formatsWhyNonStandardPath = [formatsIsStandardPath, uuids.formatsIsStandardNoAUuid, uuids.formatsWhyNonStandardQUuid]|reply_path -%}
+              {%- set formatsWhyNonStandardAUuid = repliesMap[formatsWhyNonStandardPath]|reply_str_value -%}
+              {%- if formatsWhyNonStandardAUuid == uuids.formatsWhyNSThereIsNoStandardAUuid %}
+                It is not a standardized format because there is no standardized format for this data type.
+              {%- elif formatsWhyNonStandardAUuid == uuids.formatsWhyNSItIsOptimizedAUuid %}
+                It is not a standardized format but it is optimized for processing speed and/or volume.
+              {%- elif formatsWhyNonStandardAUuid == uuids.formatsWhyNSAnotherReasonAUuid -%}
+                {%- set formatsWhyNSAnotherReasonPath = [formatsWhyNonStandardPath, uuids.formatsWhyNSAnotherReasonAUuid, uuids.formatsWhyNSAnotherReasonQUuid]|reply_path -%}
+                {%- set formatsWhyNSAnotherReason = repliesMap[formatsWhyNSAnotherReasonPath]|reply_str_value -%}
+                It is not a standardized format.
+                {%- if formatsWhyNSAnotherReason %}
+                  {{ formatsWhyNSAnotherReason|capitalize|dot }}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endif -%}
+            </p>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+    </div>
+  {%- endif -%}
+
+  {# Standards used #}
+  {%- set whatUsingPath = [uuids.creatingCUuid, uuids.whatUsingQUuid]|reply_path -%}
+  {%- set whatUsingItems = repliesMap[whatUsingPath]|reply_items -%}
+  {%- if whatUsingItems|length > 0 -%}
+    <div>We will be using the following standards (encodings, terminologies, vocabularies, ontologies):
+    <ul>
+      {%- for standardItem in whatUsingItems -%}
+        {%- set whatUsingNamePath = [whatUsingPath, standardItem, uuids.whatUsingNameQUuid]|reply_path -%}
+        {%- set whatUsingNameReply = repliesMap[whatUsingNamePath] -%}
+        {%- set whatUsingUrlPath = [whatUsingPath, standardItem, uuids.whatUsingUrlQUuid]|reply_path -%}
+        {%- set whatUsingUrl = repliesMap[whatUsingUrlPath]|reply_str_value -%}
+        <li>
+          <strong>{{ macros.integrationValue(whatUsingNameReply, uuids.whatUsingNameQUuid) }}</strong>
+          {% if whatUsingUrl %}({{ whatUsingUrl }}){% endif %}
+        </li>
+      {%- endfor -%}
+    </ul>
+    </div>
+  {%- endif -%}
+
+  {# New vocabularies #}
+  {%- set newTypesPath = [uuids.creatingCUuid, uuids.newTypesQUuid]|reply_path -%}
+  {%- set newTypesAUuid = repliesMap[newTypesPath]|reply_str_value -%}
+  {%- if newTypesAUuid == uuids.newTypesYesAUuid -%}
+    {%- set newTypesVocabsPath = [newTypesPath, uuids.newTypesYesAUuid, uuids.newTypesVocabsQUuid]|reply_path -%}
+    {%- set newTypesVocabsAUuid = repliesMap[newTypesVocabsPath]|reply_str_value -%}
+    {%- if newTypesVocabsAUuid == uuids.newTypesVocabsNoAUuid -%}
+      <p>Although we will be using new types of data, suitable public controlled vocabularies or ontologies exist for those.</p>
+    {%- elif newTypesVocabsAUuid == uuids.newTypesVocabsYesAUuid -%}
+      {%- set newTypesVocabsMappingPath = [newTypesVocabsPath, uuids.newTypesVocabsYesAUuid, uuids.newTypesVocabsMappingQUuid]|reply_path -%}
+      {%- set newTypesVocabsMappingAUuid = repliesMap[newTypesVocabsPath]|reply_str_value -%}
+      {%- if newTypesVocabsMappingAUuid == uuids.newTypesVocabsMappingNoAUuid -%}
+      <p>We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of my data.</p>
+      {%- elif newTypesVocabsMappingAUuid == uuids.newTypesVocabsMappingYesAUuid -%}
+      <p>We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of my data. Such terms will be mapped to existing vocabularies or ontologies.</p>
+      {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+</div>

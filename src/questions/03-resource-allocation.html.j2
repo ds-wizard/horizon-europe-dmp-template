@@ -1,0 +1,135 @@
+<div id="q-resource-allocation" class="question">
+  <div class="answer">
+
+  <p>FAIR is a central part of our data management; it is considered at every decision in our data management plan. We use the FAIR data process ourselves to make our use of the data as efficient as possible. Making our data FAIR is therefore not a cost that can be separated from the rest of the project.</p>
+
+  {# Archiving #}
+  {%- set coldStoragePath = [uuids.preservingCUuid, uuids.coldStorageQUuid]|reply_path -%}
+  {%- set coldStorageAUuid = repliesMap[coldStoragePath]|reply_str_value -%}
+  {%- set coldStorageDuring = coldStorageAUuid == uuids.coldStorageYesAUuid -%}
+  {%- set coldStorageAfterPath = [uuids.preservingCUuid, uuids.coldStorageAfterQUuid]|reply_path -%}
+  {%- set coldStorageAfterAUuid = repliesMap[coldStoragePath]|reply_str_value -%}
+  {%- set coldStorageAfter = coldStorageAfterAUuid == uuids.coldStorageAfterYesAUuid -%}
+
+  {%- if coldStorageDuring and coldStorageAfter -%}
+    <p>We will be archiving data (using so-called 'cold storage') for long term preservation after the project but also already during your project.</p>
+  {%- elif coldStorageDuring -%}
+    <p>We will be archiving data (using so-called 'cold storage') for long term preservation already during your project.</p>
+  {%- elif coldStorageAfter -%}
+    <p>We will be archiving data (using so-called 'cold storage') for long term preservation after the project.</p>
+  {%- endif -%}
+  
+  {# Repository charges #}
+  {%- set repoChargesPath = [uuids.preservingCUuid, uuids.repoChargesQUuid]|reply_path -%}
+  {%- set repoChargesAUuid = repliesMap[repoChargesPath]|reply_str_value -%}
+  {%- if repoChargesAUuid == uuids.repoChargesNoAUuid -%}
+    <p>None of the used repositories charge for their services.</p>
+  {%- elif repoChargesAUuid == uuids.repoChargesYesAUuid -%}
+    {%- set repoChargesHowPayPath = [repoChargesPath, uuids.repoChargesYesAUuid, uuids.repoChargesHowPayQUuid]|reply_path -%}
+    {%- set repoChargesHowPayAUuid = repliesMap[repoChargesHowPayPath]|reply_str_value -%}
+    {%- if repoChargesHowPayAUuid == uuids.repoChargesHowPayBudgetedAUuid -%}
+      <p>We have budgeted for the costs in the project to pay charges of the used repositories.</p>
+    {%- elif repoChargesHowPayAUuid == uuids.repoChargesHowPayDepartmentAUuid -%}
+      <p>The costs related to the used repositories will be carried by (one of) the departments involved in the project.</p>
+    {%- elif repoChargesHowPayAUuid == uuids.repoChargesHowPayInstituteAUuid -%}
+      <p>The costs related to the used repositories will be carried by (one of) the institutes involved in the project.</p>
+    {%- elif repoChargesHowPayAUuid == uuids.repoChargesHowPayOtherAUuid -%}
+      {%- set repoChargesHowPayOtherPath = [repoChargesHowPayPath, uuids.repoChargesHowPayOtherAUuid, uuids.repoChargesHowPayOtherQUuid]|reply_path -%}
+      {%- set repoChargesHowPayOther = repliesMap[repoChargesHowPayOtherPath]|reply_str_value -%}
+      {%- if repoChargesHowPayOther -%}
+        <p>We will carry the costs related to the used repositories by: {{ repoChargesHowPayOther|dot }}</p>
+      {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+  
+  {# Budget time and effort #}
+  {%- set budgetTimeEffortPath = [uuids.preservingCUuid, uuids.budgetTimeEffortQUuid]|reply_path -%}
+  {%- set budgetTimeEffortAUuid = repliesMap[budgetTimeEffortPath]|reply_str_value -%}
+  {%- if budgetTimeEffortAUuid == uuids.budgetTimeEffortYesAUuid -%}
+    <p>We have a reserved budget for the time and effort it will take to prepare the data for publication.</p>
+  {%- endif -%}
+
+  {# People #}
+  {%- if ctx.createdBy %}
+    <p>{{ctx.createdBy.firstName}} {{ctx.createdBy.lastName}} is responsible for implementing the DMP, and ensuring it is reviewed and revised.</p>
+  {%- endif -%}
+
+  {%- set contributorsPath = [uuids.adminDetailsCUuid, uuids.contributorsQUuid]|reply_path -%}
+  {%- set contributorsItems = repliesMap[contributorsPath]|reply_items -%}
+  {%- if contributorsItems|length > 0 -%}
+    {%- macro contributorsResponsibility(contributors, contributorRoleAUuid, responsibility) -%}
+      {%- set names = [] -%}
+      {%- for i in contributors -%}
+        {%- set role = repliesMap[[contributorsPath, i, uuids.contributorRoleQUuid]|reply_path]|reply_str_value -%}
+        {%- set name = repliesMap[[contributorsPath, i, uuids.contributorNameQUuid]|reply_path]|reply_str_value -%}
+        {%- if role == contributorRoleAUuid and name -%}
+          {%- do names.append(name) -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- set nNames = names|length -%}
+      {%- if nNames > 0 -%}
+        <p>
+          {%- if nNames > 2 -%}
+            {{ names[0:-1]|join(", ") }}, and {{ names[-1] }} are {{ responsibility }}
+          {%- elif nNames == 2 -%}
+            {{ names[0] }} and {{ names[1] }} are {{ responsibility }}
+          {%- else -%}
+            {{ names[0] }} is {{ responsibility }}
+          {%- endif %}
+        </p>
+      {%- endif -%}
+    {%- endmacro -%}
+    {# Data curators #}
+    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDataCuratorAUuid, "responsible for reviewing, enhancing, cleaning, or standardizing metadata and the associated data submitted for storage, use and maintenance within a data centre or repository.") }}
+    {# Data collectors #}
+    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDataCollectorAUuid, "responsible for finding, gathering, and collecting data.") }}
+    {# Data managers #}
+    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDataManagerAUuid, "responsible for maintaining the finished resource.") }}
+    {# Data stewards #}
+    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDataStewardAUuid, "responsible for the management and proficiency of data including data processing, data policies, data guidelines, and data availability.") }}
+    {# Distributors #}
+    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDistributorAUuid, "responsible for generating/disseminating copies of the resouce in either electronic or print form.") }}
+  {%- endif -%}
+
+  {# additional expertise #}
+  {%- set expertisePath = [uuids.adminDetailsCUuid, uuids.additionalExpertiseQUuid]|reply_path -%}
+  {%- set expertiseAUuid = repliesMap[expertisePath]|reply_str_value -%}
+  {%- if expertiseAUuid == uuids.additionalExpertiseNoAUuid -%}
+    <p>To execute the DMP, no additional specialist expertise is required.</p>
+  {%- elif expertiseAUuid == uuids.additionalExpertiseYesAvailableAUuid -%}
+    <p>To execute the DMP, additional specialist expertise is required and we have such trained support staff available.</p>
+  {%- elif expertiseAUuid == uuids.additionalExpertiseYesTrainAUuid -%}
+    <p>
+      To execute the DMP, additional specialist expertise is required. We will be training existing staff.
+      {%- set expertiseTrainPath = [expertisePath, uuids.additionalExpertiseYesTrainAUuid, uuids.additionalExpertiseYesTrainTrainingQUuid]|reply_path -%}
+      {%- set expertiseTrainText = repliesMap[expertiseTrainPath]|reply_str_value -%}
+      {%- if additionalExpertiseTrainText %}
+        The training will be: {{ expertiseTrainText|dot }}
+      {%- endif -%}
+    </p>
+  {%- elif expertiseAUuid == uuids.additionalExpertiseYesHireAUuid -%}
+    <p>
+      To execute the DMP, additional specialist expertise is required. We will be hiring new people with additional expertise.
+      {%- set expertiseHirePath = [expertisePath, uuids.additionalExpertiseYesHireAUuid, uuids.additionalExpertiseYesHireExpertiseQUuid]|reply_path -%}
+      {%- set expertiseHireText = repliesMap[expertiseHirePath]|reply_str_value -%}
+      {%- if expertiseHireText %}
+        The required expertise from new people is: {{ expertiseHireText|dot }}
+      {%- endif -%}
+    </p>
+  {%- endif -%}
+  {# additional hw/sw #}
+  {%- set additionalHWSWPath = [uuids.adminDetailsCUuid, uuids.additionalHWSWQUuid]|reply_path -%}
+  {%- set additionalHWSWAUuid = repliesMap[additionalHWSWPath]|reply_str_value -%}
+  {%- if additionalHWSWAUuid == uuids.additionalHWSWNoAUuid -%}
+    <p>We do not require any hardware or software in addition to what is usually available in the institute.</p>
+  {%- elif additionalHWSWAUuid == uuids.additionalHWSWYesAUuid -%}
+    {%- set additionalHWSWWhatPath = [additionalHWSWPath, uuids.additionalHWSWYesAUuid, uuids.additionalHWSWYesWhatQUuid]|reply_path -%}
+    {%- set additionalHWSWWhat = repliesMap[additionalHWSWWhatPath]|reply_str_value -%}
+    {%- if additionalHWSWWhat -%}
+      <p>We require the following hardware or software in addition to what is usually available in the institute: {{ additionalHWSWWhat|dot }}</p>
+    {%- else -%}
+      <p>We require hardware or software in addition to what is usually available in the institute.</p>
+    {%- endif -%}
+  {%- endif -%}
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<div id="dmp-content">
+  <section id="sec-data-summary" class="dmp-section">
+    <h2>1. Data Summary</h2>
+
+    {% include "src/questions/01-data-summary.html.j2" with context %}
+  </section>
+
+  <section id="sec-fair-data" class="dmp-section">
+    <h2>2. FAIR Data</h2>
+
+    <h3>2.1. Making data findable, including provisions for metadata</h3>
+
+    {% include "src/questions/02-1-findable.html.j2" with context %}
+    
+    <h3>2.2. Making data openly accessible</h3>
+
+    {% include "src/questions/02-2-accessible.html.j2" with context %}
+    
+    <h3>2.3. Making data interoperable</h3>
+
+    {% include "src/questions/02-3-interoperable.html.j2" with context %}
+    
+    <h3>2.4. Increase data re-use (through clarifying licenses)</h3>
+
+    {% include "src/questions/02-4-reusable.html.j2" with context %}
+  </section>
+
+  <section id="sec-resource-allocation" class="dmp-section">
+    <h2>3. Allocation of resources</h2>
+
+    {% include "src/questions/03-resource-allocation.html.j2" with context %}
+  </section>
+
+  <section id="sec-data-security" class="dmp-section">
+    <h2>4. Data security</h2>
+
+    {% include "src/questions/04-data-security.html.j2" with context %}
+  </section>
+
+  <section id="sec-ethical-aspects" class="dmp-section">
+    <h2>5. Ethical aspects</h2>
+
+    {% include "src/questions/05-ethical-aspects.html.j2" with context %}
+  </section>
+
+  <section id="sec-other-issues" class="dmp-section">
+    <h2>6. Other issues</h2>
+
+    {% include "src/questions/06-other-issues.html.j2" with context %}
+  </section>
+
+</div>

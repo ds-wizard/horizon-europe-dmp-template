@@ -1,0 +1,83 @@
+<header>
+  <p class="dmp"></p>
+  <h1>
+    {{ ctx.questionnaireName }}
+  </h1>
+  <h3>
+    Following the <strong>Horizon 2020 DMP Template v2.0</strong>
+  </h3>
+  <div>
+    <dl>
+      {%- set contributorsPath = [uuids.adminDetailsCUuid, uuids.contributorsQUuid]|join(".") -%}
+      {%- set contributorsItems = repliesMap[contributorsPath]|reply_items -%}
+      {%- if contributorsItems|length > 0 -%}
+        {%- set contacts = [] -%}
+        {%- for i in contributorsItems -%}
+          {%- set pathPrefix = [contributorsPath, i]|join(".") ~ "." -%}
+          {%- set contributorRole = repliesMap[pathPrefix ~ uuids.contributorRoleQUuid]|reply_str_value -%}
+          {%- if contributorRole == uuids.contributorRoleContactPersonAUuid -%}
+            {% do contacts.append(pathPrefix) %}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- set nContacts = contacts|length -%}
+        <dt>Contact {{ "people" if (nContacts > 1) else "person" }}</dt>
+        <dd>
+          {%- if nContacts > 0 -%}
+            <ul>
+              {%- for pathPrefix in contacts -%}
+                <li>
+                  {%- set contributorName = repliesMap[pathPrefix ~ uuids.contributorNameQUuid]|reply_str_value -%}
+                  {%- set contributorEmail = repliesMap[pathPrefix ~ uuids.contributorEmailQUuid]|reply_str_value -%}
+                  {%- set contributorOrcid = repliesMap[pathPrefix ~ uuids.contributorOrcidQUuid]|reply_str_value -%}
+                  {%- set contributorAffiliationReply = repliesMap[pathPrefix ~ uuids.contributorAffiliationQUuid] -%}
+
+                  {%- if contributorName -%}
+                    <span class="contact-name">{{ contributorName }}</span>
+                  {%- else -%}
+                    <span class="contact-name missing">(name not given)</span>
+                  {%- endif -%}
+                  {%- if contributorEmail and contributorOrcid %}
+                    ({{ macros.formatEmail(contributorEmail) }}, {{ macros.formatOrcid(contributorOrcid) }})
+                  {%- elif contributorEmail %}
+                    ({{ macros.formatEmail(contributorEmail) }})
+                  {%- elif contributorOrcid %}
+                    ({{ macros.formatOrcid(contributorOrcid) }})
+                  {%- endif -%}
+                  {%- if contributorAffiliationReply %}
+                    <br>{{ macros.integrationValue(contributorAffiliationReply, uuids.contributorAffiliationQUuid) }}
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- else -%}
+            <span class="empty-value">There are no contact people specified yet</span>
+          {%- endif -%}
+        </dd>
+      {%- endif -%}
+
+      <dt>Based on</dt>
+      <dd>{{ ctx.package.name }}, {{ ctx.package.version }} (<span class="package-id"><span class="organization-id">{{ ctx.package.organizationId }}</span>:<span class="km-id">{{ ctx.package.kmId }}</span>:<span class="version">{{ ctx.package.version }}</span></span>)</dd>
+
+      {%- if ctx.phaseUuid -%}
+      <dt>Project phase</dt>
+      <dd>{{ km.entities.phases[ctx.phaseUuid].title }}</dd>
+      {%- endif -%}
+
+      {%- if ctx.createdBy -%}
+      <dt>Created by</dt>
+      <dd><span class="contact-name">{{ ctx.createdBy.firstName }} {{ ctx.createdBy.lastName }}</span> ({{ macros.formatEmail(ctx.createdBy.email) }}){% if ctx.createdBy.affiliation %}<br>{{ ctx.createdBy.affiliation }}{% endif %}</dd>
+      {%- endif -%}
+
+      {% for version in ctx.questionnaireVersions if version.uuid == ctx.questionnaireVersion %}
+      <dt>Version</dt>
+      <dd>{{version.name}} ({{ version.createdAt|datetime_format("%d %b %Y") }})</dd>
+      {% endfor %}
+
+      <dt>Generated on</dt>
+      <dd>{{ ctx.createdAt|datetime_format("%d %b %Y") }}</dd>
+    </dl>
+    <p class="dsw">
+      Data Management Plan created in Data Stewardship Wizard &laquo;<a href="https://ds-wizard.org" target="_blank">ds-wizard.org</a>&raquo;
+    </p>
+  </div>
+</header>

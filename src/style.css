@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif:400,400i,700,700i&display=swap&subset=cyrillic,cyrillic-ext,greek,greek-ext,latin-ext,vietnamese');
+
+/* Layout and global styles */
+
+@page {
+  margin: 2.5cm;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  page-break-inside: avoid !important;
+  page-break-after: avoid !important;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Noto Serif', serif;
+  font-size: 11pt;
+  counter-reset: section;
+  counter-reset: question;
+}
+
+/* Sections */
+
+section {
+  margin-bottom: 4rem;
+}
+
+.dmp-section .question + .question {
+  margin-top: 1cm;
+}
+
+/* First page */
+
+header {
+  padding-top: 5cm;
+  width: 100vw;
+  height: 24cm;
+  box-sizing: border-box;
+  page-break-after: always;
+  position: relative;
+}
+
+header .dmp::after {
+  font-size: 18pt;
+  content: 'Data Management Plan';
+}
+
+h1 {
+  font-size: 24pt;
+}
+
+header div {
+  position: absolute;
+  bottom: 0;
+}
+
+header .contact-orcid {
+  white-space: nowrap;
+}
+
+header .dsw {
+  margin-top: 2cm;
+  text-align: center;
+  font-size: 10pt;
+  font-style: italic;
+}
+
+dl::after {
+  content: ' ';
+  display: table;
+  clear: both;
+}
+
+dl dt {
+  display: inline-block;
+  width: 20%;
+  margin: 0;
+  margin-bottom: 0.5rem;
+  float: left;
+  white-space: nowrap;
+}
+
+dl dt::after {
+  content: ":";
+}
+
+dl dd {
+  display: inline-block;
+  width: 80%;
+  margin: 0;
+  margin-bottom: 0.5rem;
+  float: left;
+  font-style: italic;
+}
+
+dl dd ul {
+  padding: 0;
+  margin: 0;
+}
+
+dl dd ul li {
+  list-style: none;
+}
+
+dl dd ul li:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+
+dl .contact-name {
+  font-weight: bold;
+}
+
+/* Abstract */
+
+.abstract {
+  page-break-after: always;
+}
+
+.abstract p {
+  text-align: justify;
+}
+
+/* custom */
+
+.mini-orcid-icon-16 {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAABnElEQVQ4y52UvUtCURjGf968lmQhFGXYEH3QUg0JhkPR4l5T0IUosMGxv6C1KdpahCZbGxscGiXBloIKo0ESEYpEM71+3NvgvXW0j3vp2c57zvPjPQ/nPWCheDrkiKdDDqtzjl/MQSAChAG/Uc4BCSCmBJKpP0HxdGgQOAY2LRo4BaJKIFn6BjIgCSDolPrQ9Caa3vwLlgLCJkwSNo6BIEBoYp8537ZVLEHD89WRkcmlWex3+WhqNeqtMrLk/nTWWxVA7wYuKYFkymksIuLO/FiEYjXDazXD6tQhJTWLLLmRezxkns+4zsfQdQ3B+wkK/9Z/Sc1yfrsFgFseYnnyAE1vcJM/QfSaGfmxoWrjhaunI2aG18WyvztsW6rUC/Q6vd/qJihnFzTuXeG5ciOWcgBmRglg9yejLLkZHVhEcrgY8SwwPbzGxcOeeCQhgmIi6LV6z5uaR20WKdYemR3ZQNMalNUs53c7vNcLIigGnS87jvVodOtUCSSV7rCjtJ+9XaUMT0fYGDMTpj2Qlp0gzFnH1UT95xuxlN2P7QOpwZChGlWkWQAAAABJRU5ErkJggg==) no-repeat;
+  background-size: 0.5cm 0.5cm;
+  width: 0.5cm;
+  height: 0.5cm;
+  display: inline-block;
+  margin: -2px 0 -2px 2px;
+}
+
+div#dmp-content {
+  page-break-before: always;
+}

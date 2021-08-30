@@ -1,0 +1,6 @@
+<div id="q-other-issues" class="question">
+  <div class="answer">
+    {%- set projectUrl = ctx.config.clientUrl ~ "/projects/" ~ ctx.questionnaireUuid -%}
+    <p>We use the <a href="https://ds-wizard.org">Data Stewardship Wizard</a> with its <em>{{ ctx.package.name }}</em> (ID: <span class="package-id"><span class="organization-id">{{ ctx.package.organizationId }}</span>:<span class="km-id">{{ ctx.package.kmId }}</span>:<span class="version">{{ ctx.package.version }}</span></span>) knowledge model to make our DMP. More specifically, we use the <a href="{{ ctx.config.clientUrl }}">{{ ctx.config.clientUrl }}</a> DSW instance where the project has direct URL: <a href="{{ projectUrl }}">{{ projectUrl }}</a>.</p>
+  </div>
+</div>
