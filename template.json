@@ -5,7 +5,7 @@
     "name": "Horizon Europe DMP",
     "description": "Data Management Plan according to the Horizon Europe template",
     "license": "Apache-2.0",
-    "metamodelVersion": 4,
+    "metamodelVersion": 7,
     "recommendedPackageId": "dsw:root:2.3.0",
     "allowedPackages": [
         {
@@ -57,7 +57,7 @@
                 {
                     "name": "wkhtmltopdf",
                     "options": {
-                        "args": "--disable-smart-shrinking --footer-center [page] --footer-font-name \"Noto Serif\" --footer-spacing 10 --footer-font-size 10 -B 25mm -L 25mm -R 25mm -T 25mm"
+                        "args": "--disable-smart-shrinking --footer-center [page] --footer-font-name \"Noto Serif\" --footer-spacing 10 --footer-font-size 10 -B 25mm -L 15mm -R 15mm -T 25mm"
                     }
                 }
             ]
@@ -160,7 +160,7 @@
         }
     ],
     "_tdk": {
-        "version": "3.2.0",
+        "version": "3.7.0",
         "readmeFile": "README.md",
         "files": [
             "src/*",

@@ -2,6 +2,7 @@
 {%- set km = ctx.knowledgeModel -%}
 {%- set repliesMap = ctx.questionnaireReplies -%}
 {%- set report = ctx.report -%}
+{%- set dc = ctx|to_context_obj -%}
 {% import "src/macros.html.j2" as macros with context %}
 {% import "src/uuids.j2" as uuids with context %}
 <html lang="en">
@@ -15,6 +16,8 @@
   <body>
     <article class="dmp">
       {% include "src/frontpage.html.j2" with context %}
+      {% include "src/versions.html.j2" with context %}
+      {% include "src/contributors.html.j2" with context %}
       {% include "src/projects.html.j2" with context %}
       {% include "src/content.html.j2" with context %}
     </article>
