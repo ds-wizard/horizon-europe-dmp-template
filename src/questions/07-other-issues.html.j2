@@ -1,0 +1,13 @@
+{#-
+TODO (not in KM):
+
+- Do you, or will you, make use of other national/funder/sectorial/departmental procedures for data management? If yes, which ones (please list and briefly describe them)?
+
+Should we add some list of "Additional data management procedures" where users would select "level", "name", eventually reference and briefly describe how it will be applied in the project? Alternatively, there could be some place for "DMP notes" in the administrative chapter that would be just text area (not very DSW-like).
+-#}
+<div id="q-other-issues" class="question">
+  <div class="answer">
+    {%- set project_url = dc.config.client_url ~ "/projects/" ~ dc.qtn.uuid -%}
+    <p>We use the <a href="https://ds-wizard.org">Data Stewardship Wizard</a> with its <em>{{ dc.pkg.name }}</em> (ID: <span class="package-id"><span class="organization-id">{{ dc.pkg.organization_id }}</span>:<span class="km-id">{{ dc.pkg.km_id }}</span>:<span class="version">{{ dc.pkg.version }}</span></span>) knowledge model to make our DMP. More specifically, we use the <a href="{{ dc.config.client_url }}">{{ dc.config.client_url }}</a> DSW instance where the project has direct URL: <a href="{{ project_url }}">{{ project_url }}</a>.</p>
+  </div>
+</div>
