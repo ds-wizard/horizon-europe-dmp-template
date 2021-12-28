@@ -1,9 +1,5 @@
 {#-
 
-TODO:
-
-- Add subtree "55f03a4a-034b-422a-adf6-757416b7650a"
-
 TODO (in KM):
 
 - Will metadata be made openly available and licenced under a public domain dedication CC0, as per the Grant Agreement? If not, please clarify why. Will metadata contain information to enable the user to access the data? (Chapter III, Q3?)
@@ -42,6 +38,7 @@ TODO (in KM):
       {%- set otherReasonsPapers = notOpenOtherReasonsAUuid == uuids.notOpenOtherReasonsPapersAUuid -%}
       {%- set otherReasonsOther = notOpenOtherReasonsAUuid == uuids.notOpenOtherReasonsOtherAUuid -%}
       {%- set anyReason = legalReasons or businessReasonsPatents or businessReasonsOther or otherReasonsPapers or otherReasonsOther -%}
+      {%- set nReasons = [legalReasons, businessReasonsPatents, businessReasonsOther, otherReasonsPapers, otherReasonsOther]|sum -%}
 
       {%- if anyReason -%}
         <p>
@@ -77,6 +74,36 @@ TODO (in KM):
           </ul>
         {%- endif -%}
         </p>
+
+        {%- if legalReasons -%}
+          {%- set legalReasonsAuthenticatedPath = [pathPrefix, uuids.notOpenLegalReasonsQUuid, uuids.notOpenLegalReasonsYesAUuid, uuids.legalReasonsAuthenticatedQUuid]|reply_path -%}
+          {%- set legalReasonsAuthenticatedAUuid = repliesMap[legalReasonsAuthenticatedPath]|reply_str_value -%}
+          {%- if legalReasonsAuthenticatedAUuid == uuids.legalReasonsAuthenticatedYesAUuid -%}
+            <p>
+              Concerning the legal reasons, a data sharing agreement will be required.
+              {%- set legalReasonsAuthorizePath = [legalReasonsAuthenticatedPath, uuids.legalReasonsAuthenticatedYesAUuid, uuids.legalReasonsAuthorizeQUuid]|reply_path -%}
+              {%- set legalReasonsAuthorizeAUuid = repliesMap[legalReasonsAuthorizePath]|reply_str_value -%}
+              {%- if legalReasonsAuthorizeAUuid == uuids.legalReasonsAuthorizeMemberAUuid %}
+                People can apply to one of the project members.
+              {%- elif legalReasonsAuthorizeAUuid == uuids.legalReasonsAuthorizeNewCommitteeAUuid %}
+                People can apply to the data access committee that we will set up.
+              {%- elif legalReasonsAuthorizeAUuid == uuids.legalReasonsAuthorizeOldCommitteeAUuid %}
+                {%- set legalReasonsAuthorizeOldCommitteePath = [legalReasonsAuthorizePath, uuids.legalReasonsAuthorizeOldCommitteeAUuid, uuids.legalReasonsAuthorizeOldCommitteeQUuid]|reply_path -%}
+                {%- set legalReasonsAuthorizeOldCommittee = repliesMap[legalReasonsAuthorizeOldCommitteePath]|reply_str_value -%}
+                {%- if legalReasonsAuthorizeOldCommittee %}
+                  People can apply to the <em>{{ legalReasonsAuthorizeOldCommittee }}</em> data access committee.
+                {%- else -%}
+                  People can apply to an existing data access committee.
+                {%- endif -%}
+              {%- elif legalReasonsAuthorizeAUuid == uuids.legalReasonsAuthorizeOtherAUuid %}
+                {%- set legalReasonsAuthorizeOtherPath = [legalReasonsAuthorizePath, uuids.legalReasonsAuthorizeOtherAUuid, uuids.legalReasonsAuthorizeOtherQUuid]|reply_path -%}
+                {%- set legalReasonsAuthorizeOther = repliesMap[legalReasonsAuthorizeOtherPath]|reply_str_value %}
+                For the authorization of potential users, we will make special arrangements{{ ": " ~ legalReasonsAuthorizeOther|dot if legalReasonsAuthorizeOther else "." }}
+              {%- endif -%}
+            </p>
+          {%- endif -%}
+        {%- endif -%}
+
       {%- else -%}
         <p>The data can become completely open immediately.</p>
       {%- endif -%}

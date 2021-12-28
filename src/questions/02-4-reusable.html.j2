@@ -1,9 +1,5 @@
 {#-
 
-TODO
-
-- Add subtree "ba38b16d-2154-4372-b445-7854a6e90443" (quality processes), for each measured data set
-
 TODO (in KM)
 
 - How will you provide documentation needed to validate data analysis and facilitate data re-use (e.g. readme files with information on methodology, codebooks, data cleaning, analyses, variable definitions, units of measurement, etc.)? (for Chapter III, Q5?)
@@ -53,6 +49,73 @@ TODO (in KM)
       {%- endfor -%}
       </ul>
       </p>
+    {%- endif -%}
+
+    {# Measure quality #}
+    {%- set measuredQuality = [] -%}
+    {%- set measuredPath = [uuids.creatingCUuid, uuids.measuredQUuid]|reply_path -%}
+    {%- set measuredAUuid = repliesMap[measuredPath]|reply_str_value -%}
+    {%- if measuredAUuid == uuids.measuredYesAUuid -%}
+      {%- set measuredDataPath = [measuredPath, uuids.measuredYesAUuid, uuids.measuredDataQUuid]|reply_path -%}
+      {%- set measuredDataItems = repliesMap[measuredDataPath]|reply_items -%}
+      {# Measured datasets #}
+      {%- for datasetItem in measuredDataItems -%}
+        {%- set pathPrefix = [measuredDataPath, datasetItem]|reply_path -%}
+        {%- set mdNamePath = [pathPrefix, uuids.measuredDataNameQUuid]|reply_path -%}
+        {%- set mdName = repliesMap[mdNamePath]|reply_str_value -%}
+        {%- set mdQualityPath = [pathPrefix, uuids.mdQualityQUuid]|reply_path -%}
+        {%- set mdQualityAUuid = repliesMap[mdQualityPath]|reply_str_value -%}
+        {%- if mdName and mdQualityAUuid == uuids.mdQualityYesAUuid -%}
+          {%- set mdQCalibrateAUuid = repliesMap[[mdQualityPath, mdQualityAUuid, uuids.mdQualityCalibrateQUuid]|reply_path]|reply_str_value -%}
+          {%- set mdQRepeatAUuid = repliesMap[[mdQualityPath, mdQualityAUuid, uuids.mdQualityRepeatQUuid]|reply_path]|reply_str_value -%}
+          {%- set mdQStdAUuid = repliesMap[[mdQualityPath, mdQualityAUuid, uuids.mdQualityStdQUuid]|reply_path]|reply_str_value -%}
+          {%- set mdQValidAUuid = repliesMap[[mdQualityPath, mdQualityAUuid, uuids.mdQualityValidQUuid]|reply_path]|reply_str_value -%}
+          {%- set mdQPeerAUuid = repliesMap[[mdQualityPath, mdQualityAUuid, uuids.mdQualityPeerQUuid]|reply_path]|reply_str_value -%}
+          {%- set mdQVocabAUuid = repliesMap[[mdQualityPath, mdQualityAUuid, uuids.mdQualityVocabQUuid]|reply_path]|reply_str_value -%}
+          {%- set mdQOtherPath = [mdQualityPath, mdQualityAUuid, uuids.mdQualityOtherQUuid]|reply_path -%}
+          {%- set mdQOtherAUuid = repliesMap[mdQOtherPath]|reply_str_value -%}
+          {%- set mdQOther = repliesMap[[mdQOtherPath, mdQOtherAUuid, uuids.mdQualityOtherYesQUuid]|reply_path]|reply_str_value -%}
+          {%- set qCalibrate = mdQCalibrateAUuid == uuids.mdQualityCalibrateYesAUuid -%}
+          {%- set qRepeat = mdQRepeatAUuid == uuids.mdQualityRepeatYesAUuid -%}
+          {%- set qStd = mdQStdAUuid == uuids.mdQualityStdYesAUuid -%}
+          {%- set qValid = mdQValidAUuid == uuids.mdQualityValidYesAUuid -%}
+          {%- set qPeer = mdQPeerAUuid == uuids.mdQualityPeerYesAUuid -%}
+          {%- set qVocab = mdQVocabAUuid == uuids.mdQualityVocabYesAUuid -%}
+          {%- set qOther = mdQOtherAUuid == uuids.mdQualityOtherYesAUuid  -%}
+          {%- if qCalibrate or qRepeat or qStd or qValid or qPeer or qVocab or qOther -%}
+            {%- do measuredQuality.append({
+              'name': mdName,
+              'calibrate': qCalibrate,
+              'repeat': qRepeat,
+              'std': qStd,
+              'valid': qValid,
+              'peer': qPeer,
+              'vocab': qVocab,
+              'other': qOther,
+              'othertxt': mdQOther,
+            }) -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if measuredQuality|length > 0 -%}
+      <p>The following instrument datasets acquired in the project will use the following quality processes:</p>
+      <ul>
+      {%- for item in measuredQuality -%}
+        <li>
+            <strong>{{ item.name }}</strong>
+            <ul>
+              {% if item.calibrate %}<li>Calibrating measurements</li>{% endif %}
+              {% if item.repeat %}<li>Repeat samples / measurements</li>{% endif %}
+              {% if item.std %}<li>Standardized data capture / recording</li>{% endif %}
+              {% if item.valid %}<li>Data Entry validation</li>{% endif %}
+              {% if item.peer %}<li>Data peer review</li>{% endif %}
+              {% if item.vocab %}<li>Use of controlled vocabularies</li>{% endif %}
+              {% if item.other %}<li>Other quality processes{{ ": " ~ item.othertxt if item.othertxt else "" }}</li>{% endif %}
+            </ul>
+        </li>
+      {%- endfor -%}
+      </ul>
+      {%- endif -%}
     {%- endif -%}
 
     {# Can open data #}

@@ -71,6 +71,13 @@
 {%- set nrefDataAccessHaveCopyAUuid = "423f7c77-c3bd-4ece-a9f6-ad9e3d0428a1" -%}
 {%- set nrefDataAccessWillDownloadAUuid = "4e183e8d-d4bd-442a-a663-d3accf4f9217" -%}
 {%- set nrefDataAccessWillOnlineAUuid = "f5e1c4d3-79f7-4950-9b10-6a7738f21978" -%}
+{%- set nrefDataConsentQUuid = "467ff3ad-156c-4285-9efb-c91072b3544e" -%}
+{%- set nrefDataConsentNotPersonalAUuid = "19ee5b2f-4ed2-4508-9265-9773229dcc36" -%}
+{%- set nrefDataConsentAnotherBaseAUuid = "dfcd23a7-463d-46f7-99cc-589d9aaa91d2" -%}
+{%- set nrefDataConsentCoversAUuid = "1d732f5b-e532-4672-9f67-4aa4e4eef449" -%}
+{%- set nrefDataConsentNewAUuid = "e29f35b6-c138-401a-b3d8-9cdcff0b8223" -%}
+{%- set nrefDataConsentOtherAUuid = "f0eeb017-869a-4480-8b6a-0c46b8ec7587" -%}
+{%- set nrefDataConsentOtherQUuid = "db636108-c99c-41a7-89b5-70e0021384a1" -%}
 {# Chapter 3 - Creating and collecting data #}
 {%- set creatingCUuid = "b1df3c74-0b1f-4574-81c4-4cc2d780c1af" -%}
 {%- set formatsQUuid = "b08fe063-33f8-4380-b3a9-ba1e586dedf2" -%}
@@ -162,6 +169,25 @@
 {%- set measuredDataEquipQUuid = "bce52f7f-2256-4afc-9801-2e4da8111470" -%}
 {%- set measuredDataEquipDescribedAUuid = "cba473be-2489-4387-8877-ce49cf95a304" -%}
 {%- set measuredDataEquipCareAUuid = "526db9ec-a5a1-4431-9cc3-751fc6625217" -%}
+
+{%- set mdQualityQUuid = "ba38b16d-2154-4372-b445-7854a6e90443" -%}
+{%- set mdQualityYesAUuid = "9a8dbe23-8fb2-4501-adde-3b6261dc1653" -%}
+{%- set mdQualityCalibrateQUuid = "e458d2eb-ba1e-4c4c-8619-5f8f431715b4" -%}
+{%- set mdQualityCalibrateYesAUuid = "7cd93213-e3da-45bc-be98-69304abbfaee" -%}
+{%- set mdQualityRepeatQUuid = "d5ab8298-9382-455c-8241-f64d3cc54ffe" -%}
+{%- set mdQualityRepeatYesAUuid = "d79fc9ad-7ac3-4bcb-bd90-3340e9870dc6" -%}
+{%- set mdQualityStdQUuid = "ecdc6c3f-249a-4d82-822c-649754201981" -%}
+{%- set mdQualityStdYesAUuid = "8ff86fcf-1827-4244-96b7-29a937e208fb" -%}
+{%- set mdQualityValidQUuid = "01b70401-021b-4fe7-9073-570ecb3b320c" -%}
+{%- set mdQualityValidYesAUuid = "394d1836-cfdd-4113-8c8a-9b4884f3ae70" -%}
+{%- set mdQualityPeerQUuid = "56354f8a-31df-40fc-aeae-67d45af560b5" -%}
+{%- set mdQualityPeerYesAUuid = "8f6a792d-5209-44cb-90d0-2106d5b292ff" -%}
+{%- set mdQualityVocabQUuid = "e2401b56-5d7e-42c6-bb97-c8bede39b4b0" -%}
+{%- set mdQualityVocabYesAUuid = "e5af082a-59e0-4a9e-af6e-cfc32eea0b14" -%}
+{%- set mdQualityOtherQUuid = "839ea5fc-9cc1-497e-91bf-c05b34847a5e" -%}
+{%- set mdQualityOtherYesAUuid = "f1e2f788-0957-4111-b342-ab9797641e4d" -%}
+{%- set mdQualityOtherYesQUuid = "e24167a2-14ec-445d-b205-fb6c7e24a7d1" -%}
+
 {%- set mdDataUtilityQUuid = "135aa977-ecc2-4bb8-aa55-2def9d9d6040" -%}
 {%- set mdDataUtilityJustUsAUuid = "f5a4d36c-4ce8-4ab6-8e5e-d7a2418c77c7" -%}
 {%- set mdDataUtilitySameFieldAUuid = "515cac06-d101-4af1-95ef-33fd6a2da8b0" -%}
@@ -328,6 +354,7 @@
 {%- set specialRepoServiceLevelSimpleAUuid = "da6725a2-62bb-4fe7-a76f-a4e396646b19" -%}
 {%- set specialRepoServiceLevelAdvancedAUuid = "d65ddfda-9b08-4ab6-90e5-07df748d7929" -%}
 {%- set publishedDataCatalogueQUuid = "46039bea-87e6-4c61-8567-4e819404b4d0" -%}
+{%- set publishedDataCatalogueRepoAUuid = "aaae5c5b-0aa9-4619-bb68-de0cd27f14da" -%}
 {%- set publishedDataCatalogueYesAUuid = "9e39ea26-cdaf-483b-9502-d47fc4f69bab" -%}
 {%- set publishedDataLicensesQUuid = "3d89e23d-ff5c-45da-97a8-169ad8c39be6" -%}
 {%- set publishedDataLicenseStartQUuid = "28d494ef-26c0-4632-956e-5cafcc498a32" -%}
@@ -417,6 +444,18 @@
 {%- set legalIpPowerQUuid = "c9ed4379-19e2-4ce3-8962-5c2fca69b6cd" -%}
 {%- set legalIpPowerNoAUuid = "46f96ea2-3a3c-43d1-b6a2-394a49034ae2" -%}
 {%- set legalIpPowerYesAUuid = "8eff4cfd-65c1-435f-b27c-e805b3d72c5c" -%}
+
+{%- set legalReasonsAuthenticatedQUuid = "55f03a4a-034b-422a-adf6-757416b7650a" -%}
+{%- set legalReasonsAuthenticatedNoQUuid = "da8b25a9-8865-4ce8-a2ba-d592c42daa4c" -%}
+{%- set legalReasonsAuthenticatedYesAUuid = "18a46146-25f6-4e5c-90ae-c6b9be9cc3f0" -%}
+{%- set legalReasonsAuthorizeQUuid = "23909308-55cf-4e94-a616-2a74c809aa48" -%}
+{%- set legalReasonsAuthorizeMemberAUuid = "ed47c9b7-9c2b-48ab-bdf4-efd8913f673e" -%}
+{%- set legalReasonsAuthorizeNewCommitteeAUuid = "ca3b6db3-cd6c-4139-8d24-e5ded15c2796" -%}
+{%- set legalReasonsAuthorizeOldCommitteeAUuid = "d010e09e-8ce8-47c6-a1f9-f281519ba936" -%}
+{%- set legalReasonsAuthorizeOldCommitteeQUuid = "0de7232f-802d-4e1f-a84c-2895d08901ce" -%}
+{%- set legalReasonsAuthorizeOtherAUuid = "f57960de-3cfb-47da-a30b-da7c5d27a38e" -%}
+{%- set legalReasonsAuthorizeOtherQUuid = "346003fa-5ea6-41ed-a3b7-68d7e26a0b3e" -%}
+
 {%- set notOpenBusinessReasonsQUuid = "85a9d872-3d41-4560-82c4-b850a6e2d5ac" -%}
 {%- set notOpenBusinessReasonsPatentsAUuid = "1c377b4c-bd6f-457e-8e7e-06efcd1b6444" -%}
 {%- set notOpenBusinessReasonsOtherAUuid = "0cfc22ec-5551-4a37-84ec-308c85440af5" -%}

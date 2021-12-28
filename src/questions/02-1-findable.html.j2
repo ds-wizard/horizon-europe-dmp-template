@@ -106,8 +106,9 @@ TODO (in KM):
           {# Catalogue #}
           {%- set publishedDataCataloguePath = [prefix, uuids.publishedDataCatalogueQUuid]|reply_path -%}
           {%- set publishedDataCatalogueAUuid = repliesMap[publishedDataCataloguePath]|reply_str_value -%}
-          {#- TODO: add more options (No / No with more details) -#}
-          {%- if publishedDataCatalogueAUuid == uuids.publishedDataCatalogueYesAUuid -%}
+          {%- if publishedDataCatalogueAUuid == uuids.publishedDataCatalogueRepoAUuid -%}
+            <br>We will not be adding a reference to any data catalogue because the data will be stored in a repository that is the prime source of data for re-use in the field.
+          {%- elif publishedDataCatalogueAUuid == uuids.publishedDataCatalogueYesAUuid -%}
             <br>We will be adding a reference to the published data to at least one data catalogue.
           {%- endif -%}
           {%- endif -%}
