@@ -1,10 +1,3 @@
-{#-
-
-TODO (in KM)
-
-- How will you provide documentation needed to validate data analysis and facilitate data re-use (e.g. readme files with information on methodology, codebooks, data cleaning, analyses, variable definitions, units of measurement, etc.)? (for Chapter III, Q5?)
-
--#}
 <div id="q-reusable" class="question">
   <div class="answer">
     {# Produced datasets #}
@@ -72,6 +65,7 @@ TODO (in KM)
           {%- set mdQValidAUuid = repliesMap[[mdQualityPath, mdQualityAUuid, uuids.mdQualityValidQUuid]|reply_path]|reply_str_value -%}
           {%- set mdQPeerAUuid = repliesMap[[mdQualityPath, mdQualityAUuid, uuids.mdQualityPeerQUuid]|reply_path]|reply_str_value -%}
           {%- set mdQVocabAUuid = repliesMap[[mdQualityPath, mdQualityAUuid, uuids.mdQualityVocabQUuid]|reply_path]|reply_str_value -%}
+          {%- set mdQConsistencyAUuid = repliesMap[[mdqPrefix, uuids.mdQualityConsistencyQUuid]|reply_path]|reply_str_value -%}
           {%- set mdQOtherPath = [mdQualityPath, mdQualityAUuid, uuids.mdQualityOtherQUuid]|reply_path -%}
           {%- set mdQOtherAUuid = repliesMap[mdQOtherPath]|reply_str_value -%}
           {%- set mdQOther = repliesMap[[mdQOtherPath, mdQOtherAUuid, uuids.mdQualityOtherYesQUuid]|reply_path]|reply_str_value -%}
@@ -81,8 +75,9 @@ TODO (in KM)
           {%- set qValid = mdQValidAUuid == uuids.mdQualityValidYesAUuid -%}
           {%- set qPeer = mdQPeerAUuid == uuids.mdQualityPeerYesAUuid -%}
           {%- set qVocab = mdQVocabAUuid == uuids.mdQualityVocabYesAUuid -%}
+          {%- set qConsistency = mdQConsistencyAUuid == uuids.mdQualityConsistencyYesAUuid -%}
           {%- set qOther = mdQOtherAUuid == uuids.mdQualityOtherYesAUuid  -%}
-          {%- if qCalibrate or qRepeat or qStd or qValid or qPeer or qVocab or qOther -%}
+          {%- if qCalibrate or qRepeat or qStd or qValid or qPeer or qVocab or qConsistency or qOther -%}
             {%- do measuredQuality.append({
               'name': mdName,
               'calibrate': qCalibrate,
@@ -91,6 +86,7 @@ TODO (in KM)
               'valid': qValid,
               'peer': qPeer,
               'vocab': qVocab,
+              'consistency': qConsistency,
               'other': qOther,
               'othertxt': mdQOther,
             }) -%}
@@ -110,6 +106,7 @@ TODO (in KM)
               {% if item.valid %}<li>Data Entry validation</li>{% endif %}
               {% if item.peer %}<li>Data peer review</li>{% endif %}
               {% if item.vocab %}<li>Use of controlled vocabularies</li>{% endif %}
+              {% if item.consistency %}<li>Measuring samples for which the outcome is known to monitor consistency</li>{% endif %}
               {% if item.other %}<li>Other quality processes{{ ": " ~ item.othertxt if item.othertxt else "" }}</li>{% endif %}
             </ul>
         </li>
@@ -184,6 +181,16 @@ TODO (in KM)
             {%- do notOpenSentences.append(privacyCannotUseStart ~ "neither " ~ privacyCanUse[0] ~ " nor " ~ privacyCanUse[1] ~ " to make the data more openly available.") -%}
           {%- elif privacyCannotUse|length == 3 -%}
             {%- do notOpenSentences.append(privacyCannotUseStart ~ "neither " ~ privacyCanUse[0] ~ " nor " ~ privacyCanUse[1] ~ ", nor " ~ privacyCanUse[2] ~ " to make the data more openly available.") -%}
+          {%- endif -%}
+
+          {%- if legalPrivacyPseudoAUuid == uuids.legalPrivacyPseudoYesAUuid -%}
+            {%- set legalPrivacyPseudoPartyPath = [legalPrivacyPseudoPath, legalPrivacyPseudoAUuid, uuids.legalPrivacyPseudoPartyQUuid]|reply_path -%}
+            {%- set legalPrivacyPseudoPartyAUuid = repliesMap[legalPrivacyPseudoPartyPath]|reply_str_value -%}
+            {%- if legalPrivacyPseudoPartyAUuid == uuids.legalPrivacyPseudoPartyNoAUuid -%}
+              {%- do notOpenSentences.append("For pseudonymization, we cannot make use of an existing 'trusted third party'.") -%}
+            {%- elif legalPrivacyPseudoPartyAUuid == uuids.legalPrivacyPseudoPartyYesAUuid -%}
+              {%- do notOpenSentences.append("For pseudonymization, we can make use of an existing 'trusted third party'.") -%}
+            {%- endif -%}
           {%- endif -%}
         {%- endif -%}
         

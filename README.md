@@ -10,6 +10,6 @@ This template is available through [DSW Registry](https://registry.ds-wizard.org
 
 ## Changelog
 
-### 0.1.0
+### 0.2.0
 
 *To be done*

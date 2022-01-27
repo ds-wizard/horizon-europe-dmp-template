@@ -1,10 +1,3 @@
-{#-
-
-TODO (not in KM):
-
-- describe certification of repository for long-term preservation and curation in more detail?
-
--#}
 <div id="q-data-security" class="question">
   <div class="answer">
     {%- set risksPathPrefix = [uuids.processingCUuid, uuids.risksQUuid, uuids.risksExploreAUuid]|reply_path -%}
@@ -163,6 +156,21 @@ TODO (not in KM):
 
       {%- if coldSentences|length > 0 -%}
         <p>{{ coldSentences|join(" ") }}</p>
+      {%- endif -%}
+    {%- endif -%}
+
+    {# Collaboration agreement for data access #}
+    {%- set collabPath = [uuids.creatingCUuid, uuids.collabQUuid]|reply_path -%}
+    {%- set collabAUuid = repliesMap[collabPath]|reply_str_value -%}
+    {%- if collabAUuid == uuids.collabNoAUuid -%}
+      <p>We are not running the project in a collaboration between different groups nor institutes. Therefore, no collaboration agreement related to data access is needed.</p>
+    {%- elif collabAUuid == uuids.collabYesAUuid -%}
+      {%- set collabAgreePath = [collabPath, collabAUuid, uuids.collabAgreeQUuid]|reply_path -%}
+      {%- set collabAgreeAUuid = repliesMap[collabAgreePath]|reply_str_value -%}
+      {%- if collabAgreeAUuid == uuids.collabAgreeNoAUuid -%}
+        <p>We are running the project in a collaboration between different groups and institutes. However, there is no collaboration agreement in the project that describes who can have access to what data.</p>
+      {%- elif collabAgreeAUuid == uuids.collabAgreeYesAUuid -%}
+        <p>We are running the project in a collaboration between different groups and institutes. A collaboration agreement that describes who can have access to what data in the project is set.</p>
       {%- endif -%}
     {%- endif -%}
   </div>

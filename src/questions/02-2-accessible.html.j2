@@ -1,10 +1,3 @@
-{#-
-
-TODO (in KM):
-
-- Will metadata be made openly available and licenced under a public domain dedication CC0, as per the Grant Agreement? If not, please clarify why. Will metadata contain information to enable the user to access the data? (Chapter III, Q3?)
-
--#}
 <div id="q-accessible" class="question">
   <div class="answer">
     {# Open philosophy #}
@@ -107,16 +100,56 @@ TODO (in KM):
       {%- else -%}
         <p>The data can become completely open immediately.</p>
       {%- endif -%}
+    {%- endif -%}
 
-      {%- set notOpenLimitedEmbargoPath = [openImmediatelyPath, uuids.openImmediatelyNoAUuid, uuids.notOpenLimitedEmbargoQUuid]|reply_path -%}
-      {%- set notOpenLimitedEmbargoAUuid = repliesMap[notOpenLimitedEmbargoPath]|reply_str_value -%}
-      {%- if notOpenLimitedEmbargoAUuid == uuids.notOpenLimitedEmbargoIndefinitelyAUuid -%}
-        <p>Limited embargo cannot be used because some restricted data will be embargoed indefinitely.</p>
-      {%- elif notOpenLimitedEmbargoAUuid == uuids.notOpenLimitedEmbargoReleasedSoonAUuid -%}
-        <p>Data will be released only as soon as restrictions are falling away.</p>
-      {%- elif notOpenLimitedEmbargoAUuid == uuids.notOpenLimitedEmbargoYesAUuid -%}
+    {# Embargo #}
+    {%- set embargoPath = [uuids.accessCUuid, uuids.limitedEmbargoQUuid]|reply_path -%}
+    {%- set embargoAUuid = repliesMap[embargoPath]|reply_str_value -%}
+    {%- if embargoAUuid == uuids.limitedEmbargoOpenAUuid -%}
+      <p>Limited embargo will not be used as all data will be opened immediately.</p>
+    {%- elif embargoAUuid == uuids.limitedEmbargoIndefinitelyAUuid -%}
+      <p>Limited embargo cannot be used because some restricted data will be embargoed indefinitely.</p>
+    {%- elif embargoAUuid == uuids.limitedEmbargoReleasedSoonAUuid -%}
+      <p>Data will be released only as soon as restrictions are falling away.</p>
+    {%- elif embargoAUuid == uuids.limitedEmbargoYesAUuid -%}
+      {%- set embargoPeriodPath = [embargoPath, embargoAUuid, uuids.limitedEmbargoPeriodQUuid]|reply_path -%}
+      {%- set embargoPeriod = repliesMap[embargoPeriodPath]|reply_str_value -%}
+      {%- if embargoPeriod -%}
+        <p>Data that is not legally restrained will be released after a fixed time period ({{ embargoPeriod }}), unconditionally.</p>
+      {%- else -%}
         <p>Data that is not legally restrained will be released after a fixed time period, unconditionally.</p>
       {%- endif -%}
+    {%- endif -%}
+
+    {# Publishing metadata #}
+    {%- set metadataOpenPath = [uuids.accessCUuid, uuids.metadataOpenQUuid]|reply_path -%}
+    {%- set metadataOpenAUuid = repliesMap[metadataOpenPath]|reply_str_value -%}
+    {%- if metadataOpenAUuid == uuids.metadataOpenNoAUuid %}
+      {%- set explanation = repliesMap[[metadataOpenPath, metadataOpenAUuid, uuids.metadataOpenNoExplainQUuid]|reply_path]|reply_str_value -%}
+      {%- if explanation -%}
+        <p>Metadata will not be available openly &ndash; {{ explanation|e|dot }}</p>
+      {%- else -%}
+        <p>Metadata will not be available openly.</p>
+      {%- endif -%}
+    {%- elif metadataOpenAUuid == uuids.metadataOpenYesAUuid -%}
+      {%- set metadataOpenInstrAUuid = repliesMap[[metadataOpenPath, metadataOpenAUuid, uuids.metadataOpenInstrQUuid]|reply_path]|reply_str_value -%}
+      {%- set metadataOpenFormAUuid = repliesMap[[metadataOpenPath, metadataOpenAUuid, uuids.metadataOpenFormQUuid]|reply_path]|reply_str_value -%}
+      <p>
+      {%- if metadataOpenInstrAUuid == uuids.metadataOpenInstrNoAUuid %}
+        Metadata will be openly available including instructions how to get access to the data.
+      {%- elif metadataOpenInstrAUuid == uuids.metadataOpenInstrNoAUuid %}
+        Metadata will be openly available without instructions how to get access to the data.
+      {%- else %}
+        Metadata will be openly available.
+      {%- endif %}
+      {%- if metadataOpenFormAUuid == uuids.metadataOpenFormNoAUuid %}
+        Metadata will not be available in a form that can be harvested and indexed.
+      {%- elif metadataOpenFormAUuid == uuids.metadataOpenFormYesRepoAUuid %}
+        Metadata will available in a form that can be harvested and indexed (managed by the used repository / repositories).
+      {%- elif metadataOpenFormAUuid == uuids.metadataOpenFormYesCareAUuid %}
+        Metadata will not be available in a form that can be harvested and indexed.
+      {%- endif %}
+      </p>
     {%- endif -%}
     
     {# Ownership #}
@@ -142,72 +175,76 @@ TODO (in KM):
     {%- set preexistingPath = [uuids.reusingCUuid, uuids.preexistingQUuid]|reply_path -%}
     {%- set preexistingAUuid = repliesMap[preexistingPath]|reply_str_value -%}
     {%- if preexistingAUuid == uuids.preexistingYesAUuid -%}
-      {%- set usingPreexistingPath = [preexistingPath, uuids.preexistingYesAUuid, uuids.usingPreexistingQUuid]|reply_path -%}
-      {%- set usingPreexistingAUuid = repliesMap[usingPreexistingPath]|reply_str_value -%}
-      {%- if usingPreexistingAUuid == uuids.usingPreexistingYesAUuid -%}
-        {%- set refDataPath = [usingPreexistingPath, uuids.usingPreexistingYesAUuid, uuids.refDataQUuid]|reply_path -%}
-        {%- set refDataItems = repliesMap[refDataPath]|reply_items -%}
-        {%- set nrefDataPath = [usingPreexistingPath, uuids.usingPreexistingYesAUuid, uuids.nrefDataQUuid]|reply_path -%}
-        {%- set nrefDataItems = repliesMap[nrefDataPath]|reply_items -%}
-        {%- set answeredRefData = [] -%}
-        {%- for i in refDataItems -%}
-          {%- if repliesMap[[refDataPath, i, uuids.refDataConditionsQUuid]|reply_path] -%}
-            {%- do answeredRefData.append(i) -%}
-          {%- endif -%}
-        {%- endfor -%}
-        {%- set answeredNRefData = [] -%}
-        {%- for i in nrefDataItems -%}
-          {%- if repliesMap[[nrefDataPath, i, uuids.nrefDataConditionsQUuid]|reply_path] -%}
-            {%- do answeredNRefData.append(i) -%}
-          {%- endif -%}
-        {%- endfor -%}
-        {%- if (answeredRefData|length + answeredNRefData|length) > 0 -%}
-          <p>For the reference and non-reference data sets that we reuse, conditions are as follows:
-          <ul>
-            {%- for i in answeredRefData -%}
-              {%- set refDataNamePath = [refDataPath, i, uuids.refDataNameQUuid]|reply_path -%}
-              {%- set refDataNameReply = repliesMap[refDataNamePath] -%}
-              {%- set refDataConditionsPath = [refDataPath, i, uuids.refDataConditionsQUuid]|reply_path -%}
-              {%- set refDataConditionsAUuid = repliesMap[refDataConditionsPath]|reply_str_value -%}
-              {%- if refDataConditionsAUuid -%}
-                <li>
-                  <strong>{{ macros.integrationValue(refDataNameReply, uuids.refDataNameQUuid) }}</strong>
-                  <span class="separator">&ndash;</span>
-                  {% if refDataConditionsAUuid == uuids.refDataConditionsCC0AUuid -%}
-                    freely available for any use (public domain or CC0).
-                  {%- elif refDataConditionsAUuid == uuids.refDataConditionsCCBYAUuid -%}
-                    freely available with obligation to quote the source (e.g. CC-BY).
-                  {%- elif refDataConditionsAUuid == uuids.refDataConditionsOtherAUuid -%}
-                    {%- set refDataConditionsOtherPath = [refDataConditionsPath, uuids.refDataConditionsOtherAUuid, uuids.refDataConditionsOtherQUuid]|reply_path -%}
-                    {%- set refDataConditionsOther = repliesMap[refDataConditionsOtherPath]|reply_str_value -%}
-                    available under specific restrictions, which we will follow in our project{{ ": " ~ refDataConditionsOther|dot if refDataConditionsOther else "." }}
-                  {%- endif -%}
-                </li>
-              {%- endif -%}
-            {%- endfor -%}
-            {%- for i in answeredNRefData -%}
-              {%- set nrefDataNamePath = [nrefDataPath, i, uuids.nrefDataNameQUuid]|reply_path -%}
-              {%- set nrefDataNameReply = repliesMap[nrefDataNamePath] -%}
-              {%- set nrefDataConditionsPath = [nrefDataPath, i, uuids.nrefDataConditionsQUuid]|reply_path -%}
-              {%- set nrefDataConditionsAUuid = repliesMap[nrefDataConditionsPath]|reply_str_value -%}
-              {%- if nrefDataConditionsAUuid -%}
-                <li>
-                  <strong>{{ macros.integrationValue(nrefDataNameReply, uuids.nrefDataNameQUuid) }}</strong>
-                  <span class="separator">&ndash;</span>
-                  {% if nrefDataConditionsAUuid == uuids.nrefDataConditionsCC0AUuid -%}
-                    freely available for any use (public domain or CC0).
-                  {%- elif nrefDataConditionsAUuid == uuids.nrefDataConditionsCCBYAUuid -%}
-                    freely available with obligation to quote the source (e.g. CC-BY).
-                  {%- elif nrefDataConditionsAUuid == uuids.nrefDataConditionsOtherAUuid -%}
-                    {%- set nrefDataConditionsOtherPath = [nrefDataConditionsPath, uuids.nrefDataConditionsOtherAUuid, uuids.refDataConditionsOtherQUuid]|reply_path -%}
-                    {%- set nrefDataConditionsOther = repliesMap[nrefDataConditionsOtherPath]|reply_str_value -%}
-                    available under specific restrictions, which we will follow in our project{{ ": " ~ nrefDataConditionsOther|dot if nrefDataConditionsOther else "." }}
-                  {%- endif -%}
-                </li>
-              {%- endif -%}
-            {%- endfor -%}
-          </ul>
+      {%- set refDataPath = [preexistingPath, uuids.preexistingYesAUuid, uuids.refDataQUuid]|reply_path -%}
+      {%- set refDataItems = repliesMap[refDataPath]|reply_items -%}
+      {%- set nrefDataPath = [preexistingPath, uuids.preexistingYesAUuid, uuids.nrefDataQUuid]|reply_path -%}
+      {%- set nrefDataItems = repliesMap[nrefDataPath]|reply_items -%}
+      {%- set answeredRefData = [] -%}
+      {%- for i in refDataItems -%}
+        {%- set isUsed = repliesMap[[refDataPath, i, uuids.refDataUseQUuid]|reply_path]|reply_str_value == uuids.refDataUseYesAUuid -%}
+        {%- set isAnswered = repliesMap[[refDataPath, i, uuids.refDataUseQUuid, uuids.refDataUseYesAUuid, uuids.refDataConditionsQUuid]|reply_path] -%}
+        {%- if isUsed and isAnswered -%}
+          {%- do answeredRefData.append(i) -%}
         {%- endif -%}
+      {%- endfor -%}
+      {%- set answeredNRefData = [] -%}
+      {%- for i in nrefDataItems -%}
+        {%- set isUsed = repliesMap[[nrefDataPath, i, uuids.nrefDataUseQUuid]|reply_path]|reply_str_value == uuids.nrefDataUseYesAUuid -%}
+        {%- set isAnswered = repliesMap[[nrefDataPath, i, uuids.nrefDataUseQUuid, uuids.nrefDataUseYesAUuid, uuids.nrefDataConditionsQUuid]|reply_path] -%}
+        {%- if isUsed and isAnswered -%}
+          {%- do answeredNRefData.append(i) -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if (answeredRefData|length + answeredNRefData|length) > 0 -%}
+        <p>For the reference and non-reference data sets that we reuse, conditions are as follows:
+        <ul>
+          {%- for i in answeredRefData -%}
+            {%- set refDataPrefix = [refDataPath, i]|reply_path -%}
+            {%- set refDataUsedPrefix = [refDataPrefix, uuids.refDataUseQUuid, uuids.refDataUseYesAUuid]|reply_path -%}
+            {%- set refDataNamePath = [refDataPrefix, uuids.refDataNameQUuid]|reply_path -%}
+            {%- set refDataNameReply = repliesMap[refDataNamePath] -%}
+            {%- set refDataConditionsPath = [refDataUsedPrefix, uuids.refDataConditionsQUuid]|reply_path -%}
+            {%- set refDataConditionsAUuid = repliesMap[refDataConditionsPath]|reply_str_value -%}
+            {%- if refDataConditionsAUuid -%}
+              <li>
+                <strong>{{ macros.integrationValue(refDataNameReply, uuids.refDataNameQUuid) }}</strong>
+                <span class="separator">&ndash;</span>
+                {% if refDataConditionsAUuid == uuids.refDataConditionsCC0AUuid -%}
+                  freely available for any use (public domain or CC0).
+                {%- elif refDataConditionsAUuid == uuids.refDataConditionsCCBYAUuid -%}
+                  freely available with obligation to quote the source (e.g. CC-BY).
+                {%- elif refDataConditionsAUuid == uuids.refDataConditionsOtherAUuid -%}
+                  {%- set refDataConditionsOtherPath = [refDataConditionsPath, uuids.refDataConditionsOtherAUuid, uuids.refDataConditionsOtherQUuid]|reply_path -%}
+                  {%- set refDataConditionsOther = repliesMap[refDataConditionsOtherPath]|reply_str_value -%}
+                  available under specific restrictions, which we will follow in our project{{ ": " ~ refDataConditionsOther|dot if refDataConditionsOther else "." }}
+                {%- endif -%}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+          {%- for i in answeredNRefData -%}
+            {%- set nrefDataPrefix = [nrefDataPath, i]|reply_path -%}
+            {%- set nrefDataUsedPrefix = [nrefDataPrefix, uuids.nrefDataUseQUuid, uuids.nrefDataUseYesAUuid]|reply_path -%}
+            {%- set nrefDataNamePath = [nrefDataPrefix, uuids.nrefDataNameQUuid]|reply_path -%}
+            {%- set nrefDataNameReply = repliesMap[nrefDataNamePath] -%}
+            {%- set nrefDataConditionsPath = [nrefDataUsedPrefix, uuids.nrefDataConditionsQUuid]|reply_path -%}
+            {%- set nrefDataConditionsAUuid = repliesMap[nrefDataConditionsPath]|reply_str_value -%}
+            {%- if nrefDataConditionsAUuid -%}
+              <li>
+                <strong>{{ macros.integrationValue(nrefDataNameReply, uuids.nrefDataNameQUuid) }}</strong>
+                <span class="separator">&ndash;</span>
+                {% if nrefDataConditionsAUuid == uuids.nrefDataConditionsCC0AUuid -%}
+                  freely available for any use (public domain or CC0).
+                {%- elif nrefDataConditionsAUuid == uuids.nrefDataConditionsCCBYAUuid -%}
+                  freely available with obligation to quote the source (e.g. CC-BY).
+                {%- elif nrefDataConditionsAUuid == uuids.nrefDataConditionsOtherAUuid -%}
+                  {%- set nrefDataConditionsOtherPath = [nrefDataConditionsPath, uuids.nrefDataConditionsOtherAUuid, uuids.refDataConditionsOtherQUuid]|reply_path -%}
+                  {%- set nrefDataConditionsOther = repliesMap[nrefDataConditionsOtherPath]|reply_str_value -%}
+                  available under specific restrictions, which we will follow in our project{{ ": " ~ nrefDataConditionsOther|dot if nrefDataConditionsOther else "." }}
+                {%- endif -%}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
       {%- endif -%}
     {%- endif -%}
     
@@ -234,7 +271,7 @@ TODO (in KM):
           {% set distrosPath = [prefix, uuids.publishedDistrosQUuid]|reply_path -%}
           {%- set distrosItems = repliesMap[distrosPath]|reply_items -%}
           {%- if distrosItems|length > 0 -%}
-            <br>The distributions will be stored in:
+            <br>The distributions will be accessible through:
             <ul>
             {%- for j in distrosItems -%}
               {%- set distroPrefix = [distrosPath, j]|reply_path -%}
@@ -243,7 +280,7 @@ TODO (in KM):
               {%- if distroRepositoryKindAUuid -%}
                 <li>
                   {%- if distroRepositoryKindAUuid == uuids.publishedDataRepositoryDomainSpecificAUuid %}
-                    Domain-specific repository
+                    <em>Domain-specific repository</em>
                     {%- set domainSpecificRepoNamePath = [distroRepositoryKindPath, uuids.publishedDataRepositoryDomainSpecificAUuid, uuids.domainSpecificRepoNameQUuid]|reply_path -%}
                     {%- set domainSpecificRepoNameReply = repliesMap[domainSpecificRepoNamePath] -%}
                     {%- if domainSpecificRepoNameReply -%}
@@ -265,11 +302,11 @@ TODO (in KM):
                       We have made other arrangements{{ ": " ~ domainSpecificRepoContactBeforeOther|dot if domainSpecificRepoContactBeforeOther else "." }}
                     {%- endif -%}
                   {%- elif distroRepositoryKindAUuid == uuids.publishedDataRepositoryNationalAUuid %}
-                    Our national repository.
+                    <em>Our national repository</em>.
                   {%- elif distroRepositoryKindAUuid == uuids.publishedDataRepositoryInstitutionalAUuid %}
-                    Our institutional repository.
+                    <em>Our institutional repository</em>.
                   {%- elif distroRepositoryKindAUuid == uuids.publishedDataRepositorySpecialAUuid %}
-                    Special-purpose repository for the project.
+                    <em>Special-purpose repository for the project</em>.
                     {# Long-term support #}
                     {%- set specialRepoLongTermSupportPath = [distroRepositoryKindPath, uuids.publishedDataRepositorySpecialAUuid, uuids.specialRepoLongTermSupportQUuid]|reply_path -%}
                     {%- set specialRepoLongTermSupportAUuid = repliesMap[specialRepoLongTermSupportPath]|reply_str_value -%}
@@ -367,6 +404,21 @@ TODO (in KM):
             {%- endif -%}
           {%- endif -%}
           {%- endif -%}
+          
+          {# When published #}
+          {%- set publishedWhenPath = [isPublishedDataPath, uuids.isPublishedDataYesAUuid, uuids.publishedWhenQUuid]|reply_path -%}
+          {%- set publishedWhenAUuid = repliesMap[publishedWhenPath]|reply_str_value -%}
+          {%- if publishedWhenAUuid == uuids.publishedWhenSoonAUuid %}
+            <br>The dataset will published as soon as possible after collecting it.
+          {%- elif publishedWhenAUuid == uuids.publishedWhenCleanupAUuid %}
+            <br>The dataset will published after initial cleanup.
+          {%- elif publishedWhenAUuid == uuids.publishedWhenFinishedAUuid %}
+            <br>The dataset will published after all our processing has finished.
+          {%- elif publishedWhenAUuid == uuids.publishedWhenWrappedAUuid %}
+            <br>The dataset will published when the project is wrapped up.
+          {%- elif publishedWhenAUuid == uuids.publishedWhenEmbargoAUuid %}
+            <br>The dataset will published after an embargo.
+          {%- endif %}
         </li>
       {%- endfor -%}
       </ul>

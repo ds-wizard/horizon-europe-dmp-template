@@ -11,14 +11,20 @@
     {%- set contributorName = repliesMap[pathPrefix ~ uuids.contributorNameQUuid]|reply_str_value -%}
     {%- set contributorEmail = repliesMap[pathPrefix ~ uuids.contributorEmailQUuid]|reply_str_value -%}
     {%- set contributorOrcid = repliesMap[pathPrefix ~ uuids.contributorOrcidQUuid]|reply_str_value -%}
-    {%- set contributorRole = repliesMap[pathPrefix ~ uuids.contributorRoleQUuid]|reply_str_value -%}
+    {%- set contributorRoles = repliesMap[pathPrefix ~ uuids.contributorRoleQUuid]|reply_items -%}
     {%- set contributorAffiliationReply = repliesMap[pathPrefix ~ uuids.contributorAffiliationQUuid] -%}
     {%- if contributorName -%}
+      {%- set roles = [] -%}
+      {%- for role in contributorRoles -%}
+        {%- if role in dc.e.choices.keys() -%}
+          {%- do roles.append(dc.e.choices[role].label) -%}
+        {%- endif -%}
+      {%- endfor -%}
       {%- do contributors.append({
         'name': contributorName,
         'email': contributorEmail,
         'orcid': contributorOrcid,
-        'role': dc.e.answers[contributorRole].label if contributorRole else '',
+        'roles': roles|sort,
         'affiliation': contributorAffiliationReply,
       }) -%}
     {%- endif -%}
@@ -36,8 +42,8 @@
       {%- elif contributor.orcid %}
         <br>{{ macros.formatOrcid(contributor.orcid) }}
       {%- endif -%}
-      {%- if contributor.role %}
-        <br>Role: <span class="role">{{ contributor.role }}</span>
+      {%- if contributor.roles|length > 0 %}
+        <br>{% if contributor.roles|length == 0 %}Role{% else %}Roles{% endif %}: {% for role in contributor.roles %}<span class="role">{{ role }}</span>{% if not loop.last %}, {% endif %}{% endfor %}
       {%- endif %}
       {%- if contributor.affiliation %}
         <br>Affiliation: <span class="affiliation">{{ macros.integrationValue(contributor.affiliation, uuids.contributorAffiliationQUuid) }}</span>
