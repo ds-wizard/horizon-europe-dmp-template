@@ -137,7 +137,7 @@
       <p>
       {%- if metadataOpenInstrAUuid == uuids.metadataOpenInstrNoAUuid %}
         Metadata will be openly available including instructions how to get access to the data.
-      {%- elif metadataOpenInstrAUuid == uuids.metadataOpenInstrNoAUuid %}
+      {%- elif metadataOpenInstrAUuid == uuids.metadataOpenInstrYesAUuid %}
         Metadata will be openly available without instructions how to get access to the data.
       {%- else %}
         Metadata will be openly available.
@@ -237,7 +237,7 @@
                 {%- elif nrefDataConditionsAUuid == uuids.nrefDataConditionsCCBYAUuid -%}
                   freely available with obligation to quote the source (e.g. CC-BY).
                 {%- elif nrefDataConditionsAUuid == uuids.nrefDataConditionsOtherAUuid -%}
-                  {%- set nrefDataConditionsOtherPath = [nrefDataConditionsPath, uuids.nrefDataConditionsOtherAUuid, uuids.refDataConditionsOtherQUuid]|reply_path -%}
+                  {%- set nrefDataConditionsOtherPath = [nrefDataConditionsPath, uuids.nrefDataConditionsOtherAUuid, uuids.nrefDataConditionsOtherQUuid]|reply_path -%}
                   {%- set nrefDataConditionsOther = repliesMap[nrefDataConditionsOtherPath]|reply_str_value -%}
                   available under specific restrictions, which we will follow in our project{{ ": " ~ nrefDataConditionsOther|dot if nrefDataConditionsOther else "." }}
                 {%- endif -%}
@@ -277,6 +277,8 @@
               {%- set distroPrefix = [distrosPath, j]|reply_path -%}
               {%- set distroRepositoryKindPath = [distroPrefix, uuids.publishedDataRepositoryKindQUuid]|reply_path -%}
               {%- set distroRepositoryKindAUuid = repliesMap[distroRepositoryKindPath]|reply_str_value -%}
+              {%- set distroSharePath = [distroPrefix, uuids.publishedDistroShareQUuid]|reply_path -%}
+              {%- set distroShareAUuid = repliesMap[distroSharePath]|reply_str_value -%}
               {%- if distroRepositoryKindAUuid -%}
                 <li>
                   {%- if distroRepositoryKindAUuid == uuids.publishedDataRepositoryDomainSpecificAUuid %}
@@ -307,6 +309,14 @@
                     <em>Our institutional repository</em>.
                   {%- elif distroRepositoryKindAUuid == uuids.publishedDataRepositorySpecialAUuid %}
                     <em>Special-purpose repository for the project</em>.
+                    {# Sharing #}
+                    {%- if distroShareAUuid == uuids.publishedDistroShareOpenAUuid %}
+                      It will be <em>Open</em> (shared with anyone).
+                    {%- elif distroShareAUuid == uuids.publishedDistroShareSharedAUuid %}
+                      It will be <em>Shared</em> with a predefined list of people.
+                    {%- elif distroShareAUuid == uuids.publishedDistroShareClosedAUuid %}
+                      It will be <em>Closed</em> (not meant for sharing).
+                    {%- endif %}
                     {# Long-term support #}
                     {%- set specialRepoLongTermSupportPath = [distroRepositoryKindPath, uuids.publishedDataRepositorySpecialAUuid, uuids.specialRepoLongTermSupportQUuid]|reply_path -%}
                     {%- set specialRepoLongTermSupportAUuid = repliesMap[specialRepoLongTermSupportPath]|reply_str_value -%}

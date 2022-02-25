@@ -14,9 +14,9 @@
   {%- set coldStorageSentences = [] -%}
 
   {%- if coldStorageDuring and coldStorageAfter -%}
-    {%- do coldStorageSentences.append("We will be archiving data (using so-called 'cold storage') for long term preservation after the project but also already during your project.") -%}
+    {%- do coldStorageSentences.append("We will be archiving data (using so-called 'cold storage') for long term preservation after the project but also already during the project.") -%}
   {%- elif coldStorageDuring -%}
-    {%- do coldStorageSentences.append("We will be archiving data (using so-called 'cold storage') for long term preservation already during your project.") -%}
+    {%- do coldStorageSentences.append("We will be archiving data (using so-called 'cold storage') for long term preservation already during the project.") -%}
   {%- elif coldStorageAfter -%}
     {%- do coldStorageSentences.append("We will be archiving data (using so-called 'cold storage') for long term preservation after the project.") -%}
   {%- endif -%}
@@ -81,8 +81,10 @@
       {%- elif predicted -%}
         {%- set dataUse = "the predicted use of the archived data" -%}
       {%- endif -%}
-      {%- if budget -%}
+      {%- if budget and dataUse -%}
         {%- do coldStorageSentences.append("The decision whether or not to extend the renewal be based on available budget as well as " ~ dataUse ~ ".") -%}
+      {%- elif budget -%}
+        {%- do coldStorageSentences.append("The decision whether or not to extend the renewal be based on available budget.") -%}
       {%- elif actual or predicted -%}
         {%- do coldStorageSentences.append("The decision whether or not to extend the renewal be based on " ~ dataUse ~ ".") -%}
       {%- endif -%}
@@ -98,11 +100,10 @@
     {# Upgrades (media) #}
     {%- set coldStorageMediaUpgradePath = [coldStorageAfterPath, coldStorageAfterAUuid, uuids.coldStorageMediaUpgradeQUuid]|reply_path -%}
     {%- set coldStorageMediaUpgradeAUuid = repliesMap[coldStorageMediaUpgradePath]|reply_str_value -%}
-    {%- set starter = "Also, archived data " if coldStorageFormatUpgradeAUuid else "Archived data " -%}
     {%- if coldStorageMediaUpgradeAUuid == uuids.coldStorageMediaUpgradeNoAUuid -%}
-      {%- do coldStorageSentences.append(starter ~ "will not be migrated to other storage media over time.") -%}
+      {%- do coldStorageSentences.append("Archived data will not be migrated to other storage media over time.") -%}
     {%- elif coldStorageMediaUpgradeAUuid == uuids.coldStorageMediaUpgradeYesAUuid -%}
-      {%- do coldStorageSentences.append(starter ~ " will be migrated regularly to more modern storage media (e.g. newer tapes).") -%}
+      {%- do coldStorageSentences.append("Archived data will be migrated regularly to more modern storage media (e.g. newer tapes).") -%}
     {%- endif -%}
   {%- endif -%}
   {%- if coldStorageSentences|length > 0 -%}
@@ -127,7 +128,7 @@
       {%- set repoChargesHowPayOtherPath = [repoChargesHowPayPath, uuids.repoChargesHowPayOtherAUuid, uuids.repoChargesHowPayOtherQUuid]|reply_path -%}
       {%- set repoChargesHowPayOther = repliesMap[repoChargesHowPayOtherPath]|reply_str_value -%}
       {%- if repoChargesHowPayOther -%}
-        <p>We will carry the costs related to the used repositories by: {{ repoChargesHowPayOther|dot }}</p>
+        <p>We will be paying for costs related to the used repositories. Further notes: <span class="user-text">{{ repoChargesHowPayOther|dot }}</span></p>
       {%- endif -%}
     {%- endif -%}
   {%- endif -%}

@@ -62,7 +62,7 @@
             {%- elif mdDataUtilityAUuid == uuids.mdDataUtilityOtherFieldsAUuid -%}
               {%- set mdDataUtilityOtherFieldsHowPath = [mdDataUtilityPath, uuids.mdDataUtilityOtherFieldsAUuid, uuids.mdDataUtilityOtherFieldsHowQUuid]|reply_path -%}
               {%- set mdDataUtilityOtherFieldsHow = repliesMap[mdDataUtilityOtherFieldsHowPath]|reply_str_value -%}
-              <p>Researchers working also in other fields of research could be interested in using this data. {% if mdDataUtilityOtherFieldsHow -%}{{ mdDataUtilityOtherFieldsHow|capitalize|dot }}{%- endif -%}</p>
+              <p>Researchers working in other fields of research could be interested in using this data. {% if mdDataUtilityOtherFieldsHow -%}We think that other researchers can use this data as follows: {{ mdDataUtilityOtherFieldsHow|dot }}{%- endif -%}</p>
             {%- endif -%}
           </li>
         {%- endfor -%}
@@ -129,7 +129,7 @@
               {%- elif neqDataUtilityAUuid == uuids.neqDataUtilityOtherFieldsAUuid -%}
                 {%- set neqDataUtilityOtherFieldsHowPath = [neqDataUtilityPath, uuids.neqDataUtilityOtherFieldsAUuid, uuids.neqDataUtilityOtherFieldsHowQUuid]|reply_path -%}
                 {%- set neqDataUtilityOtherFieldsHow = repliesMap[neqDataUtilityOtherFieldsHowPath]|reply_str_value -%}
-                <p>Researchers working also in other fields of research could be interested in using this data. {% if neqDataUtilityOtherFieldsHow -%}{{ neqDataUtilityOtherFieldsHow|capitalize|dot }}{%- endif -%}</p>
+                <p>Researchers working in other fields of research could be interested in using this data. {% if neqDataUtilityOtherFieldsHow -%}We think that other researchers can use this data as follows: {{ neqDataUtilityOtherFieldsHow|dot }}{%- endif -%}</p>
               {%- endif -%}
             </li>
           {%- endfor -%}
@@ -166,7 +166,7 @@
       <div>
         <h4>Re-used datasets</h4>
         {%- if refDataItems|length > 0 -%}
-          <div>We will use the following reference datasets:
+          <div>We have found the following reference datasets that we have considered for re-use:
           <ul>
             {%- for item in refDataItems -%}
               {%- set refDataPrefix = [refDataPath, item]|reply_path -%}
@@ -216,6 +216,12 @@
                 {# ref data - used #}
                 {%- if isUsed -%}
                   {%- set refDataUsedPrefix = [refDataUsedPath, uuids.refDataUseYesAUuid]|reply_path -%}
+                  {# owner #}
+                  {%- set refDataOwnerPath = [refDataUsedPrefix, uuids.refDataOwnerQUuid]|reply_path -%}
+                  {%- set refDataOwner = repliesMap[refDataOwnerPath]|reply_str_value -%}
+                  {%- if refDataOwner -%}
+                    <p>Owner of this dataset: {{ refDataOwner|dot }}</p>
+                  {%- endif -%}
                   {# format #}
                   {%- set refDataFormatPath = [refDataUsedPrefix, uuids.refDataFormatQUuid]|reply_path -%}
                   {%- set refDataFormatAUuid = repliesMap[refDataFormatPath]|reply_str_value -%}
@@ -269,7 +275,7 @@
           </div>
         {%- endif -%}
         {%- if nrefDataItems|length > 0 -%}
-          <div>We will use the following already existing non-reference datasets:
+          <div>We have found the following non-reference datasets that we have considered for re-use:
           <ul>
             {%- for item in nrefDataItems -%}
               {%- set nrefDataPrefix = [nrefDataPath, item]|reply_path -%}
@@ -297,7 +303,7 @@
                     ❓
                   {%- endif -%}
                 {%- endif -%}
-                {# ref data - not used #}
+                {# nref data - not used #}
                 {%- if isNotUsed -%}
                   {%- set nrefDataNotUsedPrefix = [nrefDataUsedPath, uuids.nrefDataUseNoAUuid]|reply_path -%}
                   {%- set nrefDataUseNoWhyPath = [nrefDataNotUsedPrefix, uuids.nrefDataUseNoWhyQUuid]|reply_path -%}
@@ -317,9 +323,16 @@
                     {%- endif -%}
                   {%- endif -%}
                 {%- endif -%}
-                {# ref data - used #}
+                {# nref data - used #}
                 {%- if isUsed -%}
                   {%- set nrefDataUsedPrefix = [nrefDataUsedPath, uuids.nrefDataUseYesAUuid]|reply_path -%}
+                  {%- set ownerSentences = [] -%}
+                  {# owner #}
+                  {%- set nrefDataOwnerPath = [nrefDataUsedPrefix, uuids.nrefDataOwnerQUuid]|reply_path -%}
+                  {%- set nrefDataOwner = repliesMap[nrefDataOwnerPath]|reply_str_value -%}
+                  {%- if nrefDataOwner -%}
+                    {%- do ownerSentences.append("Owner of this dataset: " ~ nrefDataOwner|dot) -%}
+                  {%- endif -%}
                   {# owners #}
                   {%- set nrefDataOwnersPath = [nrefDataUsedPrefix, uuids.nrefDataOwnersQUuid]|reply_path -%}
                   {%- set nrefDataOwnersAUuid = repliesMap[nrefDataOwnersPath]|reply_str_value -%}
@@ -327,12 +340,15 @@
                     {%- set nrefDataOwnersNoReqPath = [nrefDataOwnersPath, nrefDataOwnersAUuid, uuids.nrefDataOwnersNoReqQUuid]|reply_path -%}
                     {%- set nrefDataOwnersNoReqAUuid = repliesMap[nrefDataOwnersNoReqPath]|reply_str_value -%}
                     {%- if nrefDataOwnersNoReqAUuid == uuids.nrefDataOwnersNoReqYesAUuid -%}
-                      <p>We will need to request access to the dataset from its owners.</p>
+                      {%- do ownerSentences.append("We will need to request access to the dataset from its owners.") -%}
                     {%- endif -%}
                   {%- elif nrefDataOwnersAUuid == uuids.nrefDataOwnersYesAUuid -%}
-                    <p>The owners of the dataset will collaborate on this project.</p>
+                    {%- do ownerSentences.append("The owners of the dataset will collaborate on this project.") -%}
                   {%- elif nrefDataOwnersAUuid == uuids.nrefDataOwnersWeAUuid -%}
-                    <p>We are owners of the dataset.</p>
+                    {%- do ownerSentences.append("We are owners of the dataset.") -%}
+                  {%- endif -%}
+                  {%- if ownerSentences|length > 0 -%}
+                    <p>{{ ownerSentences|join(" ") }}</p>
                   {%- endif -%}
                   {# format #}
                   {%- set nrefDataFormatPath = [nrefDataUsedPrefix, uuids.nrefDataFormatQUuid]|reply_path -%}
@@ -396,7 +412,7 @@
       {%- set dataHarmoOthersPath = [dataHarmoPath, dataHarmoAUuid, uuids.dataHarmoOthersQUuid]|reply_path %}
       {%- set dataHarmoOthersAUuid = repliesMap[dataHarmoOthersPath]|reply_str_value %}
       <p>We will need to harmonize different sources of existing data.
-      {%- if dataHarmoAUuid == uuids.dataHarmoYesAUuid %}
+      {%- if dataHarmoAUuid == uuids.dataHarmoOthersYesAUuid %}
         Our harmonization results will be made available to others.
       {%- endif %}
       </p>
@@ -405,33 +421,45 @@
     {%- set dataCompReadPath = [preexistingPath, uuids.preexistingYesAUuid, uuids.dataCompReadQUuid]|reply_path -%}
     {%- set dataCompReadAUuid = repliesMap[dataCompReadPath]|reply_str_value -%}
     {%- if dataCompReadAUuid == uuids.dataCompReadYesAUuid -%}
-    <p>
-      We will be using data that needs to be (re-)made computer readable first.
+    {%- set dataCompReadSentences = [] -%}
+      {%- do dataCompReadSentences.append("We will be using data that needs to be (re-)made computer readable first.") -%}
       {%- set dataCompReadOthersPath = [dataCompReadPath, dataCompReadAUuid, uuids.dataCompReadOthersQUuid]|reply_path -%}
       {%- set dataCompReadOthersAUuid = repliesMap[dataCompReadOthersPath]|reply_str_value -%}
       {%- if dataCompReadOthersAUuid == uuids.dataCompReadOthersYesAUuid -%}
-        We will provide machine readable, standardised metadata to others.
+        {%- do dataCompReadSentences.append("We will provide machine readable, standardised metadata to others.") -%}
         {%- set standards = [] -%}
         {%- set standardItemsPath = [dataCompReadOthersPath, dataCompReadOthersAUuid, uuids.dataCompReadOthersYesStandardsQUuid]|reply_path -%}
         {%- set standardItems = repliesMap[standardItemsPath]|reply_items -%}
         {%- for item in standardItems -%}
           {%- set reply = repliesMap[[standardItemsPath, item, uuids.dataCompReadOthersYesStandardQUuid]|reply_path] -%}
-          {%- do standards.append(reply) -%}
+          {%- if reply and reply.value -%}
+            {%- do standards.append(reply) -%}
+          {%- endif -%}
         {%- endfor -%}
         {%- if standards|length == 1 -%}
         {%- elif standards|length > 1 %}
-          For that, we will use the following formats: 
+          {%- set standardLinks = [] -%}
           {%- for standardReply in standards %}
-            {{ macros.integrationValue(standardReply, uuids.dataCompReadOthersYesStandardQUuid) }}{% if loop.last %}.{% else %}, {% endif %}
+            {%- if reply and reply.value.value.type == "IntegrationType" -%}
+              {%- set question = km.entities.questions[questionUuid] -%}
+              {%- set integration = km.entities.integrations[question.integrationUuid] -%}
+              {%- set integrationLink = integration.responseItemUrl|replace("${id}", reply.value.value.id) -%}
+              {%- do standardLinks.append('<a href="{{ integrationLink }}" target="_blank">' ~ reply.value.value.value ~ '</a>') -%}
+            {%- elif reply %}
+              {%- do standardLinks.append(reply.value.value.value) -%}
+            {%- endif -%}
           {% endfor %}
+          {%- do dataCompReadSentences.append("For that, we will use the following formats: " ~ standardLinks|join(", ") ~ ".") -%}
         {%- endif -%}
       {%- endif -%}
       {%- set dataCompReadItselfPath = [dataCompReadPath, dataCompReadAUuid, uuids.dataCompReadItselfQUuid]|reply_path -%}
       {%- set dataCompReadItselfAUuid = repliesMap[dataCompReadItselfPath]|reply_str_value -%}
       {%- if dataCompReadItselfAUuid == uuids.dataCompReadItselfYesAUuid %}
-        The data itself will be made available in computer readable form to others.
+        {%- do dataCompReadSentences.append("The data itself will be made available in computer readable form to others.") -%}
       {%- endif -%}
-    </p>
+      {%- if dataCompReadSentences|length > 0 -%}
+        <p>{{ dataCompReadSentences|join(" ") }}</p>
+      {%- endif -%}
     {%- endif -%}
   {%- endif -%}
 
@@ -499,7 +527,7 @@
               {%- set formatsVolumeFiles = repliesMap[[formatsVolumePath, uuids.formatsVolumeFileSizeAUuid, uuids.formatsVolumeFilesQUuid]|reply_path]|reply_str_value -%}
               {%- set formatsVolumeFileGB = repliesMap[[formatsVolumePath, uuids.formatsVolumeFileSizeAUuid, uuids.formatsVolumeFileGBQUuid]|reply_path]|reply_str_value -%}
               {%- if formatsVolumeFiles and formatsVolumeFileGB %}
-                We expect to have {{ formatsVolumeFiles }} files of average size {{ formatsVolumeFileGB }} GB (i.e. approximatelly {{ (formatsVolumeFiles|int * formatsVolumeFileGB|float)|round(2) }} GB in total).
+                We expect to have {{ formatsVolumeFiles }} files of average size {{ formatsVolumeFileGB }} GB (i.e. approximately {{ (formatsVolumeFiles|int * formatsVolumeFileGB|float)|round(2) }} GB in total).
               {%- endif -%}
             {%- endif -%}
             </p>
