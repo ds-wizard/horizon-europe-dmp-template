@@ -80,7 +80,7 @@
         {%- set ethicReviewPath = [collectPersonalPath, collectPersonalAUuid, uuids.cpersEthicReviewQUuid]|reply_path -%}
         {%- set ethicReviewAUuid = repliesMap[ethicReviewPath]|reply_str_value -%}
         {%- if ethicReviewAUuid == uuids.cpersEthicReviewYesAUuid %}
-          An ethical committee will make an ethical review on the project.
+          An ethical committee will make an ethical review on the {{globals.projects}}.
         {%- endif -%}
         {%- set needDpiaPath = [collectPersonalPath, collectPersonalAUuid, uuids.cpersNeedDpiaQUuid]|reply_path -%}
         {%- set needDpiaAUuid = repliesMap[needDpiaPath]|reply_str_value -%}

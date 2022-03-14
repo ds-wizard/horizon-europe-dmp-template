@@ -216,7 +216,7 @@
                 {%- elif refDataConditionsAUuid == uuids.refDataConditionsOtherAUuid -%}
                   {%- set refDataConditionsOtherPath = [refDataConditionsPath, uuids.refDataConditionsOtherAUuid, uuids.refDataConditionsOtherQUuid]|reply_path -%}
                   {%- set refDataConditionsOther = repliesMap[refDataConditionsOtherPath]|reply_str_value -%}
-                  available under specific restrictions, which we will follow in our project{{ ": " ~ refDataConditionsOther|dot if refDataConditionsOther else "." }}
+                  available under specific restrictions, which we will follow in our {{globals.projects}}{{ ": " ~ refDataConditionsOther|dot if refDataConditionsOther else "." }}
                 {%- endif -%}
               </li>
             {%- endif -%}
@@ -239,7 +239,7 @@
                 {%- elif nrefDataConditionsAUuid == uuids.nrefDataConditionsOtherAUuid -%}
                   {%- set nrefDataConditionsOtherPath = [nrefDataConditionsPath, uuids.nrefDataConditionsOtherAUuid, uuids.nrefDataConditionsOtherQUuid]|reply_path -%}
                   {%- set nrefDataConditionsOther = repliesMap[nrefDataConditionsOtherPath]|reply_str_value -%}
-                  available under specific restrictions, which we will follow in our project{{ ": " ~ nrefDataConditionsOther|dot if nrefDataConditionsOther else "." }}
+                  available under specific restrictions, which we will follow in our {{globals.projects}}{{ ": " ~ nrefDataConditionsOther|dot if nrefDataConditionsOther else "." }}
                 {%- endif -%}
               </li>
             {%- endif -%}
@@ -308,7 +308,7 @@
                   {%- elif distroRepositoryKindAUuid == uuids.publishedDataRepositoryInstitutionalAUuid %}
                     <em>Our institutional repository</em>.
                   {%- elif distroRepositoryKindAUuid == uuids.publishedDataRepositorySpecialAUuid %}
-                    <em>Special-purpose repository for the project</em>.
+                    <em>Special-purpose repository for the {{globals.projects}}</em>.
                     {# Sharing #}
                     {%- if distroShareAUuid == uuids.publishedDistroShareOpenAUuid %}
                       It will be <em>Open</em> (shared with anyone).
@@ -366,11 +366,11 @@
                         {%- set licenseRestrictMetadataPath = [publishedDataLicensePath, uuids.publishedDataLicenseRestrictAUuid, uuids.licenseRestrictMetadataQUuid]|reply_path -%}
                         {%- set licenseRestrictMetadataAUuid = repliesMap[licenseRestrictMetadataPath]|reply_str_value %}
                         
-                        Available under some restrictions, which we will follow in our project{{ ": " ~ licenseRestrictConditions|dot if licenseRestrictConditions else "." }}
+                        Available under some restrictions, which we will follow in our {{globals.projects}}{{ ": " ~ licenseRestrictConditions|dot if licenseRestrictConditions else "." }}
                         {%- if licenseRestrictAccessAUuid == uuids.licenseRestrictAccessRequestAUuid %}
                           Re-users will be able to get access by request to the contact person.
                         {%- elif licenseRestrictAccessAUuid == uuids.licenseRestrictAccessCommitteeAUuid %}
-                          Re-users will be able to get access through a <em>Data Access Committee</em> for the project.
+                          Re-users will be able to get access through a <em>Data Access Committee</em> for the {{globals.projects}}.
                         {%- elif licenseRestrictAccessAUuid == uuids.licenseRestrictAccessAnotherAUuid -%}
                           {%- set licenseRestrictAccessAnotherPath = [licenseRestrictAccessPath, uuids.licenseRestrictAccessAnotherAUuid, uuids.licenseRestrictAccessAnotherQUuid]|reply_path -%}
                           {%- set licenseRestrictAccessAnother = repliesMap[licenseRestrictAccessAnotherPath]|reply_str_value %}
@@ -425,7 +425,7 @@
           {%- elif publishedWhenAUuid == uuids.publishedWhenFinishedAUuid %}
             <br>The dataset will published after all our processing has finished.
           {%- elif publishedWhenAUuid == uuids.publishedWhenWrappedAUuid %}
-            <br>The dataset will published when the project is wrapped up.
+            <br>The dataset will published when the {{globals.projects}} {{globals.projectsIsAre}} wrapped up.
           {%- elif publishedWhenAUuid == uuids.publishedWhenEmbargoAUuid %}
             <br>The dataset will published after an embargo.
           {%- endif %}

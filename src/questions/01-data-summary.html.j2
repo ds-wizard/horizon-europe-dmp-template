@@ -11,7 +11,7 @@
     {%- if measuredDataItems|length > 0 -%}
       <div>
       <h4>Instrument datasets</h4>
-      The following instrument datasets will be acquired in the project:
+      The following instrument datasets will be acquired in the {{globals.projects}}:
       <ul>
         {%- for datasetItem in measuredDataItems -%}
           {%- set pathPrefix = [measuredDataPath, datasetItem]|reply_path -%}
@@ -27,9 +27,9 @@
             <strong>{{ measuredDataName if measuredDataName else "(no name given)" }}</strong>
             {# Who will collect #}
             {%- if measuredDataWhoAUuid == uuids.measuredDataWhoExpertsOwnAUuid -%}
-              <p>This dataset will be collected by experts in the project, with our own equipment.</p>
+              <p>This dataset will be collected by experts in the {{globals.projects}}, with our own equipment.</p>
             {%- elif measuredDataWhoAUuid == uuids.measuredDataWhoExpertsOutAUuid -%}
-              <p>This dataset will be collected by experts in the project, at a specialized infrastructure.</p>
+              <p>This dataset will be collected by experts in the {{globals.projects}}, at a specialized infrastructure.</p>
             {%- elif measuredDataWhoAUuid == uuids.measuredDataWhoExternalAUuid -%}
               {%- set mdExternalOwnershipPath = [measuredDataWhoPath, uuids.measuredDataWhoExternalAUuid, uuids.mdExternalOwnershipQUuid]|reply_path -%}
               {%- set mdExternalOwnershipAUuid = repliesMap[mdExternalOwnershipPath]|reply_str_value -%}
@@ -244,11 +244,11 @@
                         We will use version "{{ refDataVersionedWhich }}" of this dataset.
                       {%- endif -%}
                       {%- if refDataVersionedChangeAUuid == uuids.refDataVersionedChangeStayAUuid %}
-                        If a new version becomes available during the project, we will stay with the old version.
+                        If a new version becomes available during the {{globals.projects}}, we will stay with the old version.
                       {%- elif refDataVersionedChangeAUuid == uuids.refDataVersionedChangeNewAUuid %}
-                        If a new version becomes available during the project, new analyses will be done with the new version.
+                        If a new version becomes available during the {{globals.projects}}, new analyses will be done with the new version.
                       {%- elif refDataVersionedChangeAUuid == uuids.refDataVersionedChangeAllAUuid %}
-                        If a new version becomes available during the project, all analyses will be redone with the new version.
+                        If a new version becomes available during the {{globals.projects}}, all analyses will be redone with the new version.
                       {%- endif -%}
                       </p>
                     {%- endif -%}
@@ -343,7 +343,7 @@
                       {%- do ownerSentences.append("We will need to request access to the dataset from its owners.") -%}
                     {%- endif -%}
                   {%- elif nrefDataOwnersAUuid == uuids.nrefDataOwnersYesAUuid -%}
-                    {%- do ownerSentences.append("The owners of the dataset will collaborate on this project.") -%}
+                    {%- do ownerSentences.append("The owners of the dataset will collaborate on this " ~ globals.projects ~ ".") -%}
                   {%- elif nrefDataOwnersAUuid == uuids.nrefDataOwnersWeAUuid -%}
                     {%- do ownerSentences.append("We are owners of the dataset.") -%}
                   {%- endif -%}
@@ -388,7 +388,7 @@
                   {%- elif nrefDataCompleteAUuid == uuids.nrefDataCompleteDocumentAUuid -%}
                     <p>Only part of the dataset will be used; any filtering or selection will be well documented.</p>
                   {%- elif nrefDataCompleteAUuid == uuids.nrefDataCompleteSubsetAUuid -%}
-                    <p>We will make sure the selected subset will be available together with my results.</p>
+                    <p>We will make sure the selected subset will be available together with our results.</p>
                   {%- endif -%}
                   {# data use #}
                   {%- set dataUse = repliesMap[[nrefDataUsedPrefix, uuids.nrefDataUsageQUuid]|reply_path]|reply_str_value -%}
@@ -454,7 +454,9 @@
       {%- endif -%}
       {%- set dataCompReadItselfPath = [dataCompReadPath, dataCompReadAUuid, uuids.dataCompReadItselfQUuid]|reply_path -%}
       {%- set dataCompReadItselfAUuid = repliesMap[dataCompReadItselfPath]|reply_str_value -%}
-      {%- if dataCompReadItselfAUuid == uuids.dataCompReadItselfYesAUuid %}
+      {%- if dataCompReadItselfAUuid == uuids.dataCompReadItselfYesRepoAUuid %}
+        {%- do dataCompReadSentences.append("The data itself will be made available in computer readable form to others through a standard repository.") -%}
+      {%- elif dataCompReadItselfAUuid == uuids.dataCompReadItselfYesOtherAUuid %}
         {%- do dataCompReadSentences.append("The data itself will be made available in computer readable form to others.") -%}
       {%- endif -%}
       {%- if dataCompReadSentences|length > 0 -%}
@@ -559,11 +561,11 @@
       <h4>Data storage and file conventions</h4>
       {# Storage space #}
       {%- if storageSpaceAUuid == uuids.storageSpaceLittleAUuid -%}
-        <p>The project will require so little storage space for all data and software (including temporary storage) that it is not a problem.</p>
+        <p>The {{globals.projects}} will require so little storage space for all data and software (including temporary storage) that it is not a problem.</p>
       {%- elif storageSpaceAUuid == uuids.storageSpaceSpecifyAUuid -%}
         {%- set size = repliesMap[[storageSpacePath, storageSpaceAUuid, uuids.storageSpaceSpecifyQUuid]|reply_path]|reply_str_value -%}
         {%- if size -%}
-        <p>We estimate the storage space that the project will require for all data and software (including temporary storage) to {{ size }} gigabytes.</p>
+        <p>We estimate the storage space that the {{globals.projects}} will require for all data and software (including temporary storage) to {{ size }} gigabytes.</p>
         {%- endif -%}
       {%- endif -%}
       {# File System #}
@@ -665,9 +667,9 @@
       {# Graph Database #}
       <p>
       {%- if storageConvGraphDbAUuid == uuids.storageConvGraphDbNoAUuid -%}
-        We will not use a graph database for data in the project.
+        We will not use a graph database for data in the {{globals.projects}}.
       {%- elif storageConvGraphDbAUuid == uuids.storageConvGraphDbYesAUuid -%}
-        We will use a graph database for data in the project.
+        We will use a graph database for data in the {{globals.projects}}.
       {%- endif -%}
       </p>
       {# Triple Store #}

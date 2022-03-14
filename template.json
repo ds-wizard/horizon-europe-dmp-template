@@ -1,17 +1,17 @@
 {
     "templateId": "horizon-europe-dmp",
     "organizationId": "dsw",
-    "version": "0.2.5",
+    "version": "0.3.0",
     "name": "Horizon Europe DMP",
     "description": "Data Management Plan according to the Horizon Europe template",
     "license": "Apache-2.0",
     "metamodelVersion": 8,
-    "recommendedPackageId": "dsw:root:2.3.0",
+    "recommendedPackageId": "dsw:root:2.3.14",
     "allowedPackages": [
         {
             "orgId": "dsw",
             "kmId": "root",
-            "minVersion": "2.3.0",
+            "minVersion": "2.3.14",
             "maxVersion": null
         },
         {
@@ -23,7 +23,7 @@
         {
             "orgId": "dsw",
             "kmId": "lifesciences",
-            "minVersion": "2.3.0",
+            "minVersion": "2.3.14",
             "maxVersion": null
         }
     ],
@@ -69,30 +69,6 @@
             ]
         },
         {
-            "uuid": "dbc94579-40d7-42c3-975c-71e30d07778b",
-            "name": "LaTeX Document",
-            "shortName": "latex",
-            "icon": "far fa-file-alt",
-            "color": "#44D7B6",
-            "steps": [
-                {
-                    "name": "jinja",
-                    "options": {
-                        "template": "src/index.html.j2",
-                        "content-type": "text/html",
-                        "extension": "html"
-                    }
-                },
-                {
-                    "name": "pandoc",
-                    "options": {
-                        "from": "html",
-                        "to": "latex"
-                    }
-                }
-            ]
-        },
-        {
             "uuid": "f4bd941a-dfbe-4226-a1fc-200fb5269311",
             "name": "MS Word Document",
             "shortName": "docx",
@@ -102,7 +78,7 @@
                 {
                     "name": "jinja",
                     "options": {
-                        "template": "src/index.html.j2",
+                        "template": "src/word/index.html.j2",
                         "content-type": "text/html",
                         "extension": "html"
                     }
@@ -111,55 +87,8 @@
                     "name": "pandoc",
                     "options": {
                         "from": "html",
-                        "to": "docx"
-                    }
-                }
-            ]
-        },
-        {
-            "uuid": "15e53172-bbae-4a0c-a4d9-8f3ddf60e7b6",
-            "name": "OpenDocument Text",
-            "shortName": "odt",
-            "icon": "far fa-file-alt",
-            "color": "#32C5FF",
-            "steps": [
-                {
-                    "name": "jinja",
-                    "options": {
-                        "template": "src/index.html.j2",
-                        "content-type": "text/html",
-                        "extension": "html"
-                    }
-                },
-                {
-                    "name": "pandoc",
-                    "options": {
-                        "from": "html",
-                        "to": "odt"
-                    }
-                }
-            ]
-        },
-        {
-            "uuid": "f0533e48-f4c5-4af2-b2c1-5a47d4a247c0",
-            "name": "Markdown Document",
-            "shortName": "md",
-            "icon": "far fa-file-alt",
-            "color": "#6D7278",
-            "steps": [
-                {
-                    "name": "jinja",
-                    "options": {
-                        "template": "src/index.html.j2",
-                        "content-type": "text/html",
-                        "extension": "html"
-                    }
-                },
-                {
-                    "name": "pandoc",
-                    "options": {
-                        "from": "html",
-                        "to": "markdown"
+                        "to": "docx",
+                        "args": "--filter=pandoc-docx-pagebreakpy --reference-doc=src/word/reference.docx"
                     }
                 }
             ]

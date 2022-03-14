@@ -78,9 +78,9 @@
       {%- set newTypesVocabsMappingPath = [newTypesVocabsPath, uuids.newTypesVocabsYesAUuid, uuids.newTypesVocabsMappingQUuid]|reply_path -%}
       {%- set newTypesVocabsMappingAUuid = repliesMap[newTypesVocabsPath]|reply_str_value -%}
       {%- if newTypesVocabsMappingAUuid == uuids.newTypesVocabsMappingNoAUuid -%}
-      <p>We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of my data.</p>
+      <p>We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of our data.</p>
       {%- elif newTypesVocabsMappingAUuid == uuids.newTypesVocabsMappingYesAUuid -%}
-      <p>We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of my data. Such terms will be mapped to existing vocabularies or ontologies.</p>
+      <p>We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of our data. Such terms will be mapped to existing vocabularies or ontologies.</p>
       {%- endif -%}
     {%- endif -%}
   {%- endif -%}

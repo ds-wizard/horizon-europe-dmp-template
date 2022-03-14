@@ -16,7 +16,7 @@
       {% for version in dc.qtn.versions if version.uuid == dc.qtn.version %}
         <div class="version">{{version.name}}</div>
       {% endfor %}
-      <div class="date">{{ dc.doc.created_at|datetime_format("%d %b %Y") }}</div>
+      <div class="date">{{ dc.doc.created_at|datetime_format("%d %B %Y") }}</div>
     </div>
 
     <p class="dsw">

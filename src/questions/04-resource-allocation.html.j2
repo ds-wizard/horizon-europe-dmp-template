@@ -14,11 +14,11 @@
   {%- set coldStorageSentences = [] -%}
 
   {%- if coldStorageDuring and coldStorageAfter -%}
-    {%- do coldStorageSentences.append("We will be archiving data (using so-called 'cold storage') for long term preservation after the project but also already during the project.") -%}
+    {%- do coldStorageSentences.append("We will be archiving data (using so-called 'cold storage') for long term preservation after the " ~ globals.projects ~ " but also already during the " ~ globals.projects ~ ".") -%}
   {%- elif coldStorageDuring -%}
-    {%- do coldStorageSentences.append("We will be archiving data (using so-called 'cold storage') for long term preservation already during the project.") -%}
+    {%- do coldStorageSentences.append("We will be archiving data (using so-called 'cold storage') for long term preservation already during the " ~ globals.projects ~ ".") -%}
   {%- elif coldStorageAfter -%}
-    {%- do coldStorageSentences.append("We will be archiving data (using so-called 'cold storage') for long term preservation after the project.") -%}
+    {%- do coldStorageSentences.append("We will be archiving data (using so-called 'cold storage') for long term preservation after the " ~ globals.projects ~ ".") -%}
   {%- endif -%}
 
   {%- if coldStorageAfter -%}
@@ -28,7 +28,7 @@
     {%- if coldStoragePayAUuid == uuids.coldStoragePayGrantAUuid -%}
       {%- do coldStorageSentences.append("The costs for archiving data will be paid from the grant.") -%}
     {%- elif coldStoragePayAUuid == uuids.coldStoragePayDepartmentAUuid -%}
-      {%- do coldStorageSentences.append("The costs for archiving data will be paid out of departmental budgets from one or more of the project participants.") -%}
+      {%- do coldStorageSentences.append("The costs for archiving data will be paid out of departmental budgets from one or more of the " ~ globals.projects ~ " participants.") -%}
     {%- elif coldStoragePayAUuid == uuids.coldStoragePayInstituteAUuid -%}
       {%- do coldStorageSentences.append("The used data archiving service is budgeted by one or more of the participating institutes.") -%}
     {%- endif -%}
@@ -64,7 +64,7 @@
       {%- set whoPath = [coldStorageExtendPath, coldStorageExtendAUuid, uuids.coldStorageExtendWhoQUuid]|reply_path -%}
       {%- set whoAUuid = repliesMap[whoPath]|reply_str_value -%}
       {%- if whoAUuid == uuids.coldStorageExtendWhoOneAUuid -%}
-        {%- do coldStorageSentences.append("The archival period can be extended &ndash; one of the principle investigators involved in the project will decide.") -%}
+        {%- do coldStorageSentences.append("The archival period can be extended &ndash; one of the principle investigators involved in the " ~ globals.projects ~ " will decide.") -%}
       {%- elif whoAUuid == uuids.coldStorageExtendWhoLibAUuid -%}
         {%- do coldStorageSentences.append("The archival period can be extended &ndash; library or archive staff will decide.") -%}
       {%- endif -%}
@@ -119,11 +119,11 @@
     {%- set repoChargesHowPayPath = [repoChargesPath, uuids.repoChargesYesAUuid, uuids.repoChargesHowPayQUuid]|reply_path -%}
     {%- set repoChargesHowPayAUuid = repliesMap[repoChargesHowPayPath]|reply_str_value -%}
     {%- if repoChargesHowPayAUuid == uuids.repoChargesHowPayBudgetedAUuid -%}
-      <p>We have budgeted for the costs in the project to pay charges of the used repositories.</p>
+      <p>We have budgeted for the costs in the {{globals.projects}} to pay charges of the used repositories.</p>
     {%- elif repoChargesHowPayAUuid == uuids.repoChargesHowPayDepartmentAUuid -%}
-      <p>The costs related to the used repositories will be carried by (one of) the departments involved in the project.</p>
+      <p>The costs related to the used repositories will be carried by (one of) the departments involved in the {{globals.projects}}.</p>
     {%- elif repoChargesHowPayAUuid == uuids.repoChargesHowPayInstituteAUuid -%}
-      <p>The costs related to the used repositories will be carried by (one of) the institutes involved in the project.</p>
+      <p>The costs related to the used repositories will be carried by (one of) the institutes involved in the {{globals.projects}}.</p>
     {%- elif repoChargesHowPayAUuid == uuids.repoChargesHowPayOtherAUuid -%}
       {%- set repoChargesHowPayOtherPath = [repoChargesHowPayPath, uuids.repoChargesHowPayOtherAUuid, uuids.repoChargesHowPayOtherQUuid]|reply_path -%}
       {%- set repoChargesHowPayOther = repliesMap[repoChargesHowPayOtherPath]|reply_str_value -%}
