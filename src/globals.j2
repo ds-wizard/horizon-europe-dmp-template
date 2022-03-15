@@ -1,0 +1,5 @@
+{#- Project or projects (based on number) -#}
+{%- set projectsPath = [uuids.adminDetailsCUuid, uuids.projectsQUuid]|reply_path -%}
+{%- set projectsItems = repliesMap[projectsPath]|reply_items -%}
+{%- set projects = "projects" if projectsItems|length > 1 else "project" -%}
+{%- set projectsIsAre = "are" if projectsItems|length > 1 else "is" -%}

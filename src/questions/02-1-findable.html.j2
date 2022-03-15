@@ -18,11 +18,38 @@
           {% elif isPublishedDataAUuid == uuids.isPublishedDataYesAUuid %}
             (published)
           {%- set prefix = [isPublishedDataPath, uuids.isPublishedDataYesAUuid]|reply_path -%}
+          {# Identifiers #}
+          {% set identifiersPath = [pathPrefix, uuids.producedDataIdentifiersQUuid]|reply_path -%}
+          {%- set identifiersItems = repliesMap[identifiersPath]|reply_items -%}
+          {%- if identifiersItems|length > 0 -%}
+          <br>The dataset has the following identifiers:
+          <ul>
+          {%- for j in identifiersItems -%}
+            {%- set identifierPrefix = [identifiersPath, j]|reply_path -%}
+            {%- set identifierTypePath = [identifierPrefix, uuids.dataIdentifierTypeQUuid]|reply_path -%}
+            {%- set identifierTypeAUuid = repliesMap[identifierTypePath]|reply_str_value -%}
+            {%- set identifierValuePath = [identifierPrefix, uuids.dataIdentifierIdenfitierQUuid]|reply_path -%}
+            {%- set identifierValue = repliesMap[identifierValuePath]|reply_str_value -%}
+            {%- if identifierTypeAUuid == uuids.dataIdentifierTypeHandleAUuid -%}
+              <li>Handle: <strong>{{ identifierValue }}</strong></li>
+            {%- elif identifierTypeAUuid == uuids.dataIdentifierTypeDoiAUuid -%}
+              <li>DOI: <strong><a href="https://doi.org/{{ identifierValue }}">{{ identifierValue }}</a></strong></li>
+            {%- elif identifierTypeAUuid == uuids.dataIdentifierTypeArkAUuid -%}
+              <li>ARK: <strong>{{ identifierValue }}</strong></li>
+            {%- elif identifierTypeAUuid == uuids.dataIdentifierTypeUrlAUuid -%}
+              <li>URL: <strong><a href="{{ identifierValue }}">{{ identifierValue }}</a></strong></li>
+            {%- elif identifierTypeAUuid == uuids.dataIdentifierTypeOtherAUuid -%}
+              {%- set identifierType = repliesMap[[identifierTypePath, uuids.dataIdentifierTypeOtherAUuid, uuids.dataIdentifierTypeOtherTypeQUuid]|reply_path]|reply_str_value -%}
+              <li>{{ identifierType }}: <strong>{{ identifierValue }}</strong></li>
+            {%- endif -%}
+          {%- endfor -%}
+          </ul>
+          {%- endif %}
           {# Distributions #}
           {% set distrosPath = [prefix, uuids.publishedDistrosQUuid]|reply_path -%}
           {%- set distrosItems = repliesMap[distrosPath]|reply_items -%}
           {%- if distrosItems|length > 0 -%}
-            <br>The distributions will be stored in:
+            <br>We will distribute the dataset using:
             <ul>
             {%- for j in distrosItems -%}
               {%- set distroPrefix = [distrosPath, j]|reply_path -%}
@@ -31,7 +58,7 @@
               {%- if distroRepositoryKindAUuid -%}
                 <li>
                   {%- if distroRepositoryKindAUuid == uuids.publishedDataRepositoryDomainSpecificAUuid %}
-                    Domain-specific repository
+                    <em>Domain-specific repository</em>
                     {%- set domainSpecificRepoNamePath = [distroRepositoryKindPath, uuids.publishedDataRepositoryDomainSpecificAUuid, uuids.domainSpecificRepoNameQUuid]|reply_path -%}
                     {%- set domainSpecificRepoNameReply = repliesMap[domainSpecificRepoNamePath] -%}
                     {%- if domainSpecificRepoNameReply -%}
@@ -53,11 +80,11 @@
                       We have made other arrangements{{ ": " ~ domainSpecificRepoContactBeforeOther|dot if domainSpecificRepoContactBeforeOther else "." }}
                     {%- endif -%}
                   {%- elif distroRepositoryKindAUuid == uuids.publishedDataRepositoryNationalAUuid %}
-                    Our national repository.
+                    <em>Our national repository</em>.
                   {%- elif distroRepositoryKindAUuid == uuids.publishedDataRepositoryInstitutionalAUuid %}
-                    Our institutional repository.
+                    <em>Our institutional repository</em>.
                   {%- elif distroRepositoryKindAUuid == uuids.publishedDataRepositorySpecialAUuid %}
-                    Special-purpose repository for the project.
+                    <em>Special-purpose repository for the {{globals.projects}}</em>.
                     {# Long-term support #}
                     {%- set specialRepoLongTermSupportPath = [distroRepositoryKindPath, uuids.publishedDataRepositorySpecialAUuid, uuids.specialRepoLongTermSupportQUuid]|reply_path -%}
                     {%- set specialRepoLongTermSupportAUuid = repliesMap[specialRepoLongTermSupportPath]|reply_str_value -%}
@@ -70,11 +97,39 @@
                     {%- if specialRepoServiceLevelAUuid == uuids.specialRepoServiceLevelDownloadAUuid %}
                       The repository will provide download-only service.
                     {%- elif specialRepoServiceLevelAUuid == uuids.specialRepoServiceLevelSimpleAUuid %}
-                      The repository will provice a search and simple access interface.
+                      The repository will provide a search and simple access interface.
                     {%- elif specialRepoServiceLevelAUuid == uuids.specialRepoServiceLevelAdvancedAUuid %}
                       The repository will provide an advanced processing service.
                     {%- endif -%}
                   {%- endif -%}
+                  {# Assigned identifier #}
+                  {%- set distroPidPath = [distroPrefix, uuids.distroPidQUuid]|reply_path -%}
+                  {%- set distroPidAUuid = repliesMap[distroPidPath]|reply_str_value -%}
+                  {%- if distroPidAUuid == uuids.distroPidYesAUuid -%}
+                    {%- set distroPidWhoAUuid = repliesMap[[distroPidPath, distroPidAUuid, uuids.distroPidWhoQUuid]|reply_path]|reply_str_value -%}
+                    {%- set distroPidResolveAUuid = repliesMap[[distroPidPath, distroPidAUuid, uuids.distroPidResolveQUuid]|reply_path]|reply_str_value -%}
+                    {%- set distroPidSpecs = repliesMap[[distroPidPath, distroPidAUuid, uuids.distroPidSpecifyQUuid]|reply_path]|reply_str_value|e|trim -%}
+                    {%- set pidSentences = [] %}
+                    {%- if distroPidWhoAUuid == uuids.distroPidWhoProjectAUuid -%}
+                      {%- do pidSentences.append("A persistent identifier will be assigned by a project data steward or principle investigator.") -%}
+                    {%- elif distroPidWhoAUuid == uuids.distroPidWhoInstituteAUuid -%}
+                      {%- do pidSentences.append("A persistent identifier will be assigned by an institutional data steward.") -%}
+                    {%- elif distroPidWhoAUuid == uuids.distroPidWhoRepoAUuid -%}
+                      {%- do pidSentences.append("A persistent identifier will be assigned by the repository.") -%}
+                    {%- else -%}
+                      {%- do pidSentences.append("A persistent identifier will be assigned.") -%}
+                    {%- endif -%}
+                    {%- if distroPidResolveAUuid == uuids.distroPidResolveYesAUuid %}
+                      {%- do pidSentences.append("The repository will make sure that the persistent identifier can be resolved to a digital object.") -%}
+                      {# TODO test #}
+                    {%- endif -%}
+                    {%- if distroPidSpecs %}
+                      {%- do pidSentences.append("The assigned persistent identifier is specified: " ~ distroPidSpecs|dot) -%}
+                    {%- endif -%}
+                    {%- if pidSentences|length > 0 %}
+                      <br>{{ pidSentences|join(" ") }}
+                    {%- endif -%}
+                  {%- endif %}
                 </li>
               {%- endif -%}
             {%- endfor -%}
@@ -97,7 +152,9 @@
           {# Catalogue #}
           {%- set publishedDataCataloguePath = [prefix, uuids.publishedDataCatalogueQUuid]|reply_path -%}
           {%- set publishedDataCatalogueAUuid = repliesMap[publishedDataCataloguePath]|reply_str_value -%}
-          {%- if publishedDataCatalogueAUuid == uuids.publishedDataCatalogueYesAUuid -%}
+          {%- if publishedDataCatalogueAUuid == uuids.publishedDataCatalogueRepoAUuid -%}
+            <br>We will not be adding a reference to any data catalogue because the data will be stored in a repository that is the prime source of data for re-use in the field.
+          {%- elif publishedDataCatalogueAUuid == uuids.publishedDataCatalogueYesAUuid -%}
             <br>We will be adding a reference to the published data to at least one data catalogue.
           {%- endif -%}
           {%- endif -%}
@@ -118,7 +175,7 @@
         {%- set metadataMiaIdeaPath = [metadataMiaPath, uuids.metadataMiaNoAUuid, uuids.metadataMiaIdeaQUuid]|reply_path -%}
         {%- set metadataMiaIdeaAUuid = repliesMap[metadataMiaIdeaPath]|reply_str_value -%}
         {%- if metadataMiaIdeaAUuid == uuids.metadataMiaIdeaYesAUuid -%}
-          <p>There are no 'Minimal Metadata About ...' (MIA...) standards for our experiments. However, we have a good idea of what metadata is needed to make it possible for others to read and interpret your data in the future.</p>
+          <p>There are no 'Minimal Metadata About ...' (MIA...) standards for our experiments. However, we have a good idea of what metadata is needed to make it possible for others to read and interpret our data in the future.</p>
         {%- endif -%}
       {%- elif metadataMiaAUuid == uuids.metadataMiaYesAUuid -%}
         {%- set metadataMiaListPath = [metadataMiaPath, uuids.metadataMiaYesAUuid, uuids.metadataMiaListQUuid]|reply_path -%}
@@ -154,7 +211,7 @@
 
       {# Metadata standards #}
       {%- set metadataSentences = [] -%}
-      {%- set metadataStandardsPath = [metadataPath, uuids.metadataExpAUuid, uuids.metadataStandardsQUuid]|reply_path -%}
+      {%- set metadataStandardsPath = [metadataPath, uuids.metadataExploreAUuid, uuids.metadataStandardsQUuid]|reply_path -%}
       {%- set metadataStandardsAUuid = repliesMap[metadataStandardsPath]|reply_str_value -%}
       {%- if metadataStandardsAUuid == uuids.metadataStandardsExploreAUuid -%}
         {%- set metadataStandardsDCPath = [metadataStandardsPath, uuids.metadataStandardsExploreAUuid, uuids.metadataStandardsDCQUuid]|reply_path -%}
@@ -163,6 +220,8 @@
         {%- set metadataStandardsDataCityAUuid = repliesMap[metadataStandardsDataCityPath]|reply_str_value -%}
         {%- set metadataStandardsDDIPath = [metadataStandardsPath, uuids.metadataStandardsExploreAUuid, uuids.metadataStandardsDDIQUuid]|reply_path -%}
         {%- set metadataStandardsDDIAUuid = repliesMap[metadataStandardsDDIPath]|reply_str_value -%}
+        {%- set metadataStandardsKeywordsPath = [metadataStandardsPath, uuids.metadataStandardsExploreAUuid, uuids.metadataStandardsKeywordsQUuid]|reply_path -%}
+        {%- set metadataStandardsKeywordsAUuid = repliesMap[metadataStandardsKeywordsPath]|reply_str_value -%}
 
         {%- set documentDataW3CPath = [metadataStandardsPath, uuids.metadataStandardsExploreAUuid, uuids.documentDataW3CQUuid]|reply_path -%}
         {%- set documentDataW3CAUuid = repliesMap[documentDataW3CPath]|reply_str_value -%}
@@ -171,18 +230,21 @@
         {%- if metadataStandardsDCAUuid == uuids.metadataStandardsDCYesAUuid -%}
           {%- do metadataStandards.append("Dublin Core") -%}
         {%- endif -%}
-        {%- if metadataStandardsDCAUuid == uuids.metadataStandardsDataCiteYesAUuid -%}
+        {%- if metadataStandardsDataCityAUuid == uuids.metadataStandardsDataCiteYesAUuid -%}
           {%- do metadataStandards.append("DataCite") -%}
         {%- endif -%}
-        {%- if metadataStandardsDCAUuid == uuids.metadataStandardsDCYesAUuid -%}
+        {%- if metadataStandardsDDIAUuid == uuids.metadataStandardsDDIYesAUuid -%}
           {%- do metadataStandards.append("DDI (Data Documentation Initiative)") -%}
         {%- endif -%}
         {%- if metadataStandards|length == 1 -%}
           {%- do metadataSentences.append("We will be documenting the data with " ~ metadataStandards[0] ~ " metadata standard.") -%}
         {%- elif metadataStandards|length == 2 -%}
-          {%- do metadataSentences.append("We will be documenting the data with " ~ metadataStandards[0] ~ " and " ~ metadataStandards[1] ~ " metadata standard.") -%}
+          {%- do metadataSentences.append("We will be documenting the data with " ~ metadataStandards[0] ~ " and " ~ metadataStandards[1] ~ " metadata standards.") -%}
         {%- elif metadataStandards|length == 3 -%}
-          {%- do metadataSentences.append("We will be documenting the data with " ~ metadataStandards[0] ~ ", " ~ metadataStandards[1] ~ ", and " ~ metadataStandards[2] ~ " metadata standard.") -%}
+          {%- do metadataSentences.append("We will be documenting the data with " ~ metadataStandards[0] ~ ", " ~ metadataStandards[1] ~ ", and " ~ metadataStandards[2] ~ " metadata standards.") -%}
+        {%- endif -%}
+        {%- if metadataStandardsKeywordsAUuid == uuids.metadataStandardsKeywordsYesAUuid -%}
+          {%- do metadataSentences.append("We will include keywords and relevant ontology references to optimise the possibility for discovery and potential reuse.") -%}
         {%- endif -%}
       {%- endif -%}
 
@@ -197,7 +259,7 @@
       {%- endif -%}
 
       {# filenames #}
-      {%- set metadataNamingPath = [prefix, uuids.metadataNamingQUuid]|reply_path -%}
+      {%- set metadataNamingPath = [uuids.creatingCUuid, uuids.metadataNamingQUuid]|reply_path -%}
       {%- set metadataNamingAUuid = repliesMap[metadataNamingPath]|reply_str_value -%}
       {%- if metadataNamingAUuid == uuids.metadataNamingExpAUuid -%}
         {%- set prefix = [metadataNamingPath, uuids.metadataNamingExpAUuid]|reply_path -%}

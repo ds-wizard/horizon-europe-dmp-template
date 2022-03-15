@@ -1,0 +1,67 @@
+{%- set contributorsPath = [uuids.adminDetailsCUuid, uuids.contributorsQUuid]|join(".") -%}
+{%- set contributorsItems = repliesMap[contributorsPath]|reply_items -%}
+<div id="dmp-contributors">
+  <h2>Contributors</h2>
+
+  <p>The following contributors are related to the {{globals.projects}} of this DMP:</p>
+
+  {% set contributors = [] %}
+  {%- for contributor in contributorsItems -%}
+    {%- set pathPrefix = [contributorsPath, contributor]|reply_path ~ "." -%}
+    {%- set contributorName = repliesMap[pathPrefix ~ uuids.contributorNameQUuid]|reply_str_value -%}
+    {%- set contributorEmail = repliesMap[pathPrefix ~ uuids.contributorEmailQUuid]|reply_str_value -%}
+    {%- set contributorOrcid = repliesMap[pathPrefix ~ uuids.contributorOrcidQUuid]|reply_str_value -%}
+    {%- set contributorRoles = repliesMap[pathPrefix ~ uuids.contributorRoleQUuid]|reply_items -%}
+    {%- set contributorAffiliationReply = repliesMap[pathPrefix ~ uuids.contributorAffiliationQUuid] -%}
+    {%- if contributorName -%}
+      {%- set roles = [] -%}
+      {%- for role in contributorRoles -%}
+        {%- if role in dc.e.choices.keys() -%}
+          {%- do roles.append(dc.e.choices[role].label) -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- do contributors.append({
+        'name': contributorName,
+        'email': contributorEmail,
+        'orcid': contributorOrcid,
+        'roles': roles|sort,
+        'affiliation': contributorAffiliationReply,
+      }) -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if contributors|length > 0 -%}
+  <ul>
+  {% for contributor in contributors %}
+    <li class="contributor">
+      <span class="name">{{ contributor.name }}</span>
+      {%- if contributor.email and contributor.orcid %}
+        <br>{{ macros.formatEmail(contributor.email) }}, {{ macros.formatOrcid(contributor.orcid) }}
+      {%- elif contributor.email %}
+        <br>{{ macros.formatEmail(contributor.email) }}
+      {%- elif contributor.orcid %}
+        <br>{{ macros.formatOrcid(contributor.orcid) }}
+      {%- endif -%}
+      {%- if contributor.roles|length > 0 %}
+        <br>{% if contributor.roles|length == 0 %}Role{% else %}Roles{% endif %}: {% for role in contributor.roles %}<span class="role">{{ role }}</span>{% if not loop.last %}, {% endif %}{% endfor %}
+      {%- endif %}
+      {%- if contributor.affiliation %}
+        <br>Affiliation: <span class="affiliation">{{ macros.integrationValue(contributor.affiliation, uuids.contributorAffiliationQUuid) }}</span>
+      {%- endif %}
+    </li>
+  {% endfor %}
+  </ul>
+  {%- elif dc.qtn.created_by -%}
+  <ul>
+    <li class="contributor">
+      <span class="name">{{ dc.qtn.created_by.first_name }} {{ dc.qtn.created_by.last_name }}</span>
+      <br>{{ macros.formatEmail(dc.qtn.created_by.email) }}
+      {%- if dc.qtn.created_by.affiliation %}
+      <br>Affiliation: <span class="affiliation">{{ dc.qtn.created_by.affiliation }}</span>
+      {%- endif %}
+    </li>
+  </ul>
+  {%- else -%}
+  <div style="font-style:italic;">There are no contributors described for this DMP.</div>
+  {%- endif -%}
+</div>

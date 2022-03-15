@@ -1,0 +1,24 @@
+<h2>History of changes</h2>
+
+{% if dc.qtn.versions|length > 0 %}
+<table>
+  <thead>
+    <tr>
+      <th>Version</th>
+      <th>Publication date</th>
+      <th>Changes</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for version in dc.qtn.versions|reverse %}
+    <tr>
+      <td>{{ version.name }}</td>
+      <td>{{ version.created_at|datetime_format("%d %b %Y") }}</td>
+      <td>{{ version.description }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p><em>There are no named versions.</em></p>
+{% endif %}

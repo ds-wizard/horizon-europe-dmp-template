@@ -8,20 +8,16 @@
 {% import "src/globals.j2" as globals with context %}
 <html lang="en">
   <head>
-    <title>Data Management Plan</title>
+    <title>{{ ctx.questionnaireName }}</title>
     <meta charset="utf-8">
-    <style>
-      {% include "src/style.css" %}
-    </style>
   </head>
   <body>
     <article class="dmp">
-      {% include "src/frontpage.html.j2" with context %}
-      {% include "src/versions.html.j2" with context %}
-      {% include "src/contributors.html.j2" with context %}
-      {% include "src/projects.html.j2" with context %}
+      {% include "src/word/frontpage.html.j2" with context %}
+      {% include "src/word/versions.html.j2" with context %}
+      {% include "src/word/contributors.html.j2" with context %}
+      {% include "src/word/projects.html.j2" with context %}
       {% include "src/content.html.j2" with context %}
     </article>
   </body>
-
 </html>

@@ -1,23 +1,23 @@
 {
     "templateId": "horizon-europe-dmp",
     "organizationId": "dsw",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "name": "Horizon Europe DMP",
     "description": "Data Management Plan according to the Horizon Europe template",
     "license": "Apache-2.0",
-    "metamodelVersion": 4,
-    "recommendedPackageId": "dsw:root:2.3.0",
+    "metamodelVersion": 8,
+    "recommendedPackageId": "dsw:root:2.4.0",
     "allowedPackages": [
         {
             "orgId": "dsw",
             "kmId": "root",
-            "minVersion": "2.3.0",
+            "minVersion": "2.4.0",
             "maxVersion": null
         },
         {
             "orgId": "dsw",
             "kmId": "lifesciences",
-            "minVersion": "2.3.0",
+            "minVersion": "2.4.0",
             "maxVersion": null
         }
     ],
@@ -57,31 +57,7 @@
                 {
                     "name": "wkhtmltopdf",
                     "options": {
-                        "args": "--disable-smart-shrinking --footer-center [page] --footer-font-name \"Noto Serif\" --footer-spacing 10 --footer-font-size 10 -B 25mm -L 25mm -R 25mm -T 25mm"
-                    }
-                }
-            ]
-        },
-        {
-            "uuid": "dbc94579-40d7-42c3-975c-71e30d07778b",
-            "name": "LaTeX Document",
-            "shortName": "latex",
-            "icon": "far fa-file-alt",
-            "color": "#44D7B6",
-            "steps": [
-                {
-                    "name": "jinja",
-                    "options": {
-                        "template": "src/index.html.j2",
-                        "content-type": "text/html",
-                        "extension": "html"
-                    }
-                },
-                {
-                    "name": "pandoc",
-                    "options": {
-                        "from": "html",
-                        "to": "latex"
+                        "args": "--disable-smart-shrinking --footer-center [page] --footer-font-name \"Noto Serif\" --footer-spacing 10 --footer-font-size 10 -B 25mm -L 15mm -R 15mm -T 25mm"
                     }
                 }
             ]
@@ -96,7 +72,7 @@
                 {
                     "name": "jinja",
                     "options": {
-                        "template": "src/index.html.j2",
+                        "template": "src/word/index.html.j2",
                         "content-type": "text/html",
                         "extension": "html"
                     }
@@ -105,62 +81,15 @@
                     "name": "pandoc",
                     "options": {
                         "from": "html",
-                        "to": "docx"
-                    }
-                }
-            ]
-        },
-        {
-            "uuid": "15e53172-bbae-4a0c-a4d9-8f3ddf60e7b6",
-            "name": "OpenDocument Text",
-            "shortName": "odt",
-            "icon": "far fa-file-alt",
-            "color": "#32C5FF",
-            "steps": [
-                {
-                    "name": "jinja",
-                    "options": {
-                        "template": "src/index.html.j2",
-                        "content-type": "text/html",
-                        "extension": "html"
-                    }
-                },
-                {
-                    "name": "pandoc",
-                    "options": {
-                        "from": "html",
-                        "to": "odt"
-                    }
-                }
-            ]
-        },
-        {
-            "uuid": "f0533e48-f4c5-4af2-b2c1-5a47d4a247c0",
-            "name": "Markdown Document",
-            "shortName": "md",
-            "icon": "far fa-file-alt",
-            "color": "#6D7278",
-            "steps": [
-                {
-                    "name": "jinja",
-                    "options": {
-                        "template": "src/index.html.j2",
-                        "content-type": "text/html",
-                        "extension": "html"
-                    }
-                },
-                {
-                    "name": "pandoc",
-                    "options": {
-                        "from": "html",
-                        "to": "markdown"
+                        "to": "docx",
+                        "args": "--filter=pandoc-docx-pagebreakpy --reference-doc=src/word/reference.docx"
                     }
                 }
             ]
         }
     ],
     "_tdk": {
-        "version": "3.2.0",
+        "version": "3.7.0",
         "readmeFile": "README.md",
         "files": [
             "src/*",

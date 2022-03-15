@@ -1,0 +1,154 @@
+<div id="q-ethical-aspects" class="question">
+  <div class="answer">
+
+    {# Produced datasets #}
+    {%- set producedDataPath = [uuids.preservingCUuid, uuids.producedDataQUuid]|reply_path -%}
+    {%- set producedDataItems = repliesMap[producedDataPath]|reply_items -%}
+    {%- if producedDataItems|length > 0 -%}
+      <p>For the data we produce, the ethical aspects are as follows:
+      <ul>
+      {%- for i in producedDataItems -%}
+        {%- set pathPrefix = [producedDataPath, i]|reply_path -%}
+        {%- set producedDataName = repliesMap[[pathPrefix, uuids.producedDataNameQUuid]|reply_path]|reply_str_value -%}
+        {%- set containPersonal = repliesMap[[pathPrefix, uuids.containPersonalQUuid]|reply_path]|reply_str_value -%}
+        {%- set containSensitive = repliesMap[[pathPrefix, uuids.containSensitiveQUuid]|reply_path]|reply_str_value -%}
+        <li>
+          <strong>{{ producedDataName if producedDataName else "(no name given)" }}</strong>
+          {%- if containPersonal or containSensitive -%}
+            <ul>
+            {%- if containPersonal == uuids.containPersonalNoAUuid -%}
+              <li>It does not contain personal data.</li>
+            {%- elif containPersonal == uuids.containPersonalYesAUuid -%}
+              <li>It contains personal data.</li>
+            {%- endif -%}
+            {%- if containSensitive == uuids.containSensitiveNoAUuid -%}
+              <li>It does not contain sensitive data.</li>
+            {%- elif containSensitive == uuids.containSensitiveYesAUuid -%}
+              <li>It contains sensitive data.</li>
+            {%- endif -%}
+            </ul>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+      </ul>
+      </p>
+    {%- endif -%}
+
+    {# Collected data #}
+    {%- set collectPersonalPath = [uuids.creatingCUuid, uuids.collectPersonalQUuid]|reply_path -%}
+    {%- set collectPersonalAUuid = repliesMap[collectPersonalPath]|reply_str_value -%}
+    {%- if collectPersonalAUuid -%}
+      <h4>Data we collect</h4>
+      <p>
+      {%- if collectPersonalAUuid == uuids.collectPersonalNoAUuid %}
+        We will not collect any data connected to a person, i.e. "personal data".
+      {%- elif collectPersonalAUuid == uuids.collectPersonalYesAUuid %}
+        We will collect data connected to a person, i.e. "personal data".
+        {%- set legalBasePath = [collectPersonalPath, collectPersonalAUuid, uuids.cpersLegalBasisQUuid]|reply_path -%}
+        {%- set legalBaseAUuid = repliesMap[legalBasePath]|reply_str_value -%}
+        {%- if legalBaseAUuid == uuids.cpersLegalBasisAskAUuid %}
+          We ask the data subjects for their consent.
+          {%- set consentPath = [legalBasePath, legalBaseAUuid, uuids.cpersConsentQUuid]|reply_path -%}
+          {%- set consentAUuid = repliesMap[consentPath]|reply_str_value -%}
+          {%- if consentAUuid == uuids.cpersConsentUseAUuid %}
+            We will collect consent for our specific use of the data.
+          {%- elif consentAUuid == uuids.cpersConsentReuseAUuid %}
+            We will collect consent for our use as well as reuse of the data.
+          {%- elif consentAUuid == uuids.cpersConsentUseAnonAUuid %}
+            We will collect consent for our use of the data and for anonymization; we will anonymize the data afterwards for reuse.
+          {%- elif consentAUuid == uuids.cpersConsentAnonAUuid %}
+            We ask for consent for anonymization; we will anonymise first and all further processing is on the anonymous data.
+          {%- endif -%}
+          {%- set reusersPath = [legalBasePath, legalBaseAUuid, uuids.cpersReusersQUuid]|reply_path -%}
+          {%- set reusersAUuid = repliesMap[reusersPath]|reply_str_value -%}
+          {%- if reusersAUuid == uuids.cpersReusersNoAUuid %}
+            The consent form will not be available for re-users.
+          {%- elif reusersAUuid == uuids.cpersReusersYesAUuid %}
+            The consent form will be available for re-users.
+          {%- endif -%}
+        {%- elif legalBaseAUuid == uuids.cpersLegalBasisContractAUuid %}
+          We require the processing to fulfil our contract with the data subjects.
+        {%- elif legalBaseAUuid == uuids.cpersLegalBasisLegitAUuid %}
+          We have a legitimate interest: data subjects all expect us to do this data processing because of who we are.
+        {%- elif legalBaseAUuid == uuids.cpersLegalBasisVitalAUuid %}
+          We need to do this to save the data subject (i.e. vital interest).
+        {%- elif legalBaseAUuid == uuids.cpersLegalBasisLegalAUuid %}
+          We are legally obliged to do this data processing (i.e. legal requirement).
+        {%- elif legalBaseAUuid == uuids.cpersLegalBasisPublicAUuid %}
+          We do this for the benefit of society, and this is more important than the privacy of the subjects (i.e. public interest).
+        {%- endif -%}
+        {%- set ethicReviewPath = [collectPersonalPath, collectPersonalAUuid, uuids.cpersEthicReviewQUuid]|reply_path -%}
+        {%- set ethicReviewAUuid = repliesMap[ethicReviewPath]|reply_str_value -%}
+        {%- if ethicReviewAUuid == uuids.cpersEthicReviewYesAUuid %}
+          An ethical committee will make an ethical review on the {{globals.projects}}.
+        {%- endif -%}
+        {%- set needDpiaPath = [collectPersonalPath, collectPersonalAUuid, uuids.cpersNeedDpiaQUuid]|reply_path -%}
+        {%- set needDpiaAUuid = repliesMap[needDpiaPath]|reply_str_value -%}
+        {%- if needDpiaAUuid == uuids.cpersNeedDpiaYesAUuid %}
+          We need to conduct a data protection impact assessment (DPIA).
+        {%- endif -%}
+      {%- endif -%}
+      </p>
+    {%- endif -%}
+    
+    {# Non-reference data (consent) #}
+    {%- set preexistingPath = [uuids.reusingCUuid, uuids.preexistingQUuid]|reply_path -%}
+    {%- set preexistingAUuid = repliesMap[preexistingPath]|reply_str_value -%}
+    {%- if preexistingAUuid == uuids.preexistingYesAUuid -%}
+      {%- set nrefDataPath = [preexistingPath, uuids.preexistingYesAUuid, uuids.nrefDataQUuid]|reply_path -%}
+      {%- set nrefDataItems = repliesMap[nrefDataPath]|reply_items -%}
+      {%- set answeredNRefData = [] -%}
+      {%- for item in nrefDataItems -%}
+        {%- set isUsed = repliesMap[[nrefDataPath, item, uuids.nrefDataUseQUuid]|reply_path]|reply_str_value == uuids.nrefDataUseYesAUuid -%}
+        {%- set isAnswered = repliesMap[[nrefDataPath, item, uuids.nrefDataUseQUuid, uuids.nrefDataUseYesAUuid, uuids.nrefDataConsentQUuid]|reply_path] -%}
+        {%- if isUsed and isAnswered -%}
+          {%- do answeredNRefData.append(item) -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if answeredNRefData|length > 0 -%}
+        <p>For reused non-reference datasets, the consent for privacy sensitive data will be solved as follows:</p>
+        <ul>
+          {%- for i in answeredNRefData -%}
+            {%- set nrefDataPrefix = [nrefDataPath, i]|reply_path -%}
+            {%- set nrefDataUsedPrefix = [nrefDataPrefix, uuids.nrefDataUseQUuid, uuids.nrefDataUseYesAUuid]|reply_path -%}
+            {%- set nrefDataNamePath = [nrefDataPrefix, uuids.nrefDataNameQUuid]|reply_path -%}
+            {%- set nrefDataNameReply = repliesMap[nrefDataNamePath] -%}
+            {%- set nrefDataConsentPath = [nrefDataUsedPrefix, uuids.nrefDataConsentQUuid]|reply_path -%}
+            {%- set nrefDataConsentAUuid = repliesMap[nrefDataConsentPath]|reply_str_value -%}
+            <li>
+              {# identification #}
+              <strong>{{ macros.integrationValue(nrefDataNameReply, uuids.nrefDataNameQUuid) }}</strong>
+              {%- if nrefDataWhere -%}
+                {%- if nrefDataWhere.startswith("http://") or nrefDataWhere.startswith("https://") or nrefDataWhere.startswith("ftp://") %}
+                  (<a href="{{ nrefDataWhere }}" target="_blank">{{ nrefDataWhere }}</a>)
+                {%- else %}
+                  ({{ nrefDataWhere }})
+                {%- endif -%}
+              {%- endif -%}
+              {# data access #}
+              <p>
+                {% if nrefDataConsentAUuid == uuids.nrefDataConsentNotPersonalAUuid -%}
+                  None of the data from this dataset is personal data.
+                {%- elif nrefDataConsentAUuid == uuids.nrefDataConsentAnotherLegalAUuid -%}
+                  We will use another legal base for the processing.
+                {%- elif nrefDataConsentAUuid == uuids.nrefDataConsentCoversAUuid -%}
+                  The existing consent already covers our reuse.
+                {%- elif nrefDataConsentAUuid == uuids.nrefDataConsentNewAUuid -%}
+                  New consent will be needed to cover our usage of the data.
+                {%- elif nrefDataConsentAUuid == uuids.nrefDataConsentOtherAUuid -%}
+                  {%- set nrefDataConsentOtherPath = [nrefDataConsentPath, uuids.nrefDataConsentOtherAUuid, uuids.nrefDataConsentOtherQUuid]|reply_path -%}
+                  {%- set nrefDataConsentOther = repliesMap[nrefDataConsentOtherPath]|reply_str_value -%}
+                  {%- if nrefDataConsentOther -%}
+                  An extension of consent for privacy sensitive data is needed: {{ nrefDataConsentOther|dot }}
+                  {%- else -%}
+                  An extension of consent for privacy sensitive data will be needed.
+                  {%- endif -%}
+                {%- endif -%}
+              </p>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</div>

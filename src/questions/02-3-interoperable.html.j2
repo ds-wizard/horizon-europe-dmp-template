@@ -78,10 +78,61 @@
       {%- set newTypesVocabsMappingPath = [newTypesVocabsPath, uuids.newTypesVocabsYesAUuid, uuids.newTypesVocabsMappingQUuid]|reply_path -%}
       {%- set newTypesVocabsMappingAUuid = repliesMap[newTypesVocabsPath]|reply_str_value -%}
       {%- if newTypesVocabsMappingAUuid == uuids.newTypesVocabsMappingNoAUuid -%}
-      <p>We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of my data.</p>
+      <p>We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of our data.</p>
       {%- elif newTypesVocabsMappingAUuid == uuids.newTypesVocabsMappingYesAUuid -%}
-      <p>We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of my data. Such terms will be mapped to existing vocabularies or ontologies.</p>
+      <p>We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of our data. Such terms will be mapped to existing vocabularies or ontologies.</p>
       {%- endif -%}
     {%- endif -%}
+  {%- endif -%}
+
+  {# Produced datasets (qualified references) #}
+  {%- set producedDataPath = [uuids.preservingCUuid, uuids.producedDataQUuid]|reply_path -%}
+  {%- set producedDataItems = repliesMap[producedDataPath]|reply_items -%}
+  {%- set datasets = [] -%}
+  {%- if producedDataItems|length > 0 -%}
+    {%- for i in producedDataItems -%}
+      {%- set pathPrefix = [producedDataPath, i]|reply_path -%}
+      {%- set producedDataName = repliesMap[[pathPrefix, uuids.producedDataNameQUuid]|reply_path]|reply_str_value -%}
+      {# Only published #}
+      {%- set isPublishedDataPath = [pathPrefix, uuids.isPublishedDataQUuid]|reply_path -%}
+      {%- set isPublishedDataAUuid = repliesMap[isPublishedDataPath]|reply_str_value -%}
+      {% if isPublishedDataAUuid == uuids.isPublishedDataYesAUuid %}
+        {# Qualified references #}
+        {%- set publishedQReferencesPath = [isPublishedDataPath, uuids.isPublishedDataYesAUuid, uuids.publishedQReferencesQUuid]|reply_path -%}
+        {%- set publishedQReferences = repliesMap[publishedQReferencesPath]|reply_items -%}
+        {%- set qreferences = [] -%}
+        {%- for item in publishedQReferences -%}
+          {%- set refId = repliesMap[[publishedQReferencesPath, item, uuids.publishedQReferenceIdQUuid]|reply_path]|reply_str_value|e -%}
+          {%- set refRel = repliesMap[[publishedQReferencesPath, item, uuids.publishedQReferenceRelQUuid]|reply_path]|reply_str_value|e -%}
+          {%- if refId and refRel -%}
+            {%- do qreferences.append({
+              'id': refId,
+              'relation': refRel,
+            }) -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if qreferences|length > 0 and producedDataName -%}
+          {%- do datasets.append({
+            'name': producedDataName,
+            'references': qreferences.copy(),
+          }) -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+  {%- if datasets|length > 0 -%}
+    <p>The following produced and published datasets will use qualified references:</p>
+    <ul>
+      {%- for dataset in datasets -%}
+      <li>
+        <strong>{{ dataset.name }}</strong>
+        <ul>
+          {%- for qref in dataset.references -%}
+            <li><em>{{ qref.id|e }}</em> &ndash; {{ qref.relation|e }}</li>
+          {%- endfor -%}
+        </ul>
+      </li>
+      {%- endfor -%}
+    </ul>
   {%- endif -%}
 </div>

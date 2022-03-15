@@ -1,0 +1,16 @@
+<h1>
+<strong>Horizon Europe</strong>
+<br/>
+<strong>Data Management Plan</strong>
+<br/>
+<br/>
+{% if dc.qtn.version %}
+{% for version in dc.qtn.versions if version.uuid == dc.qtn.version.uuid %}
+{{version.name}}
+<br/>
+{% endfor %}
+{% endif %}
+<br/>
+{{ dc.doc.created_at|datetime_format("%d %B %Y") }}
+</h1>
+

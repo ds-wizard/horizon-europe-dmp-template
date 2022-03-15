@@ -44,6 +44,77 @@
       </p>
     {%- endif -%}
 
+    {# Measure quality #}
+    {%- set measuredQuality = [] -%}
+    {%- set measuredPath = [uuids.creatingCUuid, uuids.measuredQUuid]|reply_path -%}
+    {%- set measuredAUuid = repliesMap[measuredPath]|reply_str_value -%}
+    {%- if measuredAUuid == uuids.measuredYesAUuid -%}
+      {%- set measuredDataPath = [measuredPath, uuids.measuredYesAUuid, uuids.measuredDataQUuid]|reply_path -%}
+      {%- set measuredDataItems = repliesMap[measuredDataPath]|reply_items -%}
+      {# Measured datasets #}
+      {%- for datasetItem in measuredDataItems -%}
+        {%- set pathPrefix = [measuredDataPath, datasetItem]|reply_path -%}
+        {%- set mdNamePath = [pathPrefix, uuids.measuredDataNameQUuid]|reply_path -%}
+        {%- set mdName = repliesMap[mdNamePath]|reply_str_value -%}
+        {%- set mdQualityPath = [pathPrefix, uuids.mdQualityQUuid]|reply_path -%}
+        {%- set mdQualityAUuid = repliesMap[mdQualityPath]|reply_str_value -%}
+        {%- if mdName and mdQualityAUuid == uuids.mdQualityYesAUuid -%}
+          {%- set mdQCalibrateAUuid = repliesMap[[mdQualityPath, mdQualityAUuid, uuids.mdQualityCalibrateQUuid]|reply_path]|reply_str_value -%}
+          {%- set mdQRepeatAUuid = repliesMap[[mdQualityPath, mdQualityAUuid, uuids.mdQualityRepeatQUuid]|reply_path]|reply_str_value -%}
+          {%- set mdQStdAUuid = repliesMap[[mdQualityPath, mdQualityAUuid, uuids.mdQualityStdQUuid]|reply_path]|reply_str_value -%}
+          {%- set mdQValidAUuid = repliesMap[[mdQualityPath, mdQualityAUuid, uuids.mdQualityValidQUuid]|reply_path]|reply_str_value -%}
+          {%- set mdQPeerAUuid = repliesMap[[mdQualityPath, mdQualityAUuid, uuids.mdQualityPeerQUuid]|reply_path]|reply_str_value -%}
+          {%- set mdQVocabAUuid = repliesMap[[mdQualityPath, mdQualityAUuid, uuids.mdQualityVocabQUuid]|reply_path]|reply_str_value -%}
+          {%- set mdQConsistencyAUuid = repliesMap[[mdqPrefix, uuids.mdQualityConsistencyQUuid]|reply_path]|reply_str_value -%}
+          {%- set mdQOtherPath = [mdQualityPath, mdQualityAUuid, uuids.mdQualityOtherQUuid]|reply_path -%}
+          {%- set mdQOtherAUuid = repliesMap[mdQOtherPath]|reply_str_value -%}
+          {%- set mdQOther = repliesMap[[mdQOtherPath, mdQOtherAUuid, uuids.mdQualityOtherYesQUuid]|reply_path]|reply_str_value -%}
+          {%- set qCalibrate = mdQCalibrateAUuid == uuids.mdQualityCalibrateYesAUuid -%}
+          {%- set qRepeat = mdQRepeatAUuid == uuids.mdQualityRepeatYesAUuid -%}
+          {%- set qStd = mdQStdAUuid == uuids.mdQualityStdYesAUuid -%}
+          {%- set qValid = mdQValidAUuid == uuids.mdQualityValidYesAUuid -%}
+          {%- set qPeer = mdQPeerAUuid == uuids.mdQualityPeerYesAUuid -%}
+          {%- set qVocab = mdQVocabAUuid == uuids.mdQualityVocabYesAUuid -%}
+          {%- set qConsistency = mdQConsistencyAUuid == uuids.mdQualityConsistencyYesAUuid -%}
+          {%- set qOther = mdQOtherAUuid == uuids.mdQualityOtherYesAUuid  -%}
+          {%- if qCalibrate or qRepeat or qStd or qValid or qPeer or qVocab or qConsistency or qOther -%}
+            {%- do measuredQuality.append({
+              'name': mdName,
+              'calibrate': qCalibrate,
+              'repeat': qRepeat,
+              'std': qStd,
+              'valid': qValid,
+              'peer': qPeer,
+              'vocab': qVocab,
+              'consistency': qConsistency,
+              'other': qOther,
+              'othertxt': mdQOther,
+            }) -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if measuredQuality|length > 0 -%}
+      <p>The following instrument datasets acquired in the {{globals.projects}} will use the following quality processes:</p>
+      <ul>
+      {%- for item in measuredQuality -%}
+        <li>
+            <strong>{{ item.name }}</strong>
+            <ul>
+              {% if item.calibrate %}<li>Calibrating measurements</li>{% endif %}
+              {% if item.repeat %}<li>Repeat samples / measurements</li>{% endif %}
+              {% if item.std %}<li>Standardized data capture / recording</li>{% endif %}
+              {% if item.valid %}<li>Data Entry validation</li>{% endif %}
+              {% if item.peer %}<li>Data peer review</li>{% endif %}
+              {% if item.vocab %}<li>Use of controlled vocabularies</li>{% endif %}
+              {% if item.consistency %}<li>Measuring samples for which the outcome is known to monitor consistency</li>{% endif %}
+              {% if item.other %}<li>Other quality processes{{ ": " ~ item.othertxt if item.othertxt else "" }}</li>{% endif %}
+            </ul>
+        </li>
+      {%- endfor -%}
+      </ul>
+      {%- endif -%}
+    {%- endif -%}
+
     {# Can open data #}
     {%- set openImmediatelyPath = [uuids.accessCUuid, uuids.openImmediatelyQUuid]|reply_path -%}
     {%- set openImmediatelyAUuid = repliesMap[openImmediatelyPath]|reply_str_value -%}
@@ -53,6 +124,8 @@
       <p>As explained in Section 2.2, our data cannot become completely open immediately.</p>
 
       {%- set notOpenSentences = [] -%}
+      {%- set notOpenSentencesIP = [] -%}
+      {%- set notOpenSentencesDP = [] -%}
       {%- set notOpenLegalReasonsPath = [openImmediatelyPath, uuids.openImmediatelyNoAUuid, uuids.notOpenLegalReasonsQUuid]|reply_path -%}
       {%- set notOpenLegalReasonsAUuid = repliesMap[notOpenLegalReasonsPath]|reply_str_value -%}
       {%- if notOpenLegalReasonsAUuid == uuids.notOpenLegalReasonsYesAUuid -%}
@@ -68,14 +141,14 @@
           {%- set legalPrivacyAggrPath = [legalPrivacyPath, uuids.legalPrivacyYesAUuid, uuids.legalPrivacyAggrQUuid]|reply_path -%}
           {%- set legalPrivacyAggrAUuid = repliesMap[legalPrivacyAggrPath]|reply_str_value -%}
 
-          {%- if legalPrivacyWhereAUuid == uuids.legalPrivacyNoAUuid -%}
+          {%- if legalPrivacyWhereAUuid == uuids.legalPrivacyWhereNoAUuid -%}
             {%- do notOpenSentences.append("There are no restrictions on where the data need to be stored related to the privacy reasons.") -%}
           {%- elif legalPrivacyWhereAUuid == uuids.legalPrivacyEuAUuid -%}
-            {%- do notOpenSentences.append("Due to the privacy reasons, the data must stay in the EU.") -%}
+            {%- do notOpenSentences.append("Due to privacy reasons, the data must stay in the EU.") -%}
           {%- elif legalPrivacyWhereAUuid == uuids.legalPrivacyCountryAUuid -%}
-            {%- do notOpenSentences.append("Due to the privacy reasons, the data must stay in the same country.") -%}
+            {%- do notOpenSentences.append("Due to privacy reasons, the data must stay in the same country.") -%}
           {%- elif legalPrivacyWhereAUuid == uuids.legalPrivacyInstituteAUuid -%}
-            {%- do notOpenSentences.append("Due to the privacy reasons, the data must stay in the same institute.") -%}
+            {%- do notOpenSentences.append("Due to privacy reasons, the data must stay in the same institute.") -%}
           {%- endif -%}
           {%- set privacyCanUse = [] -%}
           {%- set privacyCannotUse = [] -%}
@@ -111,14 +184,24 @@
           {%- elif privacyCannotUse|length == 3 -%}
             {%- do notOpenSentences.append(privacyCannotUseStart ~ "neither " ~ privacyCanUse[0] ~ " nor " ~ privacyCanUse[1] ~ ", nor " ~ privacyCanUse[2] ~ " to make the data more openly available.") -%}
           {%- endif -%}
+
+          {%- if legalPrivacyPseudoAUuid == uuids.legalPrivacyPseudoYesAUuid -%}
+            {%- set legalPrivacyPseudoPartyPath = [legalPrivacyPseudoPath, legalPrivacyPseudoAUuid, uuids.legalPrivacyPseudoPartyQUuid]|reply_path -%}
+            {%- set legalPrivacyPseudoPartyAUuid = repliesMap[legalPrivacyPseudoPartyPath]|reply_str_value -%}
+            {%- if legalPrivacyPseudoPartyAUuid == uuids.legalPrivacyPseudoPartyNoAUuid -%}
+              {%- do notOpenSentences.append("For pseudonymization, we cannot make use of an existing 'trusted third party'.") -%}
+            {%- elif legalPrivacyPseudoPartyAUuid == uuids.legalPrivacyPseudoPartyYesAUuid -%}
+              {%- do notOpenSentences.append("For pseudonymization, we can make use of an existing 'trusted third party'.") -%}
+            {%- endif -%}
+          {%- endif -%}
         {%- endif -%}
         
         {%- set legalIpPath = [notOpenLegalReasonsPath, uuids.notOpenLegalReasonsYesAUuid, uuids.legalIpQUuid]|reply_path -%}
         {%- set legalIpAUuid = repliesMap[legalIpPath]|reply_str_value -%}
         {%- if legalIpAUuid == uuids.legalIpNoAUuid -%}
-          {%- do notOpenSentences.append("There are no IP reasons why our data can not be open.") -%}
+          {%- do notOpenSentencesIP.append("There are no IP reasons why our data can not be open.") -%}
         {%- elif legalIpAUuid == uuids.legalIpYesAUuid -%}
-          {%- do notOpenSentences.append("There are IP reasons why our data can not be open.") -%}
+          {%- do notOpenSentencesIP.append("There are IP reasons why our data can not be open.") -%}
         
           {%- set legalIpClearPath = [legalIpPath, uuids.legalIpYesAUuid, uuids.legalIpClearQUuid]|reply_path -%}
           {%- set legalIpClearAUuid = repliesMap[legalIpClearPath]|reply_str_value -%}
@@ -126,28 +209,30 @@
           {%- set legalIpPowerAUuid = repliesMap[legalIpPowerPath]|reply_str_value -%}
 
           {%- if legalIpClearAUuid == uuids.legalIpClearYesAUuid -%}
-            {%- do notOpenSentences.append("It is clear who owns data and documents.") -%}
+            {%- do notOpenSentencesIP.append("It is clear who owns data and documents.") -%}
           {%- endif -%}
           {%- if legalIpPowerAUuid == uuids.legalIpPowerYesAUuid -%}
-            {%- do notOpenSentences.append("Someone will be given the decision power to move documents or data to a new place after the project has finished.") -%}
+            {%- do notOpenSentencesDP.append("Someone will be given the decision power to move documents or data to a new place after the " ~ globals.projects ~ " has finished.") -%}
           {%- endif -%}
         {%- endif -%}
       {%- endif -%}
       <p>{{ notOpenSentences|join(" ") }}</p>
+      <p>{{ notOpenSentencesIP|join(" ") }}</p>
+      <p>{{ notOpenSentencesDP|join(" ") }}</p>
     {%- endif -%}
 
     {# Cold storage #}
     {%- set coldStoragePath = [uuids.preservingCUuid, uuids.coldStorageQUuid]|reply_path -%}
     {%- set coldStorageAUuid = repliesMap[coldStoragePath]|reply_str_value -%}
     {%- if coldStorageAUuid == uuids.coldStorageNoAUuid -%}
-      <p>We do not plan to be archiving data (using so-called <em>cold storage</em>) for long term preservation already during your project.</p>
+      <p>We do not plan to be archiving data (using so-called <em>cold storage</em>) for long term preservation already during the {{globals.projects}}.</p>
     {%- elif coldStorageAUuid == uuids.coldStorageYesAUuid -%}
       {%- set coldStorageReusablePath = [coldStoragePath, uuids.coldStorageYesAUuid, uuids.coldStorageReusableQUuid]|reply_path -%}
       {%- set coldStorageReusableAUuid = repliesMap[coldStorageReusablePath]|reply_str_value -%}
       {%- if coldStorageReusableAUuid == uuids.coldStorageReusableNoAUuid -%}
-        <p>We will be archiving data (using so-called <em>cold storage</em>) for long term preservation already during your project.</p>
+        <p>We will be archiving data (using so-called <em>cold storage</em>) for long term preservation already during the {{globals.projects}}.</p>
       {%- elif coldStorageReusableAUuid == uuids.coldStorageReusableYesAUuid -%}
-        <p>We will be archiving data (using so-called <em>cold storage</em>) for long term preservation already during your project. The data are expected to be still understandable and reusable after a long time.</p>
+        <p>We will be archiving data (using so-called <em>cold storage</em>) for long term preservation already during the {{globals.projects}}. The data are expected to be still understandable and reusable after a long time.</p>
       {%- endif -%}
     {%- endif -%}
 

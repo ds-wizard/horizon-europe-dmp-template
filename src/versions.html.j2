@@ -1,0 +1,27 @@
+<div id="dmp-versions">
+  <table>
+    <thead>
+      <tr>
+        <th colspan="3" class="title">History of changes</th>
+      </tr>
+      <tr>
+        <th>Version</th>
+        <th>Publication date</th>
+        <th>Changes</th>
+      </tr>
+    <thead>
+    <tbody>
+      {% for version in dc.qtn.versions|reverse %}
+        <tr>
+          <td class="version-name">{{ version.name }}</td>
+          <td class="version-date">{{ version.created_at|datetime_format("%d %b %Y") }}</td>
+          <td class="version-changes">{{ version.description }}</td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="3" class="no-versions">There are no named versions</tr>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

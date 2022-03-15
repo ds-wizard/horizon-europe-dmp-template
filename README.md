@@ -10,6 +10,6 @@ This template is available through [DSW Registry](https://registry.ds-wizard.org
 
 ## Changelog
 
-### 0.1.0
+### 1.0.0
 
-*To be done*
+- Initial version compatible with `dsw:root:2.4.0` and `dsw:lifesciences:2.4.0` knowledge models with HTML, PDF, and Word formats

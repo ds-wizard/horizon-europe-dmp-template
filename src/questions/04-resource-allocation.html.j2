@@ -1,0 +1,235 @@
+<div id="q-resource-allocation" class="question">
+  <div class="answer">
+
+  <p>FAIR is a central part of our data management; it is considered at every decision in our data management plan. We use the FAIR data process ourselves to make our use of the data as efficient as possible. Making our data FAIR is therefore not a cost that can be separated from the rest of the project.</p>
+
+  {# Archiving (cold storage) #}
+  {%- set coldStoragePath = [uuids.preservingCUuid, uuids.coldStorageQUuid]|reply_path -%}
+  {%- set coldStorageAUuid = repliesMap[coldStoragePath]|reply_str_value -%}
+  {%- set coldStorageDuring = coldStorageAUuid == uuids.coldStorageYesAUuid -%}
+  {%- set coldStorageAfterPath = [uuids.preservingCUuid, uuids.coldStorageAfterQUuid]|reply_path -%}
+  {%- set coldStorageAfterAUuid = repliesMap[coldStorageAfterPath]|reply_str_value -%}
+  {%- set coldStorageAfter = coldStorageAfterAUuid == uuids.coldStorageAfterYesAUuid -%}
+
+  {%- set coldStorageSentences = [] -%}
+
+  {%- if coldStorageDuring and coldStorageAfter -%}
+    {%- do coldStorageSentences.append("We will be archiving data (using so-called 'cold storage') for long term preservation after the " ~ globals.projects ~ " but also already during the " ~ globals.projects ~ ".") -%}
+  {%- elif coldStorageDuring -%}
+    {%- do coldStorageSentences.append("We will be archiving data (using so-called 'cold storage') for long term preservation already during the " ~ globals.projects ~ ".") -%}
+  {%- elif coldStorageAfter -%}
+    {%- do coldStorageSentences.append("We will be archiving data (using so-called 'cold storage') for long term preservation after the " ~ globals.projects ~ ".") -%}
+  {%- endif -%}
+
+  {%- if coldStorageAfter -%}
+    {# Paying #}
+    {%- set coldStoragePayPath = [coldStorageAfterPath, coldStorageAfterAUuid, uuids.coldStoragePayQUuid]|reply_path -%}
+    {%- set coldStoragePayAUuid = repliesMap[coldStoragePayPath]|reply_str_value -%}
+    {%- if coldStoragePayAUuid == uuids.coldStoragePayGrantAUuid -%}
+      {%- do coldStorageSentences.append("The costs for archiving data will be paid from the grant.") -%}
+    {%- elif coldStoragePayAUuid == uuids.coldStoragePayDepartmentAUuid -%}
+      {%- do coldStorageSentences.append("The costs for archiving data will be paid out of departmental budgets from one or more of the " ~ globals.projects ~ " participants.") -%}
+    {%- elif coldStoragePayAUuid == uuids.coldStoragePayInstituteAUuid -%}
+      {%- do coldStorageSentences.append("The used data archiving service is budgeted by one or more of the participating institutes.") -%}
+    {%- endif -%}
+    {# Lifetime #}
+    {%- set coldStorageLifetimePath = [coldStorageAfterPath, coldStorageAfterAUuid, uuids.coldStorageLifetimeQUuid]|reply_path -%}
+    {%- set coldStorageLifetimeAUuid = repliesMap[coldStorageLifetimePath]|reply_str_value -%}
+    {%- if coldStorageLifetimeAUuid == uuids.coldStorageLifetime5yAUuid -%}
+      {%- do coldStorageSentences.append("The minimum lifetime of the archive is 5 years.") -%}
+    {%- elif coldStorageLifetimeAUuid == uuids.coldStorageLifetime10yAUuid -%}
+      {%- do coldStorageSentences.append("The minimum lifetime of the archive is 10 years.") -%}
+    {%- elif coldStorageLifetimeAUuid == uuids.coldStorageLifetime15yAUuid -%}
+      {%- do coldStorageSentences.append("The minimum lifetime of the archive is 15 years.") -%}
+    {%- elif coldStorageLifetimeAUuid == uuids.coldStorageLifetimeOtherAUuid -%}
+      {%- set years = repliesMap[[coldStorageLifetimePath, coldStorageLifetimeAUuid, uuids.coldStorageLifetimeOtherQUuid]|reply_path]|reply_str_value|trim|e -%}
+      {%- set end = " year." if (years == "one" or years == "1") else " years." -%}
+      {%- do coldStorageSentences.append("The minimum lifetime of the archive is " ~ years ~ end) -%}
+    {%- elif coldStorageLifetimeAUuid == uuids.coldStorageLifetimeWayAUuid -%}
+      {%- set way = repliesMap[[coldStorageLifetimePath, coldStorageLifetimeAUuid, uuids.coldStorageLifetimeWayQUuid]|reply_path]|reply_str_value|trim|e|dot -%}
+      {%- do coldStorageSentences.append("The minimum lifetime of the archive is specially arranged &ndash; " ~ way) -%}
+    {%- endif -%}
+    {# Extending #}
+    {%- set coldStorageExtendPath = [coldStorageAfterPath, coldStorageAfterAUuid, uuids.coldStorageExtendQUuid]|reply_path -%}
+    {%- set coldStorageExtendAUuid = repliesMap[coldStorageExtendPath]|reply_str_value -%}
+    {%- if coldStorageExtendAUuid == uuids.coldStorageExtendNoAUuid -%}
+      {%- set whyPath = [coldStorageExtendPath, coldStorageExtendAUuid, uuids.coldStorageExtendNoWhyQUuid]|reply_path -%}
+      {%- set whyAUuid = repliesMap[whyPath]|reply_str_value -%}
+      {%- if whyAUuid == uuids.coldStorageExtendNoWhyLawAUuid -%}
+        {%- do coldStorageSentences.append("The archival period cannot be extended as it is limited by law or contract.") -%}
+      {%- elif whyAUuid == uuids.coldStorageExtendNoWhyBudgetAUuid -%}
+        {%- do coldStorageSentences.append("The archival period cannot be extended as it is limited by budget.") -%}
+      {%- endif -%}
+    {%- elif coldStorageExtendAUuid == uuids.coldStorageExtendYesAUuid -%}
+      {%- set whoPath = [coldStorageExtendPath, coldStorageExtendAUuid, uuids.coldStorageExtendWhoQUuid]|reply_path -%}
+      {%- set whoAUuid = repliesMap[whoPath]|reply_str_value -%}
+      {%- if whoAUuid == uuids.coldStorageExtendWhoOneAUuid -%}
+        {%- do coldStorageSentences.append("The archival period can be extended &ndash; one of the principle investigators involved in the " ~ globals.projects ~ " will decide.") -%}
+      {%- elif whoAUuid == uuids.coldStorageExtendWhoLibAUuid -%}
+        {%- do coldStorageSentences.append("The archival period can be extended &ndash; library or archive staff will decide.") -%}
+      {%- endif -%}
+      {%- set basePath = [coldStorageExtendPath, coldStorageExtendAUuid, uuids.coldStorageExtendBaseQUuid]|reply_path -%}
+      {%- set basesUuids = repliesMap[basePath]|reply_items -%}
+      {%- set dataUse = "" -%}
+      {%- set actual = uuids.coldStorageExtendBaseActAUuid in basesUuids -%}
+      {%- set predicted = uuids.coldStorageExtendBasePredAUuid in basesUuids -%}
+      {%- set budget = uuids.coldStorageExtendBaseBudgetAUuid in basesUuids -%}
+      {%- if actual and predicted -%}
+        {%- set dataUse = "both the actual and predicted use of the archived data" -%}
+      {%- elif actual -%}
+        {%- set dataUse = "the actual use of the archived data" -%}
+      {%- elif predicted -%}
+        {%- set dataUse = "the predicted use of the archived data" -%}
+      {%- endif -%}
+      {%- if budget and dataUse -%}
+        {%- do coldStorageSentences.append("The decision whether or not to extend the renewal be based on available budget as well as " ~ dataUse ~ ".") -%}
+      {%- elif budget -%}
+        {%- do coldStorageSentences.append("The decision whether or not to extend the renewal be based on available budget.") -%}
+      {%- elif actual or predicted -%}
+        {%- do coldStorageSentences.append("The decision whether or not to extend the renewal be based on " ~ dataUse ~ ".") -%}
+      {%- endif -%}
+    {%- endif -%}
+    {# Upgrades (format) #}
+    {%- set coldStorageFormatUpgradePath = [coldStorageAfterPath, coldStorageAfterAUuid, uuids.coldStorageFormatUpgradeQUuid]|reply_path -%}
+    {%- set coldStorageFormatUpgradeAUuid = repliesMap[coldStorageFormatUpgradePath]|reply_str_value -%}
+    {%- if coldStorageFormatUpgradeAUuid == uuids.coldStorageFormatUpgradeNoAUuid -%}
+      {%- do coldStorageSentences.append("Data formats of data in cold storage will not be upgraded over time.") -%}
+    {%- elif coldStorageFormatUpgradeAUuid == uuids.coldStorageFormatUpgradeYesAUuid -%}
+      {%- do coldStorageSentences.append("Data formats of data in cold storage will be upgraded if they become obsolete.") -%}
+    {%- endif -%}
+    {# Upgrades (media) #}
+    {%- set coldStorageMediaUpgradePath = [coldStorageAfterPath, coldStorageAfterAUuid, uuids.coldStorageMediaUpgradeQUuid]|reply_path -%}
+    {%- set coldStorageMediaUpgradeAUuid = repliesMap[coldStorageMediaUpgradePath]|reply_str_value -%}
+    {%- if coldStorageMediaUpgradeAUuid == uuids.coldStorageMediaUpgradeNoAUuid -%}
+      {%- do coldStorageSentences.append("Archived data will not be migrated to other storage media over time.") -%}
+    {%- elif coldStorageMediaUpgradeAUuid == uuids.coldStorageMediaUpgradeYesAUuid -%}
+      {%- do coldStorageSentences.append("Archived data will be migrated regularly to more modern storage media (e.g. newer tapes).") -%}
+    {%- endif -%}
+  {%- endif -%}
+  {%- if coldStorageSentences|length > 0 -%}
+    <p>{{ coldStorageSentences|join(" ") }}</p>
+  {%- endif -%}
+  
+  {# Repository charges #}
+  {%- set repoChargesPath = [uuids.preservingCUuid, uuids.repoChargesQUuid]|reply_path -%}
+  {%- set repoChargesAUuid = repliesMap[repoChargesPath]|reply_str_value -%}
+  {%- if repoChargesAUuid == uuids.repoChargesNoAUuid -%}
+    <p>None of the used repositories charge for their services.</p>
+  {%- elif repoChargesAUuid == uuids.repoChargesYesAUuid -%}
+    {%- set repoChargesHowPayPath = [repoChargesPath, uuids.repoChargesYesAUuid, uuids.repoChargesHowPayQUuid]|reply_path -%}
+    {%- set repoChargesHowPayAUuid = repliesMap[repoChargesHowPayPath]|reply_str_value -%}
+    {%- if repoChargesHowPayAUuid == uuids.repoChargesHowPayBudgetedAUuid -%}
+      <p>We have budgeted for the costs in the {{globals.projects}} to pay charges of the used repositories.</p>
+    {%- elif repoChargesHowPayAUuid == uuids.repoChargesHowPayDepartmentAUuid -%}
+      <p>The costs related to the used repositories will be carried by (one of) the departments involved in the {{globals.projects}}.</p>
+    {%- elif repoChargesHowPayAUuid == uuids.repoChargesHowPayInstituteAUuid -%}
+      <p>The costs related to the used repositories will be carried by (one of) the institutes involved in the {{globals.projects}}.</p>
+    {%- elif repoChargesHowPayAUuid == uuids.repoChargesHowPayOtherAUuid -%}
+      {%- set repoChargesHowPayOtherPath = [repoChargesHowPayPath, uuids.repoChargesHowPayOtherAUuid, uuids.repoChargesHowPayOtherQUuid]|reply_path -%}
+      {%- set repoChargesHowPayOther = repliesMap[repoChargesHowPayOtherPath]|reply_str_value -%}
+      {%- if repoChargesHowPayOther -%}
+        <p>We will be paying for costs related to the used repositories. Further notes: <span class="user-text">{{ repoChargesHowPayOther|dot }}</span></p>
+      {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+  
+  {# Budget time and effort #}
+  {%- set budgetTimeEffortPath = [uuids.preservingCUuid, uuids.budgetTimeEffortQUuid]|reply_path -%}
+  {%- set budgetTimeEffortAUuid = repliesMap[budgetTimeEffortPath]|reply_str_value -%}
+  {%- if budgetTimeEffortAUuid == uuids.budgetTimeEffortYesAUuid -%}
+    {%- set sentences = [] -%}
+    {%- do sentences.append("We have a reserved budget for the time and effort it will take to prepare the data for publication.") -%}
+    {%- set howMuchPath = [budgetTimeEffortPath, budgetTimeEffortAUuid, uuids.budgetTimeEffortHowQUuid]|reply_path -%}
+    {%- set howMuch = repliesMap[howMuchPath]|reply_str_value|trim -%}
+    {%- if howMuch -%}
+      {%- do sentences.append("For making data or other research outputs FAIR, we budgeted: " ~ howMuch|dot) -%}
+    {%- endif -%}
+    <p>{{ sentences|join(" ") }}</p>
+  {%- endif -%}
+
+  {# People #}
+  {%- if ctx.createdBy %}
+    <p>{{ctx.createdBy.firstName}} {{ctx.createdBy.lastName}} is responsible for implementing the DMP, and ensuring it is reviewed and revised.</p>
+  {%- endif -%}
+
+  {%- set contributorsPath = [uuids.adminDetailsCUuid, uuids.contributorsQUuid]|reply_path -%}
+  {%- set contributorsItems = repliesMap[contributorsPath]|reply_items -%}
+  {%- if contributorsItems|length > 0 -%}
+    {%- macro contributorsResponsibility(contributors, contributorRoleAUuid, responsibility) -%}
+      {%- set names = [] -%}
+      {%- for i in contributors -%}
+        {%- set roles = repliesMap[[contributorsPath, i, uuids.contributorRoleQUuid]|reply_path]|reply_items -%}
+        {%- set name = repliesMap[[contributorsPath, i, uuids.contributorNameQUuid]|reply_path]|reply_str_value -%}
+        {%- if contributorRoleAUuid in roles and name -%}
+          {%- do names.append(name) -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- set nNames = names|length -%}
+      {%- if nNames > 0 -%}
+        <p>
+          {%- if nNames > 2 -%}
+            {{ names[0:-1]|join(", ") }}, and {{ names[-1] }} are {{ responsibility }}
+          {%- elif nNames == 2 -%}
+            {{ names[0] }} and {{ names[1] }} are {{ responsibility }}
+          {%- else -%}
+            {{ names[0] }} is {{ responsibility }}
+          {%- endif %}
+        </p>
+      {%- endif -%}
+    {%- endmacro -%}
+    {# Data curators #}
+    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDataCuratorAUuid, "responsible for reviewing, enhancing, cleaning, or standardizing metadata and the associated data submitted for storage, use and maintenance within a data centre or repository.") }}
+    {# Data collectors #}
+    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDataCollectorAUuid, "responsible for finding, gathering, and collecting data.") }}
+    {# Data managers #}
+    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDataManagerAUuid, "responsible for maintaining the finished resource.") }}
+    {# Data stewards #}
+    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDataStewardAUuid, "responsible for the management and proficiency of data including data processing, data policies, data guidelines, and data availability.") }}
+    {# Distributors #}
+    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDistributorAUuid, "responsible for generating and disseminating copies of the resouce in either electronic or print form.") }}
+    {# Data protection officers #}
+    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDataProtectorAUuid, "responsible for all issues relating to the protection of personal data and data protection policies in general.") }}
+  {%- endif -%}
+
+  {# additional expertise #}
+  {%- set expertisePath = [uuids.adminDetailsCUuid, uuids.additionalExpertiseQUuid]|reply_path -%}
+  {%- set expertiseAUuid = repliesMap[expertisePath]|reply_str_value -%}
+  {%- if expertiseAUuid == uuids.additionalExpertiseNoAUuid -%}
+    <p>To execute the DMP, no additional specialist expertise is required.</p>
+  {%- elif expertiseAUuid == uuids.additionalExpertiseYesAvailableAUuid -%}
+    <p>To execute the DMP, additional specialist expertise is required and we have such trained support staff available.</p>
+  {%- elif expertiseAUuid == uuids.additionalExpertiseYesTrainAUuid -%}
+    <p>
+      To execute the DMP, additional specialist expertise is required. We will be training existing staff.
+      {%- set expertiseTrainPath = [expertisePath, uuids.additionalExpertiseYesTrainAUuid, uuids.additionalExpertiseYesTrainTrainingQUuid]|reply_path -%}
+      {%- set expertiseTrainText = repliesMap[expertiseTrainPath]|reply_str_value -%}
+      {%- if additionalExpertiseTrainText %}
+        The training will be: {{ expertiseTrainText|dot }}
+      {%- endif -%}
+    </p>
+  {%- elif expertiseAUuid == uuids.additionalExpertiseYesHireAUuid -%}
+    <p>
+      To execute the DMP, additional specialist expertise is required. We will be hiring new people with additional expertise.
+      {%- set expertiseHirePath = [expertisePath, uuids.additionalExpertiseYesHireAUuid, uuids.additionalExpertiseYesHireExpertiseQUuid]|reply_path -%}
+      {%- set expertiseHireText = repliesMap[expertiseHirePath]|reply_str_value -%}
+      {%- if expertiseHireText %}
+        The required expertise from new people is: {{ expertiseHireText|dot }}
+      {%- endif -%}
+    </p>
+  {%- endif -%}
+  {# additional hw/sw #}
+  {%- set additionalHWSWPath = [uuids.adminDetailsCUuid, uuids.additionalHWSWQUuid]|reply_path -%}
+  {%- set additionalHWSWAUuid = repliesMap[additionalHWSWPath]|reply_str_value -%}
+  {%- if additionalHWSWAUuid == uuids.additionalHWSWNoAUuid -%}
+    <p>We do not require any hardware or software in addition to what is usually available in the institute.</p>
+  {%- elif additionalHWSWAUuid == uuids.additionalHWSWYesAUuid -%}
+    {%- set additionalHWSWWhatPath = [additionalHWSWPath, uuids.additionalHWSWYesAUuid, uuids.additionalHWSWYesWhatQUuid]|reply_path -%}
+    {%- set additionalHWSWWhat = repliesMap[additionalHWSWWhatPath]|reply_str_value -%}
+    {%- if additionalHWSWWhat -%}
+      <p>We require the following hardware or software in addition to what is usually available in the institute: {{ additionalHWSWWhat|dot }}</p>
+    {%- else -%}
+      <p>We require hardware or software in addition to what is usually available in the institute.</p>
+    {%- endif -%}
+  {%- endif -%}
+  </div>
+</div>
