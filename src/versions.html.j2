@@ -11,7 +11,7 @@
       </tr>
     <thead>
     <tbody>
-      {% for version in dc.qtn.versions %}
+      {% for version in dc.qtn.versions|reverse %}
         <tr>
           <td class="version-name">{{ version.name }}</td>
           <td class="version-date">{{ version.created_at|datetime_format("%d %b %Y") }}</td>
