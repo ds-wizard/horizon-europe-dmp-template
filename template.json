@@ -1,29 +1,23 @@
 {
     "templateId": "horizon-europe-dmp",
     "organizationId": "dsw",
-    "version": "0.3.0",
+    "version": "1.0.0",
     "name": "Horizon Europe DMP",
     "description": "Data Management Plan according to the Horizon Europe template",
     "license": "Apache-2.0",
     "metamodelVersion": 8,
-    "recommendedPackageId": "dsw:root:2.3.14",
+    "recommendedPackageId": "dsw:root:2.4.0",
     "allowedPackages": [
         {
             "orgId": "dsw",
             "kmId": "root",
-            "minVersion": "2.3.14",
-            "maxVersion": null
-        },
-        {
-            "orgId": "dsw",
-            "kmId": "root-test",
-            "minVersion": "2.3.10",
+            "minVersion": "2.4.0",
             "maxVersion": null
         },
         {
             "orgId": "dsw",
             "kmId": "lifesciences",
-            "minVersion": "2.3.14",
+            "minVersion": "2.4.0",
             "maxVersion": null
         }
     ],
