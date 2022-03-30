@@ -11,7 +11,7 @@
   {%- if reply and reply.value.value.type == "IntegrationType" -%}
     {%- set question = km.entities.questions[questionUuid] -%}
     {%- set integration = km.entities.integrations[question.integrationUuid] -%}
-    {%- set integrationLink = integration.responseItemUrl|replace("${id}", reply.value.value.id) -%}
+    {%- set integrationLink = integration.itemUrl|replace("${id}", reply.value.value.id) -%}
     <a href="{{ integrationLink }}" target="_blank">{{ reply.value.value.value }}</a>
   {%- elif reply %}
     {{ reply.value.value.value }}
