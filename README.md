@@ -10,6 +10,10 @@ This template is available through [DSW Registry](https://registry.ds-wizard.org
 
 ## Changelog
 
+### 1.2.1
+
+- Fix use of "Describe your SOP (Standard Operating Procedure) for file naming" (`9ff389f0-2236-48cf-880c-040ea1bb0d2f`)
+
 ### 1.2.0
 
 - Adjusted to template metamodel version 10 (released in DSW 3.12.0)
