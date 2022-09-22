@@ -187,7 +187,7 @@
             {%- set itemPrefix = [metadataMiaListPath, metadataMiaItem]|reply_path -%}
             {%- set metadataMiaWhichPath = [itemPrefix, uuids.metadataMiaWhichQUuid]|reply_path -%}
             {%- set metadataMiaWhichReply = repliesMap[metadataMiaWhichPath] -%}
-            <li>{{ macros.integrationValue(metadataMiaWhichReply, uuids.metadataMiaWhichQUuid) }}<li>
+            <li>{{ macros.integrationValue(metadataMiaWhichReply, uuids.metadataMiaWhichQUuid) }}</li>
           {%- endfor -%}
           </ul>
           </p>

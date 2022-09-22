@@ -10,6 +10,10 @@ This template is available through [DSW Registry](https://registry.ds-wizard.org
 
 ## Changelog
 
+### 1.2.2
+
+- Fix "Minimal Metadata About" listing (`e7b6cd51-22a6-4f7a-9ad5-a7234fa436cb`)
+
 ### 1.2.1
 
 - Fix use of "Describe your SOP (Standard Operating Procedure) for file naming" (`9ff389f0-2236-48cf-880c-040ea1bb0d2f`)
