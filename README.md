@@ -10,6 +10,10 @@ This template is available through [DSW Registry](https://registry.ds-wizard.org
 
 ## Changelog
 
+### 1.2.4
+
+- Fix "Metadata will be openly available without/including instructions..." (`26b2afa6-99e8-4337-b380-5642bc807ad8`)
+
 ### 1.2.3
 
 - Change responsibilities in Chapter 4 (instead of project creator, use assigned project managers for *responsible for implementing the DMP, and ensuring it is reviewed and revised*)

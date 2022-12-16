@@ -136,9 +136,9 @@
       {%- set metadataOpenFormAUuid = repliesMap[[metadataOpenPath, metadataOpenAUuid, uuids.metadataOpenFormQUuid]|reply_path]|reply_str_value -%}
       <p>
       {%- if metadataOpenInstrAUuid == uuids.metadataOpenInstrNoAUuid %}
-        Metadata will be openly available including instructions how to get access to the data.
-      {%- elif metadataOpenInstrAUuid == uuids.metadataOpenInstrYesAUuid %}
         Metadata will be openly available without instructions how to get access to the data.
+      {%- elif metadataOpenInstrAUuid == uuids.metadataOpenInstrYesAUuid %}
+        Metadata will be openly available including instructions how to get access to the data.
       {%- else %}
         Metadata will be openly available.
       {%- endif %}
