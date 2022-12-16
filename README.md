@@ -10,6 +10,11 @@ This template is available through [DSW Registry](https://registry.ds-wizard.org
 
 ## Changelog
 
+### 1.2.3
+
+- Change responsibilities in Chapter 4 (instead of project creator, use assigned project managers for *responsible for implementing the DMP, and ensuring it is reviewed and revised*)
+- Fix additional training description in Chapter 4
+
 ### 1.2.2
 
 - Fix "Minimal Metadata About" listing (`e7b6cd51-22a6-4f7a-9ad5-a7234fa436cb`)

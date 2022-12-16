@@ -147,11 +147,6 @@
     <p>{{ sentences|join(" ") }}</p>
   {%- endif -%}
 
-  {# People #}
-  {%- if ctx.createdBy %}
-    <p>{{ctx.createdBy.firstName}} {{ctx.createdBy.lastName}} is responsible for implementing the DMP, and ensuring it is reviewed and revised.</p>
-  {%- endif -%}
-
   {%- set contributorsPath = [uuids.adminDetailsCUuid, uuids.contributorsQUuid]|reply_path -%}
   {%- set contributorsItems = repliesMap[contributorsPath]|reply_items -%}
   {%- if contributorsItems|length > 0 -%}
@@ -177,6 +172,8 @@
         </p>
       {%- endif -%}
     {%- endmacro -%}
+    {# Project managers #}
+    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleProjectManagerAUuid, "responsible for implementing the DMP, and ensuring it is reviewed and revised.") }}
     {# Data curators #}
     {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDataCuratorAUuid, "responsible for reviewing, enhancing, cleaning, or standardizing metadata and the associated data submitted for storage, use and maintenance within a data centre or repository.") }}
     {# Data collectors #}
@@ -203,7 +200,7 @@
       To execute the DMP, additional specialist expertise is required. We will be training existing staff.
       {%- set expertiseTrainPath = [expertisePath, uuids.additionalExpertiseYesTrainAUuid, uuids.additionalExpertiseYesTrainTrainingQUuid]|reply_path -%}
       {%- set expertiseTrainText = repliesMap[expertiseTrainPath]|reply_str_value -%}
-      {%- if additionalExpertiseTrainText %}
+      {%- if expertiseTrainText %}
         The training will be: {{ expertiseTrainText|dot }}
       {%- endif -%}
     </p>
