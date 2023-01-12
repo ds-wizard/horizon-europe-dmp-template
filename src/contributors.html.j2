@@ -43,7 +43,7 @@
         <br>{{ macros.formatOrcid(contributor.orcid) }}
       {%- endif -%}
       {%- if contributor.roles|length > 0 %}
-        <br>{% if contributor.roles|length == 0 %}Role{% else %}Roles{% endif %}: {% for role in contributor.roles %}<span class="role">{{ role }}</span>{% if not loop.last %}, {% endif %}{% endfor %}
+        <br>{% if contributor.roles|length == 1 %}Role{% else %}Roles{% endif %}: {% for role in contributor.roles %}<span class="role">{{ role }}</span>{% if not loop.last %}, {% endif %}{% endfor %}
       {%- endif %}
       {%- if contributor.affiliation %}
         <br>Affiliation: <span class="affiliation">{{ macros.integrationValue(contributor.affiliation, uuids.contributorAffiliationQUuid) }}</span>
