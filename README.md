@@ -4,11 +4,25 @@
 
 The template is based on the official [Template Horizon Europe Data Management Plan (DMP)](https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/temp-form/report/data-management-plan-template_he_en.docx)
 
+
 ## Usage
 
 This template is available through [DSW Registry](https://registry.ds-wizard.org/templates).
 
+
+## Issues and Contributing
+
+This document template for DSW is available as open-source via GitHub Repository [ds-wizard/horizon-europe-dmp-template](https://github.com/ds-wizard/horizon-europe-dmp-template), you can [report issues](https://github.com/ds-wizard/horizon-europe-dmp-template/issues) there and fork it for customisations or contributions.
+
+
 ## Changelog
+
+### 1.3.0
+
+- Adjusted to template metamodel version 11 (released in DSW 3.20.0)
+- Fix Minimal Metadata About listing
+- Fix singular role selected would appear as roles
+
 
 ### 1.2.4
 
