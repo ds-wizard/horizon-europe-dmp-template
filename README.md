@@ -17,12 +17,16 @@ This document template for DSW is available as open-source via GitHub Repository
 
 ## Changelog
 
+### Unreleased
+
+- Switch from `wkhtmltopdf` to `weasyprint` for PDF
+- Improve styling for PDF and HTML
+
 ### 1.3.0
 
 - Adjusted to template metamodel version 11 (released in DSW 3.20.0)
 - Fix Minimal Metadata About listing
 - Fix singular role selected would appear as roles
-
 
 ### 1.2.4
 

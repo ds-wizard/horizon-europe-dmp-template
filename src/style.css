@@ -3,7 +3,50 @@
 /* Layout and global styles */
 
 @page {
-  margin: 2.5cm;
+  size: A4;
+
+  @bottom-left {
+    border-top: 1px solid black;
+    content: '';
+    display: block;
+    width: 100%;
+    padding-top: 1rem;
+    vertical-align: top;
+    font-family: sans-serif;
+    font-size: 10pt;
+  }
+  @bottom-center {
+    border-top: 1px solid black;
+    content: '';
+    display: block;
+    width: 100%;
+    padding-top: 1rem;
+    vertical-align: top;
+    font-family: sans-serif;
+    font-size: 10pt;
+  }
+  @bottom-center {
+    border-top: 1px solid black;
+    content: counter(page) " / " counter(pages);
+    display: block;
+    width: 100%;
+    padding-top: 1rem;
+    vertical-align: top;
+    font-family: sans-serif;
+    font-size: 10pt;
+  }
+}
+@page :blank {
+  @top-center { content: none }
+  @bottom-left { content: none }
+  @bottom-center { content: none }
+  @bottom-right { content: none }
+}
+@page :first {
+  @top-center { content: none }
+  @bottom-left { content: none }
+  @bottom-center { content: none }
+  @bottom-right { content: none }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -13,6 +56,7 @@ h1, h2, h3, h4, h5, h6 {
 
 html, body {
   height: 100%;
+  padding: 1em;
 }
 
 body {
@@ -20,6 +64,13 @@ body {
   font-size: 11pt;
   counter-reset: section;
   counter-reset: question;
+  max-width: 21cm;
+  margin: 0 auto;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 8px;
 }
 
 /* Sections */
@@ -35,7 +86,6 @@ section {
 /* First page */
 
 header {
-  width: 100vw;
   height: 24cm;
   box-sizing: border-box;
   page-break-after: always;
@@ -68,6 +118,13 @@ header .dsw {
   font-style: italic;
 }
 
+header img.eu-header {
+  max-width: 160px;
+}
+
+header img.eu-flag {
+  max-width: 320px;
+}
 
 /* Versions */
 
@@ -89,6 +146,8 @@ div#dmp-versions th {
 
 div#dmp-versions th.title {
   text-transform: uppercase;
+  text-align: center;
+  padding: 0.4em;
 }
 
 div#dmp-versions td.version-name {
@@ -134,13 +193,11 @@ div#dmp-versions td.no-versions {
 
 /* custom */
 
-.mini-orcid-icon-16 {
-  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAABnElEQVQ4y52UvUtCURjGf968lmQhFGXYEH3QUg0JhkPR4l5T0IUosMGxv6C1KdpahCZbGxscGiXBloIKo0ESEYpEM71+3NvgvXW0j3vp2c57zvPjPQ/nPWCheDrkiKdDDqtzjl/MQSAChAG/Uc4BCSCmBJKpP0HxdGgQOAY2LRo4BaJKIFn6BjIgCSDolPrQ9Caa3vwLlgLCJkwSNo6BIEBoYp8537ZVLEHD89WRkcmlWex3+WhqNeqtMrLk/nTWWxVA7wYuKYFkymksIuLO/FiEYjXDazXD6tQhJTWLLLmRezxkns+4zsfQdQ3B+wkK/9Z/Sc1yfrsFgFseYnnyAE1vcJM/QfSaGfmxoWrjhaunI2aG18WyvztsW6rUC/Q6vd/qJihnFzTuXeG5ciOWcgBmRglg9yejLLkZHVhEcrgY8SwwPbzGxcOeeCQhgmIi6LV6z5uaR20WKdYemR3ZQNMalNUs53c7vNcLIigGnS87jvVodOtUCSSV7rCjtJ+9XaUMT0fYGDMTpj2Qlp0gzFnH1UT95xuxlN2P7QOpwZChGlWkWQAAAABJRU5ErkJggg==) no-repeat;
-  background-size: 0.4cm 0.4cm;
-  width: 0.4cm;
-  height: 0.4cm;
+.orcid-svg {
+  width: 0.5cm;
+  height: 0.5cm;
   display: inline-block;
-  margin: -2px 0 -2px 2px;
+  margin: 0px -4px -2px 2px;
 }
 
 div#dmp-projects,
