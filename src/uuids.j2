@@ -15,6 +15,17 @@
 {%- set funderStatusGrantedAUuid = "dcbeab22-d188-4fa0-b50b-5c9d1a2fbefe" -%}
 {%- set funderStatusRejectedAUuid = "8c0c9f28-4672-46ba-a939-48c2c892d790" -%}
 {%- set grantNumberQUuid = "1ccbd0bb-4263-4240-9dc5-936ef09eef53" -%}
+
+{%- set projEthicalApprovalQUuid = "dbb99f35-bdd9-4637-890e-23ba5bc19d6a" -%}
+  {%- set projEthicalApprovalYesAUuid = "f301ae6e-5bbe-4fe9-a637-f2d5c5f05c73" -%}
+    {%- set projEthicalApprovalAuthQUuid = "40005844-f7bb-493a-af6d-76c17a2f7eeb" -%}
+      {%- set projEthicalApprovalAuthStatusQUuid = "b3ace89e-ca0b-4f62-b356-6001b5501e6d" -%}
+        {%- set projEthicalApprovalAuthStatusPlannedAUuid = "320eb6c2-c0ef-465b-980f-5c988439eeaf" -%}
+        {%- set projEthicalApprovalAuthStatusAppliedAUuid = "d0308e38-13ee-44e7-8fa3-a29e0d0bfe86" -%}
+        {%- set projEthicalApprovalAuthStatusGrantedAUuid = "e0a59549-b078-4d7c-9ead-4b37f1549b82" -%}
+        {%- set projEthicalApprovalAuthStatusRejectAUuid = "1f2e2b12-97d1-4f72-bad1-8fe6f6075d78" -%}
+      {%- set projEthicalApprovalAuthCaseQUuid = "bd0dd2d0-b3ef-410d-be1f-8f4bf0bbd9d5" -%}
+
 {%- set contributorsQUuid = "73d686bd-7939-412e-8631-502ee6d9ea7b" -%}
 {%- set contributorNameQUuid = "6155ad47-3d1e-4488-9f2a-742de1e56580" -%}
 {%- set contributorEmailQUuid = "3a2ffc13-6a0e-4976-bb34-14ab6d938348" -%}
@@ -116,13 +127,26 @@
 {%- set nrefDataOwnersYesAUuid = "b0384f48-668f-4be5-86cc-e3fec81bcdb7" -%}
 {%- set nrefDataOwnersWeAUuid = "08b6593f-60a2-498a-9c20-eeb55568f8c1" -%}
 
-{%- set nrefDataConsentQUuid = "467ff3ad-156c-4285-9efb-c91072b3544e" -%}
-{%- set nrefDataConsentNotPersonalAUuid = "19ee5b2f-4ed2-4508-9265-9773229dcc36" -%}
-{%- set nrefDataConsentAnotherLegalAUuid = "dfcd23a7-463d-46f7-99cc-589d9aaa91d2" -%}
-{%- set nrefDataConsentCoversAUuid = "1d732f5b-e532-4672-9f67-4aa4e4eef449" -%}
-{%- set nrefDataConsentNewAUuid = "e29f35b6-c138-401a-b3d8-9cdcff0b8223" -%}
-{%- set nrefDataConsentOtherAUuid = "f0eeb017-869a-4480-8b6a-0c46b8ec7587" -%}
-{%- set nrefDataConsentOtherQUuid = "db636108-c99c-41a7-89b5-70e0021384a1" -%}
+{%- set nrefPersonalDataQUuid = "50864250-7dad-421a-9f6c-303114fe6e6c" -%}
+  {%- set nrefPersonalDataNoAUuid = "381058ff-8fed-40f5-928e-06e19e90dd1c" -%}
+  {%- set nrefPersonalDataYesAUuid = "1bbafc04-e527-481b-ad1f-521cc48de186" -%}
+    {%- set nrefPersLegalQUuid = "c2da0410-ede1-4b0a-a750-09e6e6bd38cf" -%}
+      {%- set nrefPersLegalPublicAUuid = "597d2547-4e97-4045-8605-3b5249f2b412" -%}
+      {%- set nrefPersLegalConsentAUuid = "eb17ff9a-c57e-4fd4-b3bd-89edb31c6568" -%}
+        {%- set nrefPersLegalConsentCoverQUuid = "28e7c4f7-7ade-42b2-a68e-63ab4f67b960" -%}
+          {%- set nrefPersLegalConsentCoverExistingAUuid = "15071f5e-c120-4a10-b0e8-054dea4dbf04" -%}
+          {%- set nrefPersLegalConsentCoverNewAUuid = "5374139c-f125-4d04-bce2-3ef6d4b34a2a" -%}
+      {%- set nrefPersLegalOtherAUuid = "ef396bbf-daa7-4d61-b4d7-ab66900b2598" -%}
+        {%- set nrefPersLegalOtherWhichQUuid = "40ea30cc-ea49-4407-8bba-c511a9fb1786" -%}
+          {%- set nrefPersLegalOtherWhichLegalAUuid = "18db88c7-97c9-416e-b1ae-763bf018345e" -%}
+          {%- set nrefPersLegalOtherWhichVitalAUuid = "8caeb960-7c5e-457c-ae9e-1a2e038a466a" -%}
+          {%- set nrefPersLegalOtherWhichLegitAUuid = "34bf8a67-6bba-4eab-8264-8d76f97e66c8" -%}
+          {%- set nrefPersLegalOtherWhichContractAUuid = "bfb7a92c-5eec-497e-8a0f-ef7b12f353c2" -%}
+{%- set nrefApprovalQUuid = "c15710f6-1c7f-43a0-97e7-ab70f6b5a115" -%}
+  {%- set nrefApprovalNaAUuid = "ad44fec7-d244-4bb1-9028-8d6856a06d6b" -%}
+  {%- set nrefApprovalExistingAUuid = "284110a8-66b4-4ba5-9e7a-edb77b1f2b3a" -%}
+  {%- set nrefApprovalExtensionAUuid = "12ae8bdc-a6eb-4db9-9a1a-7e6fed7f9ace" -%}
+  {%- set nrefApprovalNewAUuid = "6dd1142d-f76f-4d0b-9c38-999f7d8a229b" -%}
 
 {%- set nrefDataFormatQUuid = "588e3c1f-e9fd-411f-954e-f7a9b1cff1de" -%}
 {%- set nrefDataFormatUseAUuid = "4831f187-8660-4641-9a32-a6f4f569614f" -%}
@@ -288,28 +312,47 @@
 {%- set neqDataUtilitySameFieldAUuid = "1566d3af-666b-456a-9ace-daee8d690d6e" -%}
 {%- set neqDataUtilityOtherFieldsAUuid = "0c630b6f-8aec-4153-818d-90fbb559072f" -%}
 {%- set neqDataUtilityOtherFieldsHowQUuid = "41a1b4ba-8cd5-47fe-a7be-06cccf9a1688" -%}
+
+
 {%- set collectPersonalQUuid = "49c009cb-a38c-4836-9780-8a8b3dd1cbac" -%}
-{%- set collectPersonalNoAUuid = "4bdc319d-282a-4a80-9cdd-78d2081e812b" -%}
-{%- set collectPersonalYesAUuid = "421e2d3e-c95c-4244-9465-de8f1cb8aeba" -%}
-{%- set cpersLegalBasisQUuid = "be4651c9-9a8c-4e10-a158-61b94ca0e139" -%}
-{%- set cpersLegalBasisAskAUuid = "73cd2dda-41ba-456b-9a4e-aa34c78f2fcf" -%}
-{%- set cpersConsentQUuid = "f5e162ee-1077-4ebe-a932-192bc7f67e98" -%}
-{%- set cpersConsentUseAUuid = "a484287c-fd7f-47ca-8dea-cdb36f48616d" -%}
-{%- set cpersConsentReuseAUuid = "08014631-8a8a-4efa-bd58-3766cc40c7ed" -%}
-{%- set cpersConsentUseAnonAUuid = "3a77595a-87ae-484d-a9a6-052f312453ee" -%}
-{%- set cpersConsentAnonAUuid = "e7e4f219-5edd-468f-b042-b5f88a559c3a" -%}
-{%- set cpersReusersQUuid = "d0e029ee-aee0-420f-bc6f-ad471410ad42" -%}
-{%- set cpersReusersNoAUuid = "e4b4093e-9abd-40ce-bd9a-8720b2966017" -%}
-{%- set cpersReusersYesAUuid = "dce67815-b47b-4e92-a70e-b32735cf9e5b" -%}
-{%- set cpersLegalBasisContractAUuid = "1dfe0a6d-4281-4d5e-bcaa-5e20fa28a591" -%}
-{%- set cpersLegalBasisLegitAUuid = "9d5e3104-2b6b-4d95-848e-253ef069d8b3" -%}
-{%- set cpersLegalBasisVitalAUuid = "557a5401-a94a-4a37-af2e-a21829557bfa" -%}
-{%- set cpersLegalBasisLegalAUuid = "f10de3a8-2751-42c7-afaa-92eed4833f8e" -%}
-{%- set cpersLegalBasisPublicAUuid = "c732f0b9-2f66-47f4-902f-724a44cdfd4b" -%}
-{%- set cpersEthicReviewQUuid = "3782d32b-91b5-432f-8f93-92bb22868a22" -%}
-{%- set cpersEthicReviewYesAUuid = "04644b31-678c-45d5-807d-93d0d79f2221" -%}
-{%- set cpersNeedDpiaQUuid = "8915bd25-db22-4ed6-bcc8-b1bbdc52989e" -%}
-{%- set cpersNeedDpiaYesAUuid = "c3914e43-cca1-4180-8960-228b7022bae6" -%}
+  {%- set collectPersonalNoAUuid = "4bdc319d-282a-4a80-9cdd-78d2081e812b" -%}
+  {%- set collectPersonalYesAUuid = "421e2d3e-c95c-4244-9465-de8f1cb8aeba" -%}
+    {%- set cpersGdprQUuid = "c8687abf-ac88-4bef-b1cc-7070bd039a07" -%}
+      {%- set cpersGdprExploreAUuid = "d8ecede2-f952-4b08-8a68-20d97849733f" -%}
+        {%- set cpersGdprLegalBasisQUuid = "be4651c9-9a8c-4e10-a158-61b94ca0e139" -%}
+          {%- set cpersGdprLegalBasisPublicAUuid = "c732f0b9-2f66-47f4-902f-724a44cdfd4b" -%}
+          {%- set cpersGdprLegalBasisAskAUuid = "73cd2dda-41ba-456b-9a4e-aa34c78f2fcf" -%}
+            {%- set cpersConsentQUuid = "f5e162ee-1077-4ebe-a932-192bc7f67e98" -%}
+              {%- set cpersConsentUseAUuid = "a484287c-fd7f-47ca-8dea-cdb36f48616d" -%}
+              {%- set cpersConsentReuseAUuid = "08014631-8a8a-4efa-bd58-3766cc40c7ed" -%}
+              {%- set cpersConsentUseAnonAUuid = "3a77595a-87ae-484d-a9a6-052f312453ee" -%}
+              {%- set cpersConsentAnonAUuid = "e7e4f219-5edd-468f-b042-b5f88a559c3a" -%}
+            {%- set cpersExplainInformedQUuid = "61d21b4f-332b-4257-a345-bbf51b10d357" -%}
+            {%- set cpersReusersQUuid = "d0e029ee-aee0-420f-bc6f-ad471410ad42" -%}
+              {%- set cpersReusersNoAUuid = "e4b4093e-9abd-40ce-bd9a-8720b2966017" -%}
+              {%- set cpersReusersYesAUuid = "dce67815-b47b-4e92-a70e-b32735cf9e5b" -%}
+            {%- set cpersDescribeProcedureQUuid = "c6579da8-496a-4468-b567-9fb6ce472bf9" -%}
+          {%- set cpersGdprLegalBasisOtherAUuid = "2a84c15c-f5ca-4471-b1fe-10f3d1231f24" -%}
+            {%- set cpersGdprLegalBasisOtherWhichQUuid = "b307cc44-7896-4383-b9b0-11cf4a58f531" -%}
+              {%- set cpersGdprLegalBasisOtherWhichContractAUuid = "1dfe0a6d-4281-4d5e-bcaa-5e20fa28a591" -%}
+              {%- set cpersGdprLegalBasisOtherWhichLegitAUuid = "9d5e3104-2b6b-4d95-848e-253ef069d8b3" -%}
+              {%- set cpersGdprLegalBasisOtherWhichVitalAUuid = "557a5401-a94a-4a37-af2e-a21829557bfa" -%}
+              {%- set cpersGdprLegalBasisOtherWhichLegalAUuid = "f10de3a8-2751-42c7-afaa-92eed4833f8e" -%}
+        {%- set cpersGdprPurposeQUuid = "c7496ece-4535-4f5d-bcf7-7845989906e9" -%}
+        {%- set cpersGdprNeedDpiaQUuid = "8915bd25-db22-4ed6-bcc8-b1bbdc52989e" -%}
+        {%- set cpersGdprNeedDpiaYesAUuid = "c3914e43-cca1-4180-8960-228b7022bae6" -%}
+
+{%- set ethLegQUuid = "ebcbf4c6-ce25-4a0b-9e82-039a88498203" -%}
+  {%- set ethLegNoAUuid = "579c0a9a-29f0-4ab8-991d-bc4f55f2e4b8" -%}
+  {%- set ethLegYesAUuid = "9310b639-4cf7-4f94-8fbe-c1afc50afe4b" -%}
+    {%- set ethLegReviewQUuid = "3782d32b-91b5-432f-8f93-92bb22868a22" -%}
+      {%- set ethLegReviewNoAUuid = "6480ac87-faaa-4b47-9a66-f338e95ace5a" -%}
+      {%- set ethLegReviewYesAUuid = "04644b31-678c-45d5-807d-93d0d79f2221" -%}
+    {%- set ethLegHumanQUuid = "b464593d-fb92-4ad9-88e1-764306bb3051" -%}
+      {%- set ethLegHumanNoAUuid = "58b49591-a1f7-4733-bc92-a87cb786b128" -%}
+      {%- set ethLegHumanYesAUuid = "761d20f2-d2ce-496b-8a91-a52ff0513e7b" -%}
+
+
 {%- set ownershipQUuid = "cb7d17a8-30c0-489d-a43c-702b27d97611" -%}
 {%- set ownershipNoOwnerAUuid = "f310952b-e946-4315-bb32-bf127d1bf96a" -%}
 {%- set ownershipPIAUuid = "91d6ee6f-c501-4d1c-a6e7-9da1789f68de" -%}
