@@ -119,9 +119,9 @@
     {%- set openImmediatelyPath = [uuids.accessCUuid, uuids.openImmediatelyQUuid]|reply_path -%}
     {%- set openImmediatelyAUuid = repliesMap[openImmediatelyPath]|reply_str_value -%}
     {%- if openImmediatelyAUuid == uuids.openImmediatelyYesAUuid -%}
-      <p>As stated already in Section 2.2, all of our data can become completely open immediately.</p>
+      <p>As stated already in Section 2.2, all of our data can become completely open over time.</p>
     {%- elif openImmediatelyAUuid == uuids.openImmediatelyNoAUuid -%}
-      <p>As explained in Section 2.2, our data cannot become completely open immediately.</p>
+      <p>As explained in Section 2.2, our data cannot become completely open.</p>
 
       {%- set notOpenSentences = [] -%}
       {%- set notOpenSentencesIP = [] -%}

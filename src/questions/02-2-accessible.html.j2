@@ -11,7 +11,7 @@
     {%- set openImmediatelyPath = [uuids.accessCUuid, uuids.openImmediatelyQUuid]|reply_path -%}
     {%- set openImmediatelyAUuid = repliesMap[openImmediatelyPath]|reply_str_value -%}
     {%- if openImmediatelyAUuid == uuids.openImmediatelyYesAUuid -%}
-      <p>All of our data can become completely open immediately.</p>
+      <p>All of our data can become completely open over time.</p>
     {%- elif openImmediatelyAUuid == uuids.openImmediatelyNoAUuid -%}
       {%- set pathPrefix = [openImmediatelyPath, uuids.openImmediatelyNoAUuid]|reply_path -%}
       {%- set notOpenLegalReasonsPath = [pathPrefix, uuids.notOpenLegalReasonsQUuid]|reply_path -%}
@@ -35,7 +35,7 @@
 
       {%- if anyReason -%}
         <p>
-        The data cannot become completely open immediately because 
+        The data cannot become completely open because 
         {%- if nReasons == 1 -%}
           {%- if legalReasons %}
             of legal reasons.
@@ -98,7 +98,7 @@
         {%- endif -%}
 
       {%- else -%}
-        <p>The data can become completely open immediately.</p>
+        <p>The data can become completely open over time.</p>
       {%- endif -%}
     {%- endif -%}
 

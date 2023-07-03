@@ -57,7 +57,7 @@
           {%- elif consentAUuid == uuids.cpersConsentUseAnonAUuid %}
             We will collect consent for our use of the data and for anonymization; we will anonymize the data afterwards for reuse.
           {%- elif consentAUuid == uuids.cpersConsentAnonAUuid %}
-            We ask for consent for anonymization; we will anonymise first and all further processing is on the anonymous data.
+            We ask for consent for anonymization; we will anonymize first and all further processing is on the anonymous data.
           {%- endif -%}
           {%- set reusersPath = [legalBasePath, legalBaseAUuid, uuids.cpersReusersQUuid]|reply_path -%}
           {%- set reusersAUuid = repliesMap[reusersPath]|reply_str_value -%}
