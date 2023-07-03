@@ -23,7 +23,7 @@
     {%- set question = km.entities.questions[questionUuid] -%}
     {%- set integration = km.entities.integrations[question.integrationUuid] -%}
     {%- set integrationLink = integration.itemUrl|replace("${id}", reply.value.value.id) -%}
-    <a href="{{ integrationLink }}" target="_blank">{{ reply.value.value.value }}</a>
+    <a href="{{ integrationLink }}" target="_blank">{{ reply.value.value.value|markdown }}</a>
   {%- elif reply %}
     {{ reply.value.value.value }}
   {%- endif -%}

@@ -17,6 +17,10 @@ This document template for DSW is available as open-source via GitHub Repository
 
 ## Changelog
 
+### 1.5.0
+
+- Update for `dsw:root:2.5.0`
+
 ### 1.4.0
 
 - Switch from `wkhtmltopdf` to `weasyprint` for PDF
