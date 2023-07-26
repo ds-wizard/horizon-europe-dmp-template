@@ -106,24 +106,6 @@
       {%- endif -%}
     {%- endif -%}
 
-    {# Access control in shared workspace #}
-    {%- set sharedWorkspacePath = [uuids.processingCUuid, uuids.sharedWorkspaceQUuid]|reply_path -%}
-    {%- set sharedWorkspaceAUuid = repliesMap[sharedWorkspacePath]|reply_str_value -%}
-    {%- if sharedWorkspaceAUuid == uuids.sharedWorkspaceYesAUuid -%}
-      {%- set sharedWorkspacePrefix = [uuids.processingCUuid, uuids.sharedWorkspaceQUuid, uuids.sharedWorkspaceYesAUuid]|reply_path -%}
-      {%- set sharedAccessControlPath = [sharedWorkspacePrefix, uuids.sharedAccessControlQUuid]|reply_path -%}
-      {%- set sharedAccessControlAUuid = repliesMap[sharedAccessControlPath]|reply_str_value -%}
-      {%- if sharedAccessControlAUuid == uuids.sharedAccessControlMembersRWAUuid -%}
-        <p>Only all project members have read/write access to the data.</p>
-      {%- elif sharedAccessControlAUuid == uuids.sharedAccessControlInstituteRAUuid -%}
-        <p>Anyone in the institute has read access to the data; all project members have read/write access.</p>
-      {%- elif sharedAccessControlAUuid == uuids.sharedAccessControlMembersRAUuid -%}
-        <p>Only project members will have read access; only selected project members will be able to write data.</p>
-      {%- elif sharedAccessControlAUuid == uuids.sharedAccessControlMembersRequestAUuid -%}
-        <p>Anyone in the institute can read data, only project members can request write access.</p>
-      {%- endif -%}
-    {%- endif -%}
-
     {# Cold storage #}
     {%- set coldStoragePath = [uuids.preservingCUuid, uuids.coldStorageQUuid]|reply_path -%}
     {%- set coldStorageAUuid = repliesMap[coldStoragePath]|reply_str_value -%}
@@ -165,21 +147,6 @@
 
       {%- if coldSentences|length > 0 -%}
         <p>{{ coldSentences|join(" ") }}</p>
-      {%- endif -%}
-    {%- endif -%}
-
-    {# Collaboration agreement for data access #}
-    {%- set collabPath = [uuids.creatingCUuid, uuids.collabQUuid]|reply_path -%}
-    {%- set collabAUuid = repliesMap[collabPath]|reply_str_value -%}
-    {%- if collabAUuid == uuids.collabNoAUuid -%}
-      <p>We are not running the project in a collaboration between different groups nor institutes. Therefore, no collaboration agreement related to data access is needed.</p>
-    {%- elif collabAUuid == uuids.collabYesAUuid -%}
-      {%- set collabAgreePath = [collabPath, collabAUuid, uuids.collabAgreeQUuid]|reply_path -%}
-      {%- set collabAgreeAUuid = repliesMap[collabAgreePath]|reply_str_value -%}
-      {%- if collabAgreeAUuid == uuids.collabAgreeNoAUuid -%}
-        <p>We are running the project in a collaboration between different groups and institutes. However, there is no collaboration agreement in the project that describes who can have access to what data.</p>
-      {%- elif collabAgreeAUuid == uuids.collabAgreeYesAUuid -%}
-        <p>We are running the project in a collaboration between different groups and institutes. A collaboration agreement that describes who can have access to what data in the project is set.</p>
       {%- endif -%}
     {%- endif -%}
   </div>
