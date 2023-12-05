@@ -178,20 +178,20 @@
               {%- set isUsed = refDataUsedAUuid == uuids.refDataUseYesAUuid -%}
               <li>
                 {# identification #}
-                <strong>{{ macros.integrationValue(refDataNameReply, uuids.refDataNameQUuid) }}</strong>
+                <div>{{ macros.integrationValue(refDataNameReply) }}</div>
                 {%- if refDataWhere -%}
+                  <p>
                   {%- if refDataWhere.startswith("http://") or refDataWhere.startswith("https://") or refDataWhere.startswith("ftp://") %}
-                    (<a href="{{ refDataWhere }}" target="_blank">{{ refDataWhere }}</a>)
+                    It is available via: <a href="{{ refDataWhere }}" target="_blank">{{ refDataWhere }}</a>.
                   {%- else %}
-                    ({{ refDataWhere }})
-                  {%- endif -%}
-                  {%- if isUsed %}
-                    ✔️
+                    It is available via: {{ refDataWhere }}. 
+                  {%- endif %}
+                  {% if isUsed %}
+                    It is used in the project.
                   {%- elif isNotUsed %}
-                    ❌
-                  {%- else %}
-                    ❓
+                    It was considered but will not be used in the project.
                   {%- endif -%}
+                  </p>
                 {%- endif -%}
                 {# ref data - not used #}
                 {%- if isNotUsed -%}
@@ -288,20 +288,20 @@
               {%- set isUsed = nrefDataUsedAUuid == uuids.nrefDataUseYesAUuid -%}
               <li>
                 {# identification #}
-                <strong>{{ macros.integrationValue(nrefDataNameReply, uuids.nrefDataNameQUuid) }}</strong>
+                <div>{{ macros.integrationValue(nrefDataNameReply) }}</div>
                 {%- if nrefDataWhere -%}
+                  <p>
                   {%- if nrefDataWhere.startswith("http://") or nrefDataWhere.startswith("https://") or nrefDataWhere.startswith("ftp://") %}
-                    (<a href="{{ nrefDataWhere }}" target="_blank">{{ nrefDataWhere }}</a>)
+                    It is available via: <a href="{{ nrefDataWhere }}" target="_blank">{{ nrefDataWhere }}</a>.
                   {%- else %}
-                    ({{ nrefDataWhere }})
-                  {%- endif -%}
-                  {%- if isUsed %}
-                    ✔️
+                    It is available via: {{ nrefDataWhere }}.
+                  {%- endif %}
+                  {% if isUsed %}
+                    It is used in the project.
                   {%- elif isNotUsed %}
-                    ❌
-                  {%- else %}
-                    ❓
+                    It was considered but will not be used in the project.
                   {%- endif -%}
+                  </p>
                 {%- endif -%}
                 {# nref data - not used #}
                 {%- if isNotUsed -%}
@@ -440,14 +440,7 @@
         {%- elif standards|length > 1 %}
           {%- set standardLinks = [] -%}
           {%- for standardReply in standards %}
-            {%- if reply and reply.value.value.type == "IntegrationType" -%}
-              {%- set question = km.entities.questions[questionUuid] -%}
-              {%- set integration = km.entities.integrations[question.integrationUuid] -%}
-              {%- set integrationLink = integration.responseItemUrl|replace("${id}", reply.value.value.id) -%}
-              {%- do standardLinks.append('<a href="{{ integrationLink }}" target="_blank">' ~ reply.value.value.value ~ '</a>') -%}
-            {%- elif reply %}
-              {%- do standardLinks.append(reply.value.value.value) -%}
-            {%- endif -%}
+            {{ macros.integrationValue(standardReply) }}
           {% endfor %}
           {%- do dataCompReadSentences.append("For that, we will use the following formats: " ~ standardLinks|join(", ") ~ ".") -%}
         {%- endif -%}
@@ -483,7 +476,7 @@
         {%- set formatsVolumeAUuid = repliesMap[formatsVolumePath]|reply_str_value -%}
         <li>
           {# identification #}
-          <strong>{{ macros.integrationValue(formatNameReply, uuids.formatsNameQUuid) }}</strong>
+          <div>{{ macros.integrationValue(formatNameReply) }}</div>
           {%- if formatsIsStandardAUuid or formatsIsLTSuitableAUuid or formatsVolumeAUuid -%}
             <p>
             {# standard? #}

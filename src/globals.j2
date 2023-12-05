@@ -1,3 +1,8 @@
+{%- set name = "DSW" -%}
+{%- set fullName = "Data Stewardship Wizard" -%}
+{%- set linkUrl = "https://ds-wizard.org" -%}
+{%- set link = "ds-wizard.org" -%}
+
 {#- Project or projects (based on number) -#}
 {%- set projectsPath = [uuids.adminDetailsCUuid, uuids.projectsQUuid]|reply_path -%}
 {%- set projectsItems = repliesMap[projectsPath]|reply_items -%}

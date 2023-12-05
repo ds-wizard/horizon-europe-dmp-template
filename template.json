@@ -1,11 +1,11 @@
 {
     "templateId": "horizon-europe-dmp",
     "organizationId": "dsw",
-    "version": "1.5.1",
+    "version": "1.6.0",
     "name": "Horizon Europe DMP",
     "description": "Data Management Plan according to the Horizon Europe template",
     "license": "Apache-2.0",
-    "metamodelVersion": 11,
+    "metamodelVersion": 12,
     "allowedPackages": [
         {
             "orgId": "dsw",
@@ -80,7 +80,7 @@
         }
     ],
     "_tdk": {
-        "version": "3.20.0",
+        "version": "4.1.0",
         "readmeFile": "README.md",
         "files": [
             "src/*",

@@ -46,7 +46,7 @@
         <br>{% if contributor.roles|length == 0 %}Role{% else %}Roles{% endif %}: {% for role in contributor.roles %}<span class="role">{{ role }}</span>{% if not loop.last %}, {% endif %}{% endfor %}
       {%- endif %}
       {%- if contributor.affiliation %}
-        <br>Affiliation: <span class="affiliation">{{ macros.integrationValue(contributor.affiliation, uuids.contributorAffiliationQUuid) }}</span>
+        <br>Affiliation: <span class="affiliation">{{ macros.integrationValue(contributor.affiliation) }}</span>
       {%- endif %}
     </li>
   {% endfor %}

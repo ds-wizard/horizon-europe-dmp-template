@@ -33,11 +33,11 @@
             {%- if identifierTypeAUuid == uuids.dataIdentifierTypeHandleAUuid -%}
               <li>Handle: <strong>{{ identifierValue }}</strong></li>
             {%- elif identifierTypeAUuid == uuids.dataIdentifierTypeDoiAUuid -%}
-              <li>DOI: <strong><a href="https://doi.org/{{ identifierValue }}">{{ identifierValue }}</a></strong></li>
+              <li>DOI: <strong><a href="https://doi.org/{{ identifierValue }}" target="_blank">{{ identifierValue }}</a></strong></li>
             {%- elif identifierTypeAUuid == uuids.dataIdentifierTypeArkAUuid -%}
               <li>ARK: <strong>{{ identifierValue }}</strong></li>
             {%- elif identifierTypeAUuid == uuids.dataIdentifierTypeUrlAUuid -%}
-              <li>URL: <strong><a href="{{ identifierValue }}">{{ identifierValue }}</a></strong></li>
+              <li>URL: <strong><a href="{{ identifierValue }}" target="_blank">{{ identifierValue }}</a></strong></li>
             {%- elif identifierTypeAUuid == uuids.dataIdentifierTypeOtherAUuid -%}
               {%- set identifierType = repliesMap[[identifierTypePath, uuids.dataIdentifierTypeOtherAUuid, uuids.dataIdentifierTypeOtherTypeQUuid]|reply_path]|reply_str_value -%}
               <li>{{ identifierType }}: <strong>{{ identifierValue }}</strong></li>
@@ -62,7 +62,7 @@
                     {%- set domainSpecificRepoNamePath = [distroRepositoryKindPath, uuids.publishedDataRepositoryDomainSpecificAUuid, uuids.domainSpecificRepoNameQUuid]|reply_path -%}
                     {%- set domainSpecificRepoNameReply = repliesMap[domainSpecificRepoNamePath] -%}
                     {%- if domainSpecificRepoNameReply -%}
-                      : {{ macros.integrationValue(domainSpecificRepoNameReply, uuids.domainSpecificRepoNameQUuid) }}.
+                      : {{ macros.integrationValue(domainSpecificRepoNameReply) }}.
                     {%- else -%}.
                     {% endif -%}
                     {# Contact the repository #}
@@ -193,7 +193,7 @@
           <p>There are the following 'Minimal Metadata About ...' (MIA...) standards for our experiments:
           <ul>
           {%- for metadataStandardReply in metadataStandardReplies -%}
-            <li>{{ macros.integrationValue(metadataStandardReply, uuids.metadataMiaWhichQUuid) }}</li>
+            <li>{{ macros.integrationValue(metadataStandardReply) }}</li>
           {%- endfor -%}
           </ul>
           </p>
