@@ -284,7 +284,7 @@
                     {%- set domainSpecificRepoNamePath = [distroRepositoryKindPath, uuids.publishedDataRepositoryDomainSpecificAUuid, uuids.domainSpecificRepoNameQUuid]|reply_path -%}
                     {%- set domainSpecificRepoNameReply = repliesMap[domainSpecificRepoNamePath] -%}
                     {%- if domainSpecificRepoNameReply -%}
-                      : {{ macros.integrationValue(domainSpecificRepoNameReply, uuids.domainSpecificRepoNameQUuid) }}.
+                      : {{ macros.integrationValue(domainSpecificRepoNameReply) }}.
                     {%- else -%}.
                     {% endif -%}
                     {# Contact the repository #}

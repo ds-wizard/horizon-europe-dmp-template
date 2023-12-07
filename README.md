@@ -27,6 +27,10 @@ This document template for DSW is available as open-source via GitHub Repository
 
 ## Changelog
 
+### 1.6.1
+
+- Fix `integrationValue` error
+
 ### 1.6.0
 
 - Adjusted to template metamodel version 12 (released in DSW 4.1.0)
