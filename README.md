@@ -27,6 +27,10 @@ This document template for DSW is available as open-source via GitHub Repository
 
 ## Changelog
 
+### 1.6.2
+
+- Fix broken images in Word
+
 ### 1.6.1
 
 - Fix `integrationValue` error
