@@ -1,6 +1,4 @@
-# horizon-europe-dmp-template
-
-*Horizon Europe DMP template for DSW*
+# Horizon Europe DMP
 
 The template is based on the official [Template Horizon Europe Data Management Plan (DMP)](https://ec.europa.eu/info/funding-tenders/opportunities/docs/2021-2027/horizon/temp-form/report/data-management-plan-template_he_en.docx)
 
@@ -26,6 +24,10 @@ This document template for DSW is available as open-source via GitHub Repository
 
 
 ## Changelog
+
+### 1.7.0
+
+- Adjusted to template metamodel version 13 (released in DSW 4.3.0)
 
 ### 1.6.2
 
