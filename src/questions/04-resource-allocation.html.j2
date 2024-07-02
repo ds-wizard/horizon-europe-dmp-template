@@ -43,7 +43,7 @@
                         {%- set projectCostItemAmountReply = repliesMap[projectCostItemAmountQUuid]|reply_str_value -%}
 
                         {%- if  projectCostItemAmountReply and projectCostItemCurrencyReply -%}
-                            <p>The amount is {{projectCostItemAmountReply}} {{macros.integrationValue(projectCostItemCurrencyReply)}}.</p>
+                            <p>The amount is {{projectCostItemAmountReply}} {{projectCostItemCurrencyReply.value.value.value.rsplit(", ")[1]}}.</p>
                         {%- endif -%}
 
                         {%- set projectCostItemAllocationQUuid = [projectCostItem, uuids.costAllocationQUuid]|reply_path  -%}
