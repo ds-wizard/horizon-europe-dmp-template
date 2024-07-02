@@ -194,6 +194,14 @@
               {%- do notOpenSentences.append("For pseudonymization, we can make use of an existing 'trusted third party'.") -%}
             {%- endif -%}
           {%- endif -%}
+
+          {# Access to private data #}
+          {%- set personalDataManagedAccessQUuid = [legalPrivacyPath, uuids.legalPrivacyYesAUuid, uuids.notOpenLegalReasonsPrivacyAccessQUuid ]|reply_path -%}
+          {%- set personalDataManagedAccessReply = repliesMap[personalDataManagedAccessQUuid]|reply_str_value -%}
+          {%- if personalDataManagedAccessReply -%}
+            <p>There is a procedure for users to access private data as follows: {{personalDataManagedAccessReply|dot}}</p>
+          {%- endif -%}
+
         {%- endif -%}
         
         {%- set legalIpPath = [notOpenLegalReasonsPath, uuids.notOpenLegalReasonsYesAUuid, uuids.legalIpQUuid]|reply_path -%}
