@@ -28,7 +28,7 @@
             {% if publishedDataHowLongAUuid == uuids.publishedDataHowLongTechnicalAUuid -%}
               <span class="separator">&ndash;</span> This data set will be kept available as long as technically possible.
             {%- elif publishedDataHowLongAUuid == uuids.publishedDataHowLongLegalAUuid -%}
-              <span class="separator">&ndash;</span> This data set will be kept available until it needs to be deleted for legal reasons.
+              <span class="separator">&ndash;</span> This data set will be kept available until it needs to be deleted for legal, contractual or regulatory reasons.
             {%- elif publishedDataHowLongAUuid == uuids.publishedDataHowLongFixedAUuid -%}
               {%- set publishedDataHowLongFixedPath = [publishedDataHowLongPath, uuids.publishedDataHowLongFixedAUuid, uuids.publishedDataHowLongFixedQUuid]|reply_path -%}
               {%- set publishedDataHowLongFixed = repliesMap[publishedDataHowLongFixedPath]|reply_str_value -%}
