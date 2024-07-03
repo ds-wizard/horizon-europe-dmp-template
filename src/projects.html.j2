@@ -18,6 +18,8 @@
 
     {%- set projectAcronymPath = [projectsPath, projectsItem, uuids.projectAcronymQUuid]|reply_path -%}
     {%- set projectAcronym = repliesMap[projectAcronymPath]|reply_str_value -%}
+     {%- set projectNumberPath = [projectsPath, projectsItem, uuids.projectNumberQUuid]|reply_path -%}
+    {%- set projectNumber = repliesMap[projectNumberPath]|reply_str_value -%}
     {%- set projectStartPath = [projectsPath, projectsItem, uuids.projectStartQUuid]|reply_path -%}
     {%- set projectStart = repliesMap[projectStartPath]|reply_str_value -%}
     {%- set projectEndPath = [projectsPath, projectsItem, uuids.projectEndQUuid]|reply_path -%}
@@ -27,6 +29,8 @@
       <dl>
         <dt>Acronym</dt>
         <dd>{{ projectAcronym if projectAcronym else "N/A" }}</dd>
+        <dt>Project Number</dt>
+        <dd>{{ projectNumber if projectNumber else "N/A" }}</dd>
         <dt>Start date</dt>
         <dd>{{ projectStart if projectStart else "N/A" }}</dd>
         <dt>End date</dt>

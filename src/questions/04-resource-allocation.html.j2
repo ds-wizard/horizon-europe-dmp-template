@@ -1,7 +1,115 @@
 <div id="q-resource-allocation" class="question">
   <div class="answer">
 
-  <p>FAIR is a central part of our data management; it is considered at every decision in our data management plan. We use the FAIR data process ourselves to make our use of the data as efficient as possible. Making our data FAIR is therefore not a cost that can be separated from the rest of the project.</p>
+  <p>FAIR is a central part of our data management; it is considered at every decision in our data management plan. We use the FAIR data process ourselves to make our use of the data as efficient as possible.</p>
+
+  {# Costs #}
+    {%- set projectPath = [uuids.adminDetailsCUuid, uuids.projectsQUuid]|reply_path -%}
+    {%- set projectItems = repliesMap[projectPath]|reply_items -%}
+    {%- if projectItems|length > 0 -%}
+    <ul>
+        {%- for i in projectItems -%}
+            {%- set projectItem = [projectPath, i]|reply_path -%}
+            {%- set projectItemNameQUuid = [projectItem, uuids.projectNameQUuid]|reply_path -%}
+            {%- set projectItemNameReply = repliesMap[projectItemNameQUuid]|reply_str_value -%}
+
+            {%- set projectItemNumberQUuid = [projectItem, uuids.projectNumberQUuid]|reply_path -%}
+            {%- set projectItemNumberReply = repliesMap[projectItemNumberQUuid]|reply_str_value -%}
+              <li> 
+                <strong>{{ projectItemNameReply if projectItemNameReply else "(no name given)" }}{{ " - " + projectItemNumberReply if projectItemNumberReply}} </strong>
+                {%- set projectCostPath = [projectItem, uuids.costQUuid]|reply_path -%}
+                {%- set projectCostItems = repliesMap[projectCostPath]|reply_items -%}
+
+                {%- if projectCostItems|length > 0  -%}
+                <p>Following resources will be dedicated to data management and ensuring that data will be FAIR:</p>
+                    <ul>
+                    {%- for j in projectCostItems -%}
+                        {%- set projectCostItem = [projectCostPath, j]|reply_path -%}
+                        {%- set projectCostItemTitleQUuid = [projectCostItem, uuids.costTitleQUuid]|reply_path -%}
+                        {%- set projectCostItemTitleReply = repliesMap[projectCostItemTitleQUuid]|reply_str_value -%}
+                        <li>
+                        <strong>{{ projectCostItemTitleReply if projectCostItemTitleReply else "(no name given)" }}</strong>
+                        
+                        {%- set projectCostItemDescriptionQUuid = [projectCostItem, uuids.costDescriptionQUuid]|reply_path -%}
+                        {%- set projectCostItemDescriptionReply = repliesMap[projectCostItemDescriptionQUuid]|reply_str_value  -%}
+                        
+                        {{" - "+projectCostItemDescriptionReply|dot}}
+
+                        {%- set projectCostItemCurrencyQUuid = [projectCostItem, uuids.costCurrencyQUuid]|reply_path  -%}
+                        {%- set projectCostItemCurrencyReply = repliesMap[projectCostItemCurrencyQUuid] -%}
+
+
+                        {%- set projectCostItemAmountQUuid = [projectCostItem, uuids.costAmountQUuid]|reply_path   -%}
+                        {%- set projectCostItemAmountReply = repliesMap[projectCostItemAmountQUuid]|reply_str_value -%}
+
+                        {%- if  projectCostItemAmountReply and projectCostItemCurrencyReply -%}
+                            <p>The amount is {{projectCostItemAmountReply}} {{projectCostItemCurrencyReply.value.value.value.rsplit(", ")[1]}}.</p>
+                        {%- endif -%}
+
+                        {%- set projectCostItemAllocationQUuid = [projectCostItem, uuids.costAllocationQUuid]|reply_path  -%}
+                        {%- set projectCostItemAllocationItems = repliesMap[projectCostItemAllocationQUuid]|reply_items -%}
+
+                        
+                          {%- set projectCostItemAllocations = [] -%}
+                          {%- if uuids.costAllocationFindabilityAUuid in projectCostItemAllocationItems -%}
+                            {%- do projectCostItemAllocations.append("ensuring findability") -%}
+                          {%- endif -%}
+                          {%- if uuids.costAllocationAccessibilityAUuid in projectCostItemAllocationItems -%}
+                            {%- do projectCostItemAllocations.append("ensuring accessibility") -%}
+                          {%- endif -%}
+                          {%- if uuids.costAllocationInteroperabilityAUuid in projectCostItemAllocationItems -%}
+                            {%- do projectCostItemAllocations.append("ensuring interoperability") -%}
+                          {%- endif -%}
+                          {%- if uuids.costAllocationReusabilityAUuid in projectCostItemAllocationItems -%}
+                            {%- do projectCostItemAllocations.append("ensuring reusability") -%}
+                          {%- endif -%}
+                          {%- if uuids.costManagementAUuid in projectCostItemAllocationItems -%}
+                            {%- do projectCostItemAllocations.append("supporting management") -%}
+                          {%- endif -%}
+                        
+                        {%- if projectCostItemAllocations|length > 0 -%}
+                          <p>
+                            This resource is allocated for{{+" "}}
+                            {%- if projectCostItemAllocations|length > 2 -%}
+                              {{ projectCostItemAllocations[0:-1]|join(", ") }}, and {{ projectCostItemAllocations[-1] }} of data.
+                            {%- elif projectCostItemAllocations|length == 2 -%}
+                              {{ projectCostItemAllocations[0] }} and {{ projectCostItemAllocations[1] }} of data.
+                            {%- else -%}
+                              {{ projectCostItemAllocations[0] }} of data.
+                            {%- endif %}
+                          </p>
+                        {%- endif -%}
+ 
+                        {%- set projectCostItemCoverQUuid = [projectCostItem, uuids.costCoverQUuid]|reply_path  -%}
+                        {%- set projectCostItemCoverReply = repliesMap[projectCostItemCoverQUuid]|reply_str_value -%}
+
+                        {%- if projectCostItemCoverReply == uuids.costCoverGrantAUuid -%}
+                          {%- set costCoverGrantIdQUuid = [projectCostItemCoverQUuid, uuids.costCoverGrantAUuid, uuids.costCoverGrantIdQUuid]|reply_path -%}
+                          {%- set costCoverGrantIdReply = repliesMap[costCoverGrantIdQUuid]|reply_str_value -%}
+                          <p>This cost will be covered by funding grant
+                          {%- if costCoverGrantIdReply -%}
+                            {{" "}}(grant number: {{costCoverGrantIdReply}})
+                          {%- else -%}
+                            . </p>
+                          {%- endif -%}
+                        {%- elif projectCostItemCoverReply == uuids.costCoverOtherAUuid -%}
+                          {%- set costCoverOtherHowQUuid = [projectCostItemCoverQUuid,uuids.costCoverOtherAUuid, uuids.costCoverOtherHowQUuid]|reply_path  -%}
+                          {%- set costCoverOtherHowReply = repliesMap[costCoverOtherHowQUuid]|reply_str_value -%}
+                          {%- if costCoverOtherHowReply -%}
+                            <p>This cost will be covered as follows: {{costCoverOtherHowReply}}.</p>
+                          {%- endif -%}
+                        {%- endif -%}
+                        </li>
+                    {%- endfor -%}
+                    </ul>
+                {%- else -%}
+                <p>Making our data FAIR is not a cost that can be separated from the rest of the project.</p>
+                {%- endif -%}
+            </li>
+        {%- endfor -%}
+    </ul>
+    {%- else -%}
+    {%- endif -%}
 
   {# Archiving (cold storage) #}
   {%- set coldStoragePath = [uuids.preservingCUuid, uuids.coldStorageQUuid]|reply_path -%}

@@ -21,9 +21,18 @@ This document template for DSW is available as open-source via GitHub Repository
 * **Kryštof Komanec** <[krystof.komanec@ds-wizard.org](mailto:krystof.komanec@ds-wizard.org)>
   * ORCID: [0000-0003-3856-1682](https://orcid.org/0000-0003-3856-1682)
   * GitHub: [@krystofkomanec](https://github.com/krystofkomanec)
+* **Jana Martínková** <[jana.martinkova@ds-wizard.org]>(mailto:jana.martinkova@ds-wizard.org)>
+  * ORCID: [0000-0001-8575-6533](https://orcid.org/0000-0001-8575-6533/)
+  * GitHub: [@jmartinkova](https://github.com/jmartinkova)
 
 
 ## Changelog
+
+### 1.8.0
+
+- Fix Questions 2 (part 1) regarding data versions to allow for multiple choices
+- Improve Question 2 (part 4) regarding access to private data and reasons destroying data
+- Improve Question 4 regarding costs in project
 
 ### 1.7.0
 
