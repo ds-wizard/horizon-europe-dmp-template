@@ -12,7 +12,7 @@
     width: 100%;
     padding-top: 1rem;
     vertical-align: top;
-    font-family: sans-serif;
+    font-family: "Open Sans", sans-serif;
     font-size: 10pt;
   }
   @bottom-center {
@@ -22,7 +22,7 @@
     width: 100%;
     padding-top: 1rem;
     vertical-align: top;
-    font-family: sans-serif;
+    font-family: "Open Sans", sans-serif;
     font-size: 10pt;
   }
   @bottom-center {
@@ -32,7 +32,7 @@
     width: 100%;
     padding-top: 1rem;
     vertical-align: top;
-    font-family: sans-serif;
+    font-family: "Open Sans", sans-serif;
     font-size: 10pt;
   }
 }
@@ -60,7 +60,7 @@ html, body {
 }
 
 body {
-  font-family: 'Noto Serif', serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 11pt;
   counter-reset: section;
   counter-reset: question;
