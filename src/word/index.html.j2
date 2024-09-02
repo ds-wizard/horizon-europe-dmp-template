@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 {%- set km = ctx.knowledgeModel -%}
-{%- set repliesMap = ctx.questionnaireReplies -%}
+{%- set repliesMap = ctx.questionnaire.replies -%}
 {%- set report = ctx.report -%}
 {%- set dc = ctx|to_context_obj -%}
 {% import "src/macros.html.j2" as macros with context %}
@@ -8,7 +8,7 @@
 {% import "src/globals.j2" as globals with context %}
 <html lang="en">
   <head>
-    <title>{{ ctx.questionnaireName }}</title>
+    <title>{{ ctx.questionnaire.name }}</title>
     <meta charset="utf-8">
   </head>
   <body>
