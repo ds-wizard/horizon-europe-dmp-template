@@ -426,21 +426,21 @@
               {%- set swPrefix = [publishedSpecSwWhatPath, sw]|reply_path -%}
               {%- set swName = repliesMap[[swPrefix, uuids.publishedSpecSwWhatNameQUuid]|reply_path]|reply_str_value -%}
               {%- set swPID = repliesMap[[swPrefix, uuids.publishedSpecSwWhatPidQUuid]|reply_path]|reply_str_value -%}
-              <li>{{ swName }} {% if swPID %}({{ swPID }}){% endif %}
+              <li><strong>{{ swName }} {% if swPID %}({{ swPID }}){% endif %}</strong><br>
               {%- set swDocumentation = repliesMap[[swPrefix, uuids.publishedSpecSwDocQUuid]|reply_path]|reply_str_value -%}
               {%- if swDocumentation == uuids.publishedSpecSwDocNoAUuid %}
                 {%- set swDocumentationNotWhy = repliesMap[[swPrefix, uuids.publishedSpecSwDocQUuid, uuids.publishedSpecSwDocNoAUuid, uuids.publishedSpecSwDocNoWhyQUuid]|reply_path]|reply_str_value -%}
-                <br>The documentation of this software will not be included in the metadata of this data set{{ " because: " ~ swDocumentationNotWhy if swDocumentationNotWhy else "." }}
+                The documentation of this software will not be included in the metadata of this data set{{ " because: " ~ swDocumentationNotWhy if swDocumentationNotWhy else "." }}
 
               {%- elif swDocumentation == uuids.publishedSpecSwDocYesAUuid-%}
-                <br>The documentation of this software will be included in the metadata of data set.
+                The documentation of this software will be included in the metadata of data set.
               {%- endif -%}
 
               {%- set swIncluded = repliesMap[[swPrefix, uuids.publishedSpecSwDocIncludeQUuid]|reply_path]|reply_str_value -%}
               {%- if swIncluded == uuids.publishedSpecSwDocIncludeNoAUuid %}
-                <br>The software (e.g. in open source code) will not be included.
+                The software (e.g. in open source code) will not be included.
               {%- elif swIncluded == uuids.publishedSpecSwDocIncludeYesAUuid -%}
-                <br>The software (e.g. in open source code) will be included.
+                The software (e.g. in open source code) will be included.
               {%- endif -%}
 
               </li>
