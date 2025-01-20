@@ -429,18 +429,18 @@
               <li>{{ swName }} {% if swPID %}({{ swPID }}){% endif %}
               {%- set swDocumentation = repliesMap[[swPrefix, uuids.publishedSpecSwDocQUuid]|reply_path]|reply_str_value -%}
               {%- if swDocumentation == uuids.publishedSpecSwDocNoAUuid %}
-                {%- set swDocumentationNotWhy = repliesMap[[swPrefix, uuids.publishedSpecSwDocQUuid, uuid.publishedSpecSwDocNoAUuid, uuids.publishedSpecSwDocNoWhyQUuid]|reply_path]|reply_str_value -%}
-                <br>No, the documentation will not be included in the metadata{{ " because: " ~ swDocumentationNotWhy if swDocumentationNotWhy else "." }}</br>
+                {%- set swDocumentationNotWhy = repliesMap[[swPrefix, uuids.publishedSpecSwDocQUuid, uuids.publishedSpecSwDocNoAUuid, uuids.publishedSpecSwDocNoWhyQUuid]|reply_path]|reply_str_value -%}
+                <br>The documentation of this software will not be included in the metadata of this data set{{ " because: " ~ swDocumentationNotWhy if swDocumentationNotWhy else "." }}
 
               {%- elif swDocumentation == uuids.publishedSpecSwDocYesAUuid-%}
-                <br>Yes, the documentation will be included in the metadata.
+                <br>The documentation of this software will be included in the metadata of data set.
               {%- endif -%}
 
               {%- set swIncluded = repliesMap[[swPrefix, uuids.publishedSpecSwDocIncludeQUuid]|reply_path]|reply_str_value -%}
               {%- if swIncluded == uuids.publishedSpecSwDocIncludeNoAUuid %}
-                <br>The software will not be included (e.g. in open source code).
+                <br>The software (e.g. in open source code) will not be included.
               {%- elif swIncluded == uuids.publishedSpecSwDocIncludeYesAUuid -%}
-                <br>The software will be included (e.g. in open source code).
+                <br>The software (e.g. in open source code) will be included.
               {%- endif -%}
 
               </li>
