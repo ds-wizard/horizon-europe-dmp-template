@@ -7,6 +7,24 @@
       <p>We will be working with the philosophy <em>as open as possible</em> for our data.</p>
     {%- endif -%}
 
+    {# Free and standard protcol #}
+    {%- set accessibleFreeStandardProtocolPath = [uuids.accessCUuid, uuids.accessibleFreeStandardProtocolQUuid]|reply_path -%}
+    {%- set accessibleFreeStandardProtocolAUuid = repliesMap[accessibleFreeStandardProtocolPath]|reply_str_value -%}
+    {%- if accessibleFreeStandardProtocolAUuid == uuids.accessibleFreeStandardProtocolYesAUuid -%}
+      <p>The data will be accessible through a free and stadard protocol
+      {%- set accessibleProtocolYesWhatPath = [accessibleFreeStandardProtocolPath, uuids.accessibleFreeStandardProtocolYesAUuid, uuids.accessibleProtocolYesWhatQUuid]|reply_path -%}
+      {%- set accessibleProtocolYesWhat = repliesMap[accessibleProtocolYesWhatPath]|reply_str_value -%}
+      {{ ": " ~ accessibleProtocolYesWhat|dot if accessibleProtocolYesWhat else "." }}
+      </p> 
+    {%- elif accessibleFreeStandardProtocolAUuid == uuids.accessibleFreeStandardProtocolNoAUuid -%}
+    <p>The data will not be accessible through a free and standard protocol
+    {%- set accessibleProtocolNoWhyPath = [accessibleFreeStandardProtocolPath, uuids.accessibleFreeStandardProtocolNoAUuid, uuids.accessibleProtocolNoWhyQUuid]|reply_path -%}
+    {%- set accessibleProtocolNoWhy = repliesMap[accessibleProtocolNoWhyPath]|reply_str_value -%}
+      {{ " because: " ~ accessibleProtocolNoWhy if accessibleProtocolNoWhy else "." }}
+      </p>
+    {%- endif -%}
+
+
     {# Can open data #}
     {%- set openImmediatelyPath = [uuids.accessCUuid, uuids.openImmediatelyQUuid]|reply_path -%}
     {%- set openImmediatelyAUuid = repliesMap[openImmediatelyPath]|reply_str_value -%}
@@ -395,7 +413,9 @@
           {%- set specificSwPath = [prefix, uuids.publishedSpecSwQUuid]|reply_path %}
           {%- set specificSwAUuid = repliesMap[specificSwPath]|reply_str_value -%}
           {%- if specificSwAUuid == uuids.publishedSpecSwNoAUuid -%}
-            <br>A user of this data can use it without any specific software.
+            {%- set specificSwWhyQUuid = [specificSwPath, uuids.publishedSpecSwNoAUuid, uuids.publishedSpecSwNoWhyQUuid]|reply_path -%}
+            {%- set specificSwWhy = repliesMap[specificSwWhyQUuid]|reply_str_value -%}
+            <br>A user of this data can use it without any specific software{{ " because: " ~ specificSwWhy|dot if specificSwWhy else "." }}</br>
           {%- elif specificSwAUuid == uuids.publishedSpecSwYesAUuid -%}
             {%- set publishedSpecSwWhatPath = [specificSwPath, uuids.publishedSpecSwYesAUuid, uuids.publishedSpecSwWhatQUuid]|reply_path %}
             {%- set publishedSpecSwWhatItems = repliesMap[publishedSpecSwWhatPath]|reply_items -%}
@@ -406,7 +426,24 @@
               {%- set swPrefix = [publishedSpecSwWhatPath, sw]|reply_path -%}
               {%- set swName = repliesMap[[swPrefix, uuids.publishedSpecSwWhatNameQUuid]|reply_path]|reply_str_value -%}
               {%- set swPID = repliesMap[[swPrefix, uuids.publishedSpecSwWhatPidQUuid]|reply_path]|reply_str_value -%}
-              <li>{{ swName }} {% if swPID %}({{ swPID }}){% endif %}</li>
+              <li><strong>{{ swName }} {% if swPID %}({{ swPID }}){% endif %}</strong><br>
+              {%- set swDocumentation = repliesMap[[swPrefix, uuids.publishedSpecSwDocQUuid]|reply_path]|reply_str_value -%}
+              {%- if swDocumentation == uuids.publishedSpecSwDocNoAUuid %}
+                {%- set swDocumentationNotWhy = repliesMap[[swPrefix, uuids.publishedSpecSwDocQUuid, uuids.publishedSpecSwDocNoAUuid, uuids.publishedSpecSwDocNoWhyQUuid]|reply_path]|reply_str_value %}
+                The documentation of this software will not be included in the metadata of this data set{{ " because: " ~ swDocumentationNotWhy|dot if swDocumentationNotWhy else "." }}
+
+              {%- elif swDocumentation == uuids.publishedSpecSwDocYesAUuid %}
+                The documentation of this software will be included in the metadata of data set.
+              {%- endif -%}
+
+              {%- set swIncluded = repliesMap[[swPrefix, uuids.publishedSpecSwDocIncludeQUuid]|reply_path]|reply_str_value -%}
+              {%- if swIncluded == uuids.publishedSpecSwDocIncludeNoAUuid %}
+                The software (e.g. in open source code) will not be included.
+              {%- elif swIncluded == uuids.publishedSpecSwDocIncludeYesAUuid %}
+                The software (e.g. in open source code) will be included.
+              {%- endif -%}
+
+              </li>
             {%- endfor -%}
             </ul>
             {%- endif -%}

@@ -28,6 +28,11 @@ This document template for DSW is available as open-source via GitHub Repository
 
 ## Changelog
 
+### 1.12.0
+
+- Improved Question 2 (part 2) regarding SW documentation and standard protocol
+- Improved layout of affiliation
+
 ### 1.11.0
 
 - Adjusted to template metamodel version 16 (released in DSW 4.13.0)

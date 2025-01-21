@@ -179,6 +179,7 @@ div#dmp-versions td.no-versions {
 .contributor .role,
 .contributor .affiliation {
   font-style: italic;
+  display: inline-block;
 }
 
 /* Projects */
