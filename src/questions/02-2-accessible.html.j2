@@ -415,7 +415,7 @@
           {%- if specificSwAUuid == uuids.publishedSpecSwNoAUuid -%}
             {%- set specificSwWhyQUuid = [specificSwPath, uuids.publishedSpecSwNoAUuid, uuids.publishedSpecSwNoWhyQUuid]|reply_path -%}
             {%- set specificSwWhy = repliesMap[specificSwWhyQUuid]|reply_str_value -%}
-            <br>A user of this data can use it without any specific software{{ " because: " ~ specificSwWhy if specificSwWhy else "." }}</br>
+            <br>A user of this data can use it without any specific software{{ " because: " ~ specificSwWhy|dot if specificSwWhy else "." }}</br>
           {%- elif specificSwAUuid == uuids.publishedSpecSwYesAUuid -%}
             {%- set publishedSpecSwWhatPath = [specificSwPath, uuids.publishedSpecSwYesAUuid, uuids.publishedSpecSwWhatQUuid]|reply_path %}
             {%- set publishedSpecSwWhatItems = repliesMap[publishedSpecSwWhatPath]|reply_items -%}
@@ -430,7 +430,7 @@
               {%- set swDocumentation = repliesMap[[swPrefix, uuids.publishedSpecSwDocQUuid]|reply_path]|reply_str_value -%}
               {%- if swDocumentation == uuids.publishedSpecSwDocNoAUuid %}
                 {%- set swDocumentationNotWhy = repliesMap[[swPrefix, uuids.publishedSpecSwDocQUuid, uuids.publishedSpecSwDocNoAUuid, uuids.publishedSpecSwDocNoWhyQUuid]|reply_path]|reply_str_value %}
-                The documentation of this software will not be included in the metadata of this data set{{ " because: " ~ swDocumentationNotWhy if swDocumentationNotWhy else "." }}
+                The documentation of this software will not be included in the metadata of this data set{{ " because: " ~ swDocumentationNotWhy|dot if swDocumentationNotWhy else "." }}
 
               {%- elif swDocumentation == uuids.publishedSpecSwDocYesAUuid %}
                 The documentation of this software will be included in the metadata of data set.
