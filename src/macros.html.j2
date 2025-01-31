@@ -9,7 +9,7 @@
 
 {%- macro integrationValue(reply) -%}
   {%- if reply and reply.value.value.type == "IntegrationType" -%}
-    {{ reply.value.value.value.rsplit(" ![]")[0]|markdown }}
+    {{ reply.value.value.value.rsplit(" ![]")[0]|markdown|replace("<p>", "")|replace("</p>", "") }}
   {%- elif reply %}
     {{ reply.value.value.value }}
   {%- endif -%}
