@@ -28,6 +28,11 @@ This document template for DSW is available as open-source via GitHub Repository
 
 ## Changelog
 
+### 1.13.0
+
+- Fixed Question 2 (part 4) on approaches to open data
+- Improved layout of affiliation
+
 ### 1.12.0
 
 - Improved Question 2 (part 2) regarding SW documentation and standard protocol

@@ -178,11 +178,11 @@
 
           {%- set privacyCannotUseStart = "We cannot use " if privacyCanUse|length == 0 else "But we cannot use " -%}
           {%- if privacyCannotUse|length == 1 -%}
-            {%- do notOpenSentences.append(privacyCannotUseStart ~ privacyCanUse[0] ~ " to make the data more openly available.") -%}
+            {%- do notOpenSentences.append(privacyCannotUseStart ~ privacyCannotUse[0] ~ " to make the data more openly available.") -%}
           {%- elif privacyCannotUse|length == 2 -%}
-            {%- do notOpenSentences.append(privacyCannotUseStart ~ "neither " ~ privacyCanUse[0] ~ " nor " ~ privacyCanUse[1] ~ " to make the data more openly available.") -%}
+            {%- do notOpenSentences.append(privacyCannotUseStart ~ "neither " ~ privacyCannotUse[0] ~ " nor " ~ privacyCannotUse[1] ~ " to make the data more openly available.") -%}
           {%- elif privacyCannotUse|length == 3 -%}
-            {%- do notOpenSentences.append(privacyCannotUseStart ~ "neither " ~ privacyCanUse[0] ~ " nor " ~ privacyCanUse[1] ~ ", nor " ~ privacyCanUse[2] ~ " to make the data more openly available.") -%}
+            {%- do notOpenSentences.append(privacyCannotUseStart ~ "neither " ~ privacyCannotUse[0] ~ " nor " ~ privacyCannotUse[1] ~ ", nor " ~ privacyCannotUse[2] ~ " to make the data more openly available.") -%}
           {%- endif -%}
 
           {%- if legalPrivacyPseudoAUuid == uuids.legalPrivacyPseudoYesAUuid -%}
