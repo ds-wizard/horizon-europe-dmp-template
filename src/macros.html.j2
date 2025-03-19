@@ -7,7 +7,7 @@
   {%- if reply.value.value.type == "IntegrationType" -%}
     <span class="contact-orcid">ORCID: <a href="https://orcid.org/{{ reply.value.value.id }}" target="_blank">{{ reply.value.value.id }}</a></span>
   {%- else -%}
-    <span class="contact-orcid">ORCID: {{ reply.value.value.value }} </span>
+    <span class="contact-orcid">ORCID: <a href="https://orcid.org/{{ reply.value.value.value }}" target="_blank">{{ reply.value.value.value }}</a></span>
   {%- endif -%}
 {%- endmacro -%}
 
