@@ -79,6 +79,14 @@
                       {%- set domainSpecificRepoContactBeforeOther = repliesMap[domainSpecificRepoContactBeforeOtherPath]|reply_str_value %}
                       We have made other arrangements{{ ": " ~ domainSpecificRepoContactBeforeOther|dot if domainSpecificRepoContactBeforeOther else "." }}
                     {%- endif -%}
+                  {%- elif distroRepositoryKindAUuid == uuids.publishedDataRepositoryGeneralPurposeAUuid %}
+                    <em>General-purpose repository</em>
+                    {%- set generalPurposeRepoNamePath = [distroRepositoryKindPath, uuids.publishedDataRepositoryGeneralPurposeAUuid, uuids.generalPurposeRepoNameQUuid]|reply_path -%}
+                    {%- set generalPurposeRepoNameReply = repliesMap[generalPurposeRepoNamePath] -%}
+                    {%- if generalPurposeRepoNameReply -%}
+                      : {{ macros.integrationValue(generalPurposeRepoNameReply) }}.
+                    {%- else -%}.
+                    {% endif -%}
                   {%- elif distroRepositoryKindAUuid == uuids.publishedDataRepositoryNationalAUuid %}
                     <em>Our national repository</em>.
                   {%- elif distroRepositoryKindAUuid == uuids.publishedDataRepositoryInstitutionalAUuid %}
@@ -121,7 +129,6 @@
                     {%- endif -%}
                     {%- if distroPidResolveAUuid == uuids.distroPidResolveYesAUuid %}
                       {%- do pidSentences.append("The repository will make sure that the persistent identifier can be resolved to a digital object.") -%}
-                      {# TODO test #}
                     {%- endif -%}
                     {%- if distroPidSpecs %}
                       {%- do pidSentences.append("The assigned persistent identifier is specified: " ~ distroPidSpecs|dot) -%}

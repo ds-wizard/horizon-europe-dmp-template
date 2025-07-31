@@ -28,6 +28,11 @@ This document template for DSW is available as open-source via GitHub Repository
 
 ## Changelog
 
+### 1.15.0
+
+- Added "General-purpose repository" option to repository type descriptions
+- Fixed broken link to the Horizon Europe DMP template in the README
+
 ### 1.14.0
 
 - Added ORCID Integration
