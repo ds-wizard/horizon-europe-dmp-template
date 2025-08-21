@@ -4,7 +4,7 @@
 {%- endmacro -%}
 
 {%- macro formatOrcid(reply) -%}
-  {%- if reply.value.value.type == "IntegrationType" -%}
+  {%- if reply.value.value.type == "IntegrationLegacyType" -%}
     <span class="contact-orcid">ORCID: <a href="https://orcid.org/{{ reply.value.value.id }}" target="_blank">{{ reply.value.value.id }}</a></span>
   {%- else -%}
     <span class="contact-orcid">ORCID: <a href="https://orcid.org/{{ reply.value.value.value }}" target="_blank">{{ reply.value.value.value }}</a></span>
@@ -12,7 +12,7 @@
 {%- endmacro -%}
 
 {%- macro integrationValue(reply) -%}
-  {%- if reply and reply.value.value.type == "IntegrationType" -%}
+  {%- if reply and reply.value.value.type == "IntegrationLegacyType" -%}
     {{ reply.value.value.value.rsplit(" ![]")[0]|markdown|replace("<p>", "")|replace("</p>", "") }}
   {%- elif reply %}
     {{ reply.value.value.value }}
