@@ -225,7 +225,7 @@
             {%- set refDataConditionsAUuid = repliesMap[refDataConditionsPath]|reply_str_value -%}
             {%- if refDataConditionsAUuid -%}
               <li>
-                <div>{{ macros.integrationValue(refDataNameReply) }}</div>
+                <div>{{ macros.integrationFairSharing(refDataNameReply) }}</div>
                 {% if refDataConditionsAUuid == uuids.refDataConditionsCC0AUuid -%}
                   It is freely available for any use (public domain or CC0).
                 {%- elif refDataConditionsAUuid == uuids.refDataConditionsCCBYAUuid -%}
@@ -247,7 +247,7 @@
             {%- set nrefDataConditionsAUuid = repliesMap[nrefDataConditionsPath]|reply_str_value -%}
             {%- if nrefDataConditionsAUuid -%}
               <li>
-                <div>{{ macros.integrationValue(nrefDataNameReply) }}</div>
+                <div>{{ macros.integrationFairSharing(nrefDataNameReply) }}</div>
                 {% if nrefDataConditionsAUuid == uuids.nrefDataConditionsCC0AUuid -%}
                   It is freely available for any use (public domain or CC0).
                 {%- elif nrefDataConditionsAUuid == uuids.nrefDataConditionsCCBYAUuid -%}
@@ -302,7 +302,7 @@
                     {%- set domainSpecificRepoNamePath = [distroRepositoryKindPath, uuids.publishedDataRepositoryDomainSpecificAUuid, uuids.domainSpecificRepoNameQUuid]|reply_path -%}
                     {%- set domainSpecificRepoNameReply = repliesMap[domainSpecificRepoNamePath] -%}
                     {%- if domainSpecificRepoNameReply -%}
-                      : {{ macros.integrationValue(domainSpecificRepoNameReply) }}.
+                      : {{ macros.integrationFairSharing(domainSpecificRepoNameReply) }}.
                     {%- else -%}.
                     {% endif -%}
                     {# Contact the repository #}
@@ -324,7 +324,7 @@
                     {%- set generalPurposeRepoNamePath = [distroRepositoryKindPath, uuids.publishedDataRepositoryGeneralPurposeAUuid, uuids.generalPurposeRepoNameQUuid]|reply_path -%}
                     {%- set generalPurposeRepoNameReply = repliesMap[generalPurposeRepoNamePath] -%}
                     {%- if generalPurposeRepoNameReply -%}
-                      : {{ macros.integrationValue(generalPurposeRepoNameReply) }}.
+                      : {{ macros.integrationFairSharing(generalPurposeRepoNameReply) }}.
                     {%- else -%}.
                     {% endif -%}
                   {%- elif distroRepositoryKindAUuid == uuids.publishedDataRepositoryNationalAUuid %}

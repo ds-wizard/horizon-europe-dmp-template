@@ -11,10 +11,15 @@
   {%- endif -%}
 {%- endmacro -%}
 
-{%- macro integrationValue(reply) -%}
-  {%- if reply and reply.value.value.type == "IntegrationLegacyType" -%}
-    {{ reply.value.value.value.rsplit(" ![]")[0]|markdown|replace("<p>", "")|replace("</p>", "") }}
-  {%- elif reply %}
+{%- macro integrationFairSharing(reply) -%}
+  {%- if reply and reply.value.value.type == "IntegrationType" -%}
+    {%- set replyObject = reply.value.value.raw -%}
+    <a href="https://doi.org/{{ replyObject.doi }}" target="_blank">{{ replyObject.name }}</a>
+  {%- elif reply and reply.value.value.type == "PlainType" %}
     {{ reply.value.value.value }}
   {%- endif -%}
+{%- endmacro -%}
+
+{%- macro integrationValue(reply) -%}
+    {{ reply.value.value.value }}
 {%- endmacro -%}

@@ -16,7 +16,7 @@
         {%- set formatsVolumeAUuid = repliesMap[formatsVolumePath]|reply_str_value -%}
         <li>
           {# identification #}
-          <div>{{ macros.integrationValue(formatNameReply) }}</div>
+          <div>{{ macros.integrationFairSharing(formatNameReply) }}</div>
           {%- if formatsIsStandardAUuid or formatsIsLTSuitableAUuid or formatsVolumeAUuid -%}
             <p>
             {# standard? #}
@@ -58,7 +58,7 @@
         {%- set whatUsingUrlPath = [whatUsingPath, standardItem, uuids.whatUsingUrlQUuid]|reply_path -%}
         {%- set whatUsingUrl = repliesMap[whatUsingUrlPath]|reply_str_value -%}
         <li>
-          <div>{{ macros.integrationValue(whatUsingNameReply) }}</div>
+          <div>{{ macros.integrationFairSharing(whatUsingNameReply) }}</div>
           {% if whatUsingUrl %}({{ whatUsingUrl }}){% endif %}
         </li>
       {%- endfor -%}
