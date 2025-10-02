@@ -456,6 +456,8 @@
         <p>{{ dataCompReadSentences|join(" ") }}</p>
       {%- endif -%}
     {%- endif -%}
+  {%- elif preexistingAUuid == uuids.preexistingNoAUuid -%}
+    <p>We will not be using any existing datasets.</p>
   {%- endif -%}
 
   {# Format/Type with volume #}
