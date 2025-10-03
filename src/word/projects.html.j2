@@ -41,7 +41,7 @@
               {%- set grantNumber = repliesMap[grantNumberPath]|reply_str_value -%}
               {%- set funderStatusPath = [fundersPath, fundersItem, uuids.funderStatusQUuid]|reply_path -%}
               {%- set funderStatus = repliesMap[funderStatusPath]|reply_str_value %}
-              <li>{{ macros.integrationValue(funderNameReply) }}: {{ grantNumber if grantNumber else "grant number not yet given" }} {% if funderStatus == uuids.funderStatusPlannedAUuid %}(planned){% elif funderStatus == uuids.funderStatusAppliedAUuid %}(applied){% elif funderStatus == uuids.funderStatusGrantedAUuid %}(granted){% elif funderStatus == uuids.funderStatusRejectedAUuid %}(rejected){% endif %}</li>
+              <li>{{ macros.integrationCrossref(funderNameReply) }}: {{ grantNumber if grantNumber else "grant number not yet given" }} {% if funderStatus == uuids.funderStatusPlannedAUuid %}(planned){% elif funderStatus == uuids.funderStatusAppliedAUuid %}(applied){% elif funderStatus == uuids.funderStatusGrantedAUuid %}(granted){% elif funderStatus == uuids.funderStatusRejectedAUuid %}(rejected){% endif %}</li>
             {%- endfor %}
             </ul>
           {%- else -%}
