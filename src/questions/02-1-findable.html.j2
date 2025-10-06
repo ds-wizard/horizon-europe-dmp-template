@@ -62,7 +62,7 @@
                     {%- set domainSpecificRepoNamePath = [distroRepositoryKindPath, uuids.publishedDataRepositoryDomainSpecificAUuid, uuids.domainSpecificRepoNameQUuid]|reply_path -%}
                     {%- set domainSpecificRepoNameReply = repliesMap[domainSpecificRepoNamePath] -%}
                     {%- if domainSpecificRepoNameReply -%}
-                      : {{ macros.integrationValue(domainSpecificRepoNameReply) }}.
+                      : {{ macros.integrationFairSharing(domainSpecificRepoNameReply) }}.
                     {%- else -%}.
                     {% endif -%}
                     {# Contact the repository #}
@@ -84,7 +84,7 @@
                     {%- set generalPurposeRepoNamePath = [distroRepositoryKindPath, uuids.publishedDataRepositoryGeneralPurposeAUuid, uuids.generalPurposeRepoNameQUuid]|reply_path -%}
                     {%- set generalPurposeRepoNameReply = repliesMap[generalPurposeRepoNamePath] -%}
                     {%- if generalPurposeRepoNameReply -%}
-                      : {{ macros.integrationValue(generalPurposeRepoNameReply) }}.
+                      : {{ macros.integrationFairSharing(generalPurposeRepoNameReply) }}.
                     {%- else -%}.
                     {% endif -%}
                   {%- elif distroRepositoryKindAUuid == uuids.publishedDataRepositoryNationalAUuid %}
@@ -213,7 +213,7 @@
           <p>There are the following 'Minimal Metadata About ...' (MIA...) standards for our experiments:
           <ul>
           {%- for metadataStandardReply in metadataStandardReplies -%}
-            <li>{{ macros.integrationValue(metadataStandardReply) }}</li>
+            <li>{{ macros.integrationFairSharing(metadataStandardReply) }}</li>
           {%- endfor -%}
           </ul>
           </p>
@@ -297,7 +297,7 @@
           {%- set metadataSopDescribePath = [metadataSopPath, uuids.metadataSopYesAUuid, uuids.metadataSopDescribeQUuid]|reply_path -%}
           {%- set metadataSopDescribe = repliesMap[metadataSopDescribePath]|reply_str_value -%}
           {%- if metadataSopDescribe -%}
-            {%- do sentences.append(metadataSopDescribe|capitalize|dot) -%}
+            {%- do sentences.append(metadataSopDescribe|dot) -%}
           {%- endif -%}
         {%- endif -%}
         {%- set metadataRelationsPath = [prefix, uuids.metadataRelationsQUuid]|reply_path -%}

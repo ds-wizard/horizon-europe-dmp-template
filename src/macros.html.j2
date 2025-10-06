@@ -4,17 +4,58 @@
 {%- endmacro -%}
 
 {%- macro formatOrcid(reply) -%}
-  {%- if reply.value.value.type == "IntegrationLegacyType" -%}
-    <span class="contact-orcid">ORCID: <a href="https://orcid.org/{{ reply.value.value.id }}" target="_blank">{{ reply.value.value.id }}</a></span>
-  {%- else -%}
+  {%- if reply and reply.value.value.type == "IntegrationType" -%}
+    <span class="contact-orcid">ORCID: <a href="https://orcid.org/{{ reply.value.value.raw["orcid-id"] }}" target="_blank">{{ reply.value.value.raw["orcid-id"] }}</a></span>
+  {%- elif reply and reply.value.value.type == "PlainType" -%}
     <span class="contact-orcid">ORCID: <a href="https://orcid.org/{{ reply.value.value.value }}" target="_blank">{{ reply.value.value.value }}</a></span>
   {%- endif -%}
 {%- endmacro -%}
 
-{%- macro integrationValue(reply) -%}
-  {%- if reply and reply.value.value.type == "IntegrationLegacyType" -%}
-    {{ reply.value.value.value.rsplit(" ![]")[0]|markdown|replace("<p>", "")|replace("</p>", "") }}
-  {%- elif reply %}
+{%- macro integrationFairSharing(reply) -%}
+  {%- if reply and reply.value.value.type == "IntegrationType" -%}
+    {%- set replyObject = reply.value.value.raw -%}
+    <a href="https://doi.org/{{ replyObject.doi }}" target="_blank">{{ replyObject.name }}</a>
+  {%- elif reply and reply.value.value.type == "PlainType" %}
     {{ reply.value.value.value }}
   {%- endif -%}
+{%- endmacro -%}
+
+{%- macro integrationCrossref(reply) -%}
+  {%- if reply and reply.value.value.type == "IntegrationType" -%}
+    {%- set replyObject = reply.value.value.raw -%}
+    <a href="{{ replyObject.uri }}" target="_blank">{{ replyObject.name }}</a>
+  {%- elif reply and reply.value.value.type == "PlainType" %}
+    {{ reply.value.value.value }}
+  {%- endif -%}
+{%- endmacro -%}
+
+{%- macro integrationROR(reply) -%}
+  {%- if reply and reply.value.value.type == "IntegrationType" -%}
+    {%- set item = reply.value.value.raw -%}
+    {% for name in item.names -%}
+      {% if "ror_display" in name.types -%}
+        <a href="{{ item.id }}" target="_blank"><strong>{{ name.value }}</strong></a>
+      {%- endif %}
+    {%- endfor %}
+    {% for name in item.names -%}
+      {% if "acronym" in name.types -%}
+        ({{ name.value }})
+      {%- endif %}
+    {%- endfor %}
+  {%- elif reply and reply.value.value.type == "PlainType" %}
+    {{ reply.value.value.value }}
+  {%- endif -%}
+{%- endmacro -%}
+
+{%- macro integrationCurrency(reply) -%}
+  {%- if reply and reply.value.value.type == "IntegrationType" -%}
+    {%- set replyObject = reply.value.value.raw -%}
+    {{replyObject.code}} ({{replyObject.name}})
+  {%- elif reply and reply.value.value.type == "PlainType" %}
+    {{ reply.value.value.value }}
+  {%- endif -%}
+{%- endmacro -%}
+
+{%- macro integrationValue(reply) -%}
+    {{ reply.value.value.value }}
 {%- endmacro -%}

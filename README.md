@@ -28,6 +28,11 @@ This document template for DSW is available as open-source via GitHub Repository
 
 ## Changelog
 
+### 1.17.0
+
+- Update integrations to metamodel version 17.0 (released in DSW 4.22.0)
+- Improved minor text flow
+
 ### 1.16.0
 
 - Adjusted to template metamodel version 17.0 (released in DSW 4.22.0)

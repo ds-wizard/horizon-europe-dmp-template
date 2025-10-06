@@ -178,7 +178,7 @@
               {%- set isUsed = refDataUsedAUuid == uuids.refDataUseYesAUuid -%}
               <li>
                 {# identification #}
-                <div>{{ macros.integrationValue(refDataNameReply) }}</div>
+                <div>{{ macros.integrationFairSharing(refDataNameReply) }}</div>
                 {%- if refDataWhere -%}
                   <p>
                   {%- if refDataWhere.startswith("http://") or refDataWhere.startswith("https://") or refDataWhere.startswith("ftp://") %}
@@ -288,7 +288,7 @@
               {%- set isUsed = nrefDataUsedAUuid == uuids.nrefDataUseYesAUuid -%}
               <li>
                 {# identification #}
-                <div>{{ macros.integrationValue(nrefDataNameReply) }}</div>
+                <div>{{ macros.integrationFairSharing(nrefDataNameReply) }}</div>
                 {%- if nrefDataWhere -%}
                   <p>
                   {%- if nrefDataWhere.startswith("http://") or nrefDataWhere.startswith("https://") or nrefDataWhere.startswith("ftp://") %}
@@ -436,11 +436,10 @@
             {%- do standards.append(reply) -%}
           {%- endif -%}
         {%- endfor -%}
-        {%- if standards|length == 1 -%}
-        {%- elif standards|length > 1 %}
+        {%- if standards|length > 0 %}
           {%- set standardLinks = [] -%}
           {%- for standardReply in standards %}
-            {{ macros.integrationValue(standardReply) }}
+            {% do standardLinks.append(macros.integrationFairSharing(standardReply)) %}
           {% endfor %}
           {%- do dataCompReadSentences.append("For that, we will use the following formats: " ~ standardLinks|join(", ") ~ ".") -%}
         {%- endif -%}
@@ -456,6 +455,8 @@
         <p>{{ dataCompReadSentences|join(" ") }}</p>
       {%- endif -%}
     {%- endif -%}
+  {%- elif preexistingAUuid == uuids.preexistingNoAUuid -%}
+    <p>We will not be using any existing datasets.</p>
   {%- endif -%}
 
   {# Format/Type with volume #}
@@ -476,7 +477,7 @@
         {%- set formatsVolumeAUuid = repliesMap[formatsVolumePath]|reply_str_value -%}
         <li>
           {# identification #}
-          <div>{{ macros.integrationValue(formatNameReply) }}</div>
+          <div>{{ macros.integrationFairSharing(formatNameReply) }}</div>
           {%- if formatsIsStandardAUuid or formatsIsLTSuitableAUuid or formatsVolumeAUuid -%}
             <p>
             {# standard? #}
