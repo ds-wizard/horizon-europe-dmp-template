@@ -11,7 +11,7 @@
     {%- else -%}
       {# Extract ORCID number from the value string #}
       {%- set value = reply.value.value.value %}
-      {%- set orcid = value.split('ORCID:')[-1].strip().split()[0]|markdown|replace("<p>", "")|replace("</p>", "") if 'ORCID:' in value else None %}
+      {%- set orcid = value.split('ORCID:')[-1].strip().split()[0]|replace("**", "")|markdown|replace("<p>", "")|replace("</p>", "") if 'ORCID:' in value else None %}
       {%- if orcid and orcid|length >= 15 -%}
         <span class="contact-orcid">ORCID: {{ orcid }}</span>
       {%- else -%}
@@ -29,7 +29,7 @@
       {%- set replyObject = reply.value.value.raw -%}
       <a href="https://doi.org/{{ replyObject.doi }}" target="_blank">{{ replyObject.name }}</a>
     {%- else -%}
-      {{ reply.value.value.value.rsplit(" ![]")[0]|markdown|replace("<p>", "")|replace("</p>", "") }}
+      {{ reply.value.value.value.rsplit(" ![]")[0]|replace("**", "")|markdown|replace("<p>", "")|replace("</p>", "") }}
     {%- endif -%}
   {%- elif reply and reply.value.value.type == "PlainType" -%}
     {{ reply.value.value.value }}
@@ -42,7 +42,7 @@
       {%- set replyObject = reply.value.value.raw -%}
       <a href="{{ replyObject.uri }}" target="_blank">{{ replyObject.name }}</a>
     {%- else -%}
-      {{ reply.value.value.value.rsplit(" ![]")[0]|markdown|replace("<p>", "")|replace("</p>", "") }}
+      {{ reply.value.value.value.rsplit(" ![]")[0]|replace("**", "")|markdown|replace("<p>", "")|replace("</p>", "") }}
     {%- endif -%}
   {%- elif reply and reply.value.value.type == "PlainType" -%}
     {{ reply.value.value.value }}
@@ -64,7 +64,7 @@
         {%- endif %}
       {%- endfor %}
     {%- else -%}
-      {{ reply.value.value.value.rsplit(" ![]")[0]|markdown|replace("<p>", "")|replace("</p>", "") }}
+      {{ reply.value.value.value.rsplit(" ![]")[0]|replace("**", "")|markdown|replace("<p>", "")|replace("</p>", "") }}
     {%- endif -%}
   {%- elif reply and reply.value.value.type == "PlainType" -%}
     {{ reply.value.value.value }}
@@ -77,7 +77,7 @@
       {%- set replyObject = reply.value.value.raw -%}
       {{replyObject.code}} ({{replyObject.name}})
     {%- else -%}
-      {{ reply.value.value.value.rsplit(" ![]")[0]|markdown|replace("<p>", "")|replace("</p>", "") }}
+      {{ reply.value.value.value.rsplit(" ![]")[0]|replace("**", "")|markdown|replace("<p>", "")|replace("</p>", "") }}
     {%- endif -%}
   {%- elif reply and reply.value.value.type == "PlainType" -%}
     {{ reply.value.value.value }}
