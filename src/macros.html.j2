@@ -5,7 +5,19 @@
 
 {%- macro formatOrcid(reply) -%}
   {%- if reply and reply.value.value.type == "IntegrationType" -%}
-    <span class="contact-orcid">ORCID: <a href="https://orcid.org/{{ reply.value.value.raw["orcid-id"] }}" target="_blank">{{ reply.value.value.raw["orcid-id"] }}</a></span>
+    {%- if reply.value.value.raw -%}
+      {%- set replyObject = reply.value.value.raw -%}
+      <span class="contact-orcid">ORCID: <a href="https://orcid.org/{{ replyObject["orcid-id"] }}" target="_blank">{{ replyObject["orcid-id"] }}</a></span>
+    {%- else -%}
+      {# Extract ORCID number from the value string #}
+      {%- set value = reply.value.value.value %}
+      {%- set orcid = value.split('ORCID:')[-1].strip().split()[0]|replace("**", "")|markdown|replace("<p>", "")|replace("</p>", "") if 'ORCID:' in value else None %}
+      {%- if orcid and orcid|length >= 15 -%}
+        <span class="contact-orcid">ORCID: {{ orcid }}</span>
+      {%- else -%}
+        <span class="contact-orcid">ORCID: Not found</span>
+      {%- endif -%}
+    {%- endif -%}
   {%- elif reply and reply.value.value.type == "PlainType" -%}
     <span class="contact-orcid">ORCID: <a href="https://orcid.org/{{ reply.value.value.value }}" target="_blank">{{ reply.value.value.value }}</a></span>
   {%- endif -%}
@@ -13,45 +25,61 @@
 
 {%- macro integrationFairSharing(reply) -%}
   {%- if reply and reply.value.value.type == "IntegrationType" -%}
-    {%- set replyObject = reply.value.value.raw -%}
-    <a href="https://doi.org/{{ replyObject.doi }}" target="_blank">{{ replyObject.name }}</a>
-  {%- elif reply and reply.value.value.type == "PlainType" %}
+    {%- if reply.value.value.raw -%}
+      {%- set replyObject = reply.value.value.raw -%}
+      <a href="https://doi.org/{{ replyObject.doi }}" target="_blank">{{ replyObject.name }}</a>
+    {%- else -%}
+      {{ reply.value.value.value.rsplit(" ![]")[0]|replace("**", "")|markdown|replace("<p>", "")|replace("</p>", "") }}
+    {%- endif -%}
+  {%- elif reply and reply.value.value.type == "PlainType" -%}
     {{ reply.value.value.value }}
   {%- endif -%}
 {%- endmacro -%}
 
 {%- macro integrationCrossref(reply) -%}
   {%- if reply and reply.value.value.type == "IntegrationType" -%}
-    {%- set replyObject = reply.value.value.raw -%}
-    <a href="{{ replyObject.uri }}" target="_blank">{{ replyObject.name }}</a>
-  {%- elif reply and reply.value.value.type == "PlainType" %}
+    {%- if reply.value.value.raw -%}
+      {%- set replyObject = reply.value.value.raw -%}
+      <a href="{{ replyObject.uri }}" target="_blank">{{ replyObject.name }}</a>
+    {%- else -%}
+      {{ reply.value.value.value.rsplit(" ![]")[0]|replace("**", "")|markdown|replace("<p>", "")|replace("</p>", "") }}
+    {%- endif -%}
+  {%- elif reply and reply.value.value.type == "PlainType" -%}
     {{ reply.value.value.value }}
   {%- endif -%}
 {%- endmacro -%}
 
 {%- macro integrationROR(reply) -%}
   {%- if reply and reply.value.value.type == "IntegrationType" -%}
-    {%- set item = reply.value.value.raw -%}
-    {% for name in item.names -%}
-      {% if "ror_display" in name.types -%}
-        <a href="{{ item.id }}" target="_blank"><strong>{{ name.value }}</strong></a>
-      {%- endif %}
-    {%- endfor %}
-    {% for name in item.names -%}
-      {% if "acronym" in name.types -%}
-        ({{ name.value }})
-      {%- endif %}
-    {%- endfor %}
-  {%- elif reply and reply.value.value.type == "PlainType" %}
+    {%- if reply.value.value.raw -%}
+      {%- set item = reply.value.value.raw -%}
+      {% for name in item.names -%}
+        {% if "ror_display" in name.types -%}
+          <a href="{{ item.id }}" target="_blank"><strong>{{ name.value }}</strong></a>
+        {%- endif %}
+      {%- endfor %}
+      {% for name in item.names -%}
+        {% if "acronym" in name.types -%}
+          ({{ name.value }})
+        {%- endif %}
+      {%- endfor %}
+    {%- else -%}
+      {{ reply.value.value.value.rsplit(" ![]")[0]|replace("**", "")|markdown|replace("<p>", "")|replace("</p>", "") }}
+    {%- endif -%}
+  {%- elif reply and reply.value.value.type == "PlainType" -%}
     {{ reply.value.value.value }}
   {%- endif -%}
 {%- endmacro -%}
 
 {%- macro integrationCurrency(reply) -%}
   {%- if reply and reply.value.value.type == "IntegrationType" -%}
-    {%- set replyObject = reply.value.value.raw -%}
-    {{replyObject.code}} ({{replyObject.name}})
-  {%- elif reply and reply.value.value.type == "PlainType" %}
+    {%- if reply.value.value.raw -%}
+      {%- set replyObject = reply.value.value.raw -%}
+      {{replyObject.code}} ({{replyObject.name}})
+    {%- else -%}
+      {{ reply.value.value.value.rsplit(" ![]")[0]|replace("**", "")|markdown|replace("<p>", "")|replace("</p>", "") }}
+    {%- endif -%}
+  {%- elif reply and reply.value.value.type == "PlainType" -%}
     {{ reply.value.value.value }}
   {%- endif -%}
 {%- endmacro -%}
