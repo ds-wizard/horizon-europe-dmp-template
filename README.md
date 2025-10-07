@@ -28,6 +28,11 @@ This document template for DSW is available as open-source via GitHub Repository
 
 ## Changelog
 
+### 1.18.0
+
+- Update dependency on KM to 2.6.13
+- Fix legacy integration type
+
 ### 1.17.0
 
 - Update integrations to metamodel version 17.0 (released in DSW 4.22.0)
