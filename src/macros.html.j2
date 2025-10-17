@@ -55,7 +55,7 @@
       {%- set item = reply.value.value.raw -%}
       {% for name in item.names -%}
         {% if "ror_display" in name.types -%}
-          <a href="{{ item.id }}" target="_blank"><strong>{{ name.value }}</strong></a>
+          <a href="{{ item.id }}" target="_blank">{{ name.value }}</a>
         {%- endif %}
       {%- endfor %}
       {% for name in item.names -%}

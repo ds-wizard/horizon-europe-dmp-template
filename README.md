@@ -31,6 +31,7 @@ This document template for DSW is available as open-source via GitHub Repository
 ### 1.19.0
 
 - Fix non-equipment datasets utility
+- Fix affiliation for MS Word format
 
 ### 1.18.0
 
