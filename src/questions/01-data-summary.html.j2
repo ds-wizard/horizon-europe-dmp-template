@@ -117,7 +117,7 @@
             {%- set neqDataSetsName = repliesMap[[pathPrefix, uuids.neqDataSetsNameQUuid]|reply_path]|reply_str_value -%}
             {%- set neqDataSetsDesc = repliesMap[[pathPrefix, uuids.neqDataSetsDescQUuid]|reply_path]|reply_str_value -%}
             {%- set neqDataUtilityPath = [pathPrefix, uuids.neqDataUtilityQUuid]|reply_path -%}
-            {%- set neqDataUtilityAUuid = repliesMap[neqDataUtilityPath]|reply_items -%}
+            {%- set neqDataUtilityAUuid = repliesMap[neqDataUtilityPath]|reply_str_value -%}
             <li>
               <strong>{{ neqDataSetsName if neqDataSetsName else "(no name given)" }}</strong>
               {% if neqDataSetsDesc -%}<span class="separator">&ndash;</span> {{ neqDataSetsDesc }}{%- endif -%}
