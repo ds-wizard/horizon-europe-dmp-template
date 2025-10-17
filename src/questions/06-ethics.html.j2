@@ -115,9 +115,9 @@
       <h4>Data we collect</h4>
 
       {%- if collectPersonalAUuid == uuids.collectPersonalNoAUuid %}
-        <p>We will not collect any data connected to a person, i.e. "personal data".</p>
+        <p>We will not collect any data related to individuals, i.e. "personal data".</p>
       {%- elif collectPersonalAUuid == uuids.collectPersonalYesAUuid %}
-        {%- set sentences = ['We will collect data connected to a person, i.e. "personal data".'] -%}
+        {%- set sentences = ['We will collect data related to individuals, i.e. "personal data".'] -%}
         {%- set cpersGdprPath = [collectPersonalPath, collectPersonalAUuid, uuids.cpersGdprQUuid]|reply_path -%}
         {%- set cpersGdprAUuid = repliesMap[cpersGdprPath]|reply_str_value -%}
         {%- if cpersGdprAUuid == uuids.cpersGdprExploreAUuid -%}

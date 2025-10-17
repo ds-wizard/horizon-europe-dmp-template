@@ -166,7 +166,7 @@
       <div>
         <h4>Re-used datasets</h4>
         {%- if refDataItems|length > 0 -%}
-          <div>We have found the following reference datasets that we have considered for re-use:
+          <div>We identified the following reference datasets considered for potential re-use:
           <ul>
             {%- for item in refDataItems -%}
               {%- set refDataPrefix = [refDataPath, item]|reply_path -%}
@@ -275,7 +275,7 @@
           </div>
         {%- endif -%}
         {%- if nrefDataItems|length > 0 -%}
-          <div>We have found the following non-reference datasets that we have considered for re-use:
+          <div>We identified the following non-reference datasets considered for potential re-use:
           <ul>
             {%- for item in nrefDataItems -%}
               {%- set nrefDataPrefix = [nrefDataPath, item]|reply_path -%}
