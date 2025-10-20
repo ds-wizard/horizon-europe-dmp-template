@@ -92,7 +92,7 @@
         {%- endif -%}
       {%- endfor -%}
 
-      {# helper inline join) #}
+      {# helper inline join #}
       {%- set fragments = [] -%}
       {%- if small|length > 0 -%}
         {%- set risks = (small[:-1]|join(', ') ~ ', and ' ~ small[-1]) if small|length > 1 else small[0] -%}
