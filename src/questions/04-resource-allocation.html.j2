@@ -122,11 +122,11 @@
   {%- set coldStorageSentences = [] -%}
 
   {%- if coldStorageDuring and coldStorageAfter -%}
-    {%- do coldStorageSentences.append("We will be archiving data (using so-called 'cold storage') for long term preservation after the " ~ globals.projects ~ " but also already during the " ~ globals.projects ~ ".") -%}
+    {%- do coldStorageSentences.append("We will be archiving data in cold storage systems for long-term preservation after the " ~ globals.projects ~ " but also already during the " ~ globals.projects ~ ".") -%}
   {%- elif coldStorageDuring -%}
-    {%- do coldStorageSentences.append("We will be archiving data (using so-called 'cold storage') for long term preservation already during the " ~ globals.projects ~ ".") -%}
+    {%- do coldStorageSentences.append("We will be archiving data in cold storage systems for long-term preservation already during the " ~ globals.projects ~ ".") -%}
   {%- elif coldStorageAfter -%}
-    {%- do coldStorageSentences.append("We will be archiving data (using so-called 'cold storage') for long term preservation after the " ~ globals.projects ~ ".") -%}
+    {%- do coldStorageSentences.append("We will be archiving data in cold storage systems for long-term preservation after the " ~ globals.projects ~ ".") -%}
   {%- endif -%}
 
   {%- if coldStorageAfter -%}
@@ -201,9 +201,9 @@
     {%- set coldStorageFormatUpgradePath = [coldStorageAfterPath, coldStorageAfterAUuid, uuids.coldStorageFormatUpgradeQUuid]|reply_path -%}
     {%- set coldStorageFormatUpgradeAUuid = repliesMap[coldStorageFormatUpgradePath]|reply_str_value -%}
     {%- if coldStorageFormatUpgradeAUuid == uuids.coldStorageFormatUpgradeNoAUuid -%}
-      {%- do coldStorageSentences.append("Data formats of data in cold storage will not be upgraded over time.") -%}
+      {%- do coldStorageSentences.append("Data formats in cold storage will not be upgraded over time.") -%}
     {%- elif coldStorageFormatUpgradeAUuid == uuids.coldStorageFormatUpgradeYesAUuid -%}
-      {%- do coldStorageSentences.append("Data formats of data in cold storage will be upgraded if they become obsolete.") -%}
+      {%- do coldStorageSentences.append("Data formats in cold storage will be upgraded if they become obsolete.") -%}
     {%- endif -%}
     {# Upgrades (media) #}
     {%- set coldStorageMediaUpgradePath = [coldStorageAfterPath, coldStorageAfterAUuid, uuids.coldStorageMediaUpgradeQUuid]|reply_path -%}

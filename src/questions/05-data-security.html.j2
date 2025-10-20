@@ -39,10 +39,10 @@
             {%- if storeLab -%}They{%- else -%}Project members{%- endif %} can carry data with them on password-protected laptops.
           {% endif -%}
           {%- if risksCertificationsAUuid == uuids.risksCertificationsYesAUuid %}
-            All data centers where project data is stored carry sufficient certifications.
+            All data centers where project data is stored hold appropriate certifications.
           {% endif -%}
           {%- if risksHttpsAUuid == uuids.risksHttpsYesAUuid %}
-            All project web services are addressed via secure HTTP (https://...).
+            All project web services are accessible via secure HTTP (https://...).
           {% endif -%}
           {%- if risksInstructedAUuid == uuids.risksInstructedYesAUuid %}
             Project members have been instructed about both generic and specific risks to the {{globals.projects}}.
@@ -56,29 +56,58 @@
       {%- set risksInfoLeakAUuid = repliesMap[risksInfoLeakPath]|reply_str_value -%}
       {%- set risksInfoVandalismPath = [risksPathPrefix, uuids.risksInfoVandalismQUuid]|reply_path -%}
       {%- set risksInfoVandalismAUuid = repliesMap[risksInfoVandalismPath]|reply_str_value -%}
-      {%- set risksInfoLossTexts = {
-        uuids.risksInfoLossSmallAUuid: "The possible impact to the project or organization if information is lost is small.",
-        uuids.risksInfoLossLowAUuid: "The risk of information loss in the project or organization is acceptably low.",
-        uuids.risksInfoLossWillAUuid: "We will mitigate information loss risk for the project or organization."
+
+      {# Define mapping of UUIDs to qualitative levels #}
+      {%- set risk_levels = {
+        uuids.risksInfoLossSmallAUuid: 'small',
+        uuids.risksInfoLossLowAUuid: 'low',
+        uuids.risksInfoLossWillAUuid: 'will',
+        uuids.risksInfoLeakSmallAUuid: 'small',
+        uuids.risksInfoLeakLowAUuid: 'low',
+        uuids.risksInfoLeakWillAUuid: 'will',
+        uuids.risksInfoVandalismSmallAUuid: 'small',
+        uuids.risksInfoVandalismLowAUuid: 'low',
+        uuids.risksInfoVandalismWillAUuid: 'will'
       } -%}
-      {%- set risksInfoLeakTexts = {
-        uuids.risksInfoLeakSmallAUuid: "The possible impact to the project or organization if information is leaked is small.",
-        uuids.risksInfoLeakLowAUuid: "The risk of information leak in the project or organization is acceptably low.",
-        uuids.risksInfoLeakWillAUuid: "We will mitigate information leak risk for the project or organization."
+
+      {# Extract selected levels for each type #}
+      {%- set selected = {
+        'loss': risk_levels[risksInfoLossAUuid],
+        'leak': risk_levels[risksInfoLeakAUuid],
+        'vandalism': risk_levels[risksInfoVandalismAUuid]
       } -%}
-      {%- set risksInfoVandalismTexts = {
-        uuids.risksInfoVandalismSmallAUuid: "The possible impact to the project or organization if information is vandalised is small.",
-        uuids.risksInfoVandalismLowAUuid: "The risk of information vandalism in the project or organization is acceptably low.",
-        uuids.risksInfoVandalismWillAUuid: "We will mitigate information vandalism risk for the project or organization."
-      } -%}
-      {% set risksInfoXText = [
-        risksInfoLossTexts[risksInfoLossAUuid],
-        risksInfoLeakTexts[risksInfoLeakAUuid],
-        risksInfoVandalismTexts[risksInfoVandalismAUuid]
-      ]|join(" ") %}
-      {%- if risksInfoXText|length > 0 -%}
-        <p>{{ risksInfoXText }}</p>
+
+      {%- set small = [] -%}
+      {%- set low = [] -%}
+      {%- set will = [] -%}
+
+      {# simple grouping in one pass #}
+      {%- for key, level in selected.items() -%}
+        {%- if level == 'small' -%}
+          {%- do small.append(key) -%}
+        {%- elif level == 'low' -%}
+          {%- do low.append(key) -%}
+        {%- elif level == 'will' -%}
+          {%- do will.append(key) -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {# helper inline join #}
+      {%- set fragments = [] -%}
+      {%- if small|length > 0 -%}
+        {%- set risks = (small[:-1]|join(', ') ~ ', and ' ~ small[-1]) if small|length > 1 else small[0] -%}
+        {%- set _ = fragments.append("The possible impact of information " ~ risks ~ " is small") -%}
       {%- endif -%}
+      {%- if low|length > 0 -%}
+        {%- set risks = (low[:-1]|join(', ') ~ ', and ' ~ low[-1]) if low|length > 1 else low[0] -%}
+        {%- set _ = fragments.append("The risk of information " ~ risks ~ " is acceptably low") -%}
+      {%- endif -%}
+      {%- if will|length > 0 -%}
+        {%- set risks = (will[:-1]|join(', ') ~ ', and ' ~ will[-1]) if will|length > 1 else will[0] -%}
+        {%- set _ = fragments.append("We will mitigate the risk of information " ~ risks) -%}
+      {%- endif -%}
+      <p>{{ fragments | join('. ') }}.</p>
+
       {# Personal data #}
       {%- set risksPersonalDataPath = [risksPathPrefix, uuids.risksPersonalDataQUuid]|reply_path -%}
       {%- set risksPersonalDataAUuid = repliesMap[risksPersonalDataPath]|reply_str_value -%}
@@ -139,7 +168,7 @@
       {%- endif -%}
 
       {%- if coldStorageProtectAUuid == uuids.coldStorageProtectYesAUuid -%}
-        {%- do coldSentences.append("The archive need to be protected against loss or theft.") -%}
+        {%- do coldSentences.append("The archive needs to be protected against loss or theft.") -%}
 
         {%- set coldStorageProtectEncPath = [coldStorageProtectPath, uuids.coldStorageProtectYesAUuid, uuids.coldStorageProtectEncQUuid]|reply_path -%}
         {%- set coldStorageProtectEncAUuid = repliesMap[coldStorageProtectEncPath]|reply_str_value -%}

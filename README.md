@@ -28,6 +28,12 @@ This document template for DSW is available as open-source via GitHub Repository
 
 ## Changelog
 
+### 1.19.0
+
+- Fix non-equipment datasets utility
+- Fix affiliation for MS Word format
+- Improve text
+
 ### 1.18.0
 
 - Update dependency on KM to 2.6.13
