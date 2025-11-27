@@ -17,7 +17,7 @@
           {% if isPublishedDataAUuid == uuids.isPublishedDataNoAUuid %}
             (not published)
           {% elif isPublishedDataAUuid == uuids.isPublishedDataYesAUuid %}
-            (published)
+            (will be published)
           {% endif -%}
           {# How long will be stored + Metadata FAIRness #}
           {%- set publishedDataHowLongPath = [pathPrefix, uuids.publishedDataHowLongQUuid]|reply_path -%}

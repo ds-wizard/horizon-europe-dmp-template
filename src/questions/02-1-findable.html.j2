@@ -16,7 +16,7 @@
           {% if isPublishedDataAUuid == uuids.isPublishedDataNoAUuid %}
             (not published)
           {% elif isPublishedDataAUuid == uuids.isPublishedDataYesAUuid %}
-            (published)
+            (will be published)
           {%- set prefix = [isPublishedDataPath, uuids.isPublishedDataYesAUuid]|reply_path -%}
           {# Identifiers #}
           {% set identifiersPath = [pathPrefix, uuids.producedDataIdentifiersQUuid]|reply_path -%}

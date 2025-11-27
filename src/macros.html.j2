@@ -84,6 +84,21 @@
   {%- endif -%}
 {%- endmacro -%}
 
+{%- macro integrationLicense(reply) -%}
+  {%- if reply and reply.value.value.type == "IntegrationType" -%}
+    {%- if reply.value.value.raw -%}
+      {%- set replyObject = reply.value.value.raw -%}
+      {%- if replyObject.url -%}
+      <a href="{{ replyObject.url }}" target="_blank">{{ replyObject.name }}</a>
+      {%- else -%}
+      {{replyObject.name}}
+      {%- endif -%}
+    {%- endif -%}
+  {%- elif reply and reply.value.value.type == "PlainType" -%}
+    {{ reply.value.value.value }}
+  {%- endif -%}
+{%- endmacro -%}
+
 {%- macro integrationValue(reply) -%}
     {{ reply.value.value.value }}
 {%- endmacro -%}

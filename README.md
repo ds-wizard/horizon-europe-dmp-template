@@ -28,6 +28,11 @@ This document template for DSW is available as open-source via GitHub Repository
 
 ## Changelog
 
+### 1.20.0
+
+- Add content to Other Outputs category
+- 
+
 ### 1.19.0
 
 - Fix non-equipment datasets utility
