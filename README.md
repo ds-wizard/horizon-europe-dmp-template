@@ -30,23 +30,23 @@ This document template for DSW is available as open-source via GitHub Repository
 
 ### 1.20.0
 
-- Add content to Other Outputs category
-- 
+- Added content to the Other Outputs category
+- Fixed the published dataset to reflect future-oriented statement
 
 ### 1.19.0
 
-- Fix non-equipment datasets utility
-- Fix affiliation for MS Word format
-- Improve text
+- Fixed non-equipment datasets utility
+- Fixed affiliation for MS Word format
+- Improved text
 
 ### 1.18.0
 
-- Update dependency on KM to 2.6.13
-- Fix legacy integration type
+- Updated dependency on KM to 2.6.13
+- Fixed legacy integration type
 
 ### 1.17.0
 
-- Update integrations to metamodel version 17.0 (released in DSW 4.22.0)
+- Updated integrations to metamodel version 17.0 (released in DSW 4.22.0)
 - Improved minor text flow
 
 ### 1.16.0
