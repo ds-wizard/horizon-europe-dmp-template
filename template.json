@@ -23,7 +23,7 @@
     "formats": [
         {
             "uuid": "5b9800f9-22ba-41f8-9ccd-f17fda46f69a",
-            "name": "HTML",
+            "name": "HTML Document",
             "icon": "far fa-file-code",
             "steps": [
                 {
