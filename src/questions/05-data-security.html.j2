@@ -106,7 +106,9 @@
         {%- set risks = (will[:-1]|join(', ') ~ ', and ' ~ will[-1]) if will|length > 1 else will[0] -%}
         {%- set _ = fragments.append("We will mitigate the risk of information " ~ risks) -%}
       {%- endif -%}
-      <p>{{ fragments | join('. ') }}.</p>
+      {%- if fragments|length > 0 -%}
+        <p>{{ fragments | join('. ') }}.</p>
+      {%- endif -%}
 
       {# Personal data #}
       {%- set risksPersonalDataPath = [risksPathPrefix, uuids.risksPersonalDataQUuid]|reply_path -%}

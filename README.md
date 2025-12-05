@@ -30,7 +30,7 @@ This document template for DSW is available as open-source via GitHub Repository
 
 ### 1.20.0
 
-- Added content to the Other Outputs category
+- Added content to the Other Outputs question
 - Fixed the published dataset to reflect future-oriented statement
 
 ### 1.19.0
