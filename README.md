@@ -33,6 +33,7 @@ This document template for DSW is available as open-source via GitHub Repository
 - Added content to the Other Outputs question
 - Fixed the published dataset to reflect future-oriented statement
 - Improved qualified references part
+- Updated reused dataset name to use reply string value instead FAIRsharing integration
 
 ### 1.19.0
 
