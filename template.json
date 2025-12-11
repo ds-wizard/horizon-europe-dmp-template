@@ -10,13 +10,13 @@
         {
             "orgId": "dsw",
             "kmId": "root",
-            "minVersion": "2.6.13",
+            "minVersion": "2.7.0",
             "maxVersion": null
         },
         {
             "orgId": "dsw",
             "kmId": "lifesciences",
-            "minVersion": "2.6.13",
+            "minVersion": "2.7.0",
             "maxVersion": null
         }
     ],
