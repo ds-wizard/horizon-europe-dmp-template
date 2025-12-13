@@ -281,7 +281,7 @@
           {% if isPublishedDataAUuid == uuids.isPublishedDataNoAUuid %}
             (not published)
           {% elif isPublishedDataAUuid == uuids.isPublishedDataYesAUuid %}
-            (published)
+            (will be published)
           {%- set prefix = [isPublishedDataPath, uuids.isPublishedDataYesAUuid]|reply_path -%}
           {# Distributions #}
           {% set distrosPath = [prefix, uuids.publishedDistrosQUuid]|reply_path -%}
