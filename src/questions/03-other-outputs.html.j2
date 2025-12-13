@@ -123,7 +123,7 @@
                   {%- endif -%}
 
               {%- elif otherOutputAvailableReply == uuids.otherOutputAvailableNoAUuid %}
-                {%- set otherOutputReasonPath = [otherOutputAvailablePath, uuids.otherOutputAvailableNoAUuid, uuids.otherOutputAvailableReasonQUuid]|reply_path -%}
+                {%- set otherOutputReasonPath = [otherOutputAvailablePath, uuids.otherOutputAvailableNoAUuid, uuids.otherOutputAvailableNoReasonQUuid]|reply_path -%}
                 {%- set otherOutputReasonReply = repliesMap[otherOutputReasonPath]|reply_str_value -%}
                   {%- if otherOutputReasonReply %}
                   It will not be made available because <em>{{ otherOutputReasonReply }}</em>.
