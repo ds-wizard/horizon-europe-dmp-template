@@ -95,27 +95,31 @@
       {%- set producedDataName = repliesMap[[pathPrefix, uuids.producedDataNameQUuid]|reply_path]|reply_str_value -%}
       {# Only published #}
       {%- set isPublishedDataPath = [pathPrefix, uuids.isPublishedDataQUuid]|reply_path -%}
-      {%- set isPublishedDataAUuid = repliesMap[isPublishedDataPath]|reply_str_value -%}
-      {% if isPublishedDataAUuid == uuids.isPublishedDataYesAUuid %}
+      {%- set isPublishedDataA = repliesMap[isPublishedDataPath]|reply_str_value -%}
+      {%- if isPublishedDataA == uuids.isPublishedDataYesAUuid -%}
         {# Qualified references #}
         {%- set publishedQReferencesPath = [isPublishedDataPath, uuids.isPublishedDataYesAUuid, uuids.publishedQReferencesQUuid]|reply_path -%}
-        {%- set publishedQReferences = repliesMap[publishedQReferencesPath]|reply_items -%}
-        {%- set qreferences = [] -%}
-        {%- for item in publishedQReferences -%}
-          {%- set refId = repliesMap[[publishedQReferencesPath, item, uuids.publishedQReferenceIdQUuid]|reply_path]|reply_str_value|e -%}
-          {%- set refRel = repliesMap[[publishedQReferencesPath, item, uuids.publishedQReferenceRelQUuid]|reply_path]|reply_str_value|e -%}
-          {%- if refId and refRel -%}
-            {%- do qreferences.append({
-              'id': refId,
-              'relation': refRel,
+        {%- set publishedQReferencesAUuid = repliesMap[publishedQReferencesPath]|reply_str_value -%}
+        {%- if publishedQReferencesAUuid == uuids.publishedQReferencesYesAUuid -%}
+          {%- set publishedQReferencesItemsPath = [publishedQReferencesPath, uuids.publishedQReferencesYesAUuid, uuids.publishedQReferencesItemQUuid ]|reply_path -%}
+          {%- set publishedQReferencesItems = repliesMap[publishedQReferencesItemsPath]|reply_items -%}
+          {%- set qreferences = [] -%}
+          {%- for item in publishedQReferencesItems -%}
+            {%- set refId = repliesMap[[publishedQReferencesItemsPath, item, uuids.publishedQReferenceIdQUuid]|reply_path]|reply_str_value|e -%}
+            {%- set refRel = repliesMap[[publishedQReferencesItemsPath, item, uuids.publishedQReferenceRelQUuid]|reply_path]|reply_str_value|e -%}
+            {%- if refId and refRel -%}
+              {%- do qreferences.append({
+                'id': refId,
+                'relation': refRel,
+              }) -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if qreferences|length > 0 and producedDataName -%}
+            {%- do datasets.append({
+              'name': producedDataName,
+              'references': qreferences.copy(),
             }) -%}
           {%- endif -%}
-        {%- endfor -%}
-        {%- if qreferences|length > 0 and producedDataName -%}
-          {%- do datasets.append({
-            'name': producedDataName,
-            'references': qreferences.copy(),
-          }) -%}
         {%- endif -%}
       {%- endif -%}
     {%- endfor -%}

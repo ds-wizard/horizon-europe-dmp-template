@@ -220,12 +220,12 @@
             {%- set refDataPrefix = [refDataPath, i]|reply_path -%}
             {%- set refDataUsedPrefix = [refDataPrefix, uuids.refDataUseQUuid, uuids.refDataUseYesAUuid]|reply_path -%}
             {%- set refDataNamePath = [refDataPrefix, uuids.refDataNameQUuid]|reply_path -%}
-            {%- set refDataNameReply = repliesMap[refDataNamePath] -%}
+            {%- set refDataNameReply = repliesMap[refDataNamePath]|reply_str_value -%}
             {%- set refDataConditionsPath = [refDataUsedPrefix, uuids.refDataConditionsQUuid]|reply_path -%}
             {%- set refDataConditionsAUuid = repliesMap[refDataConditionsPath]|reply_str_value -%}
             {%- if refDataConditionsAUuid -%}
               <li>
-                <div>{{ macros.integrationFairSharing(refDataNameReply) }}</div>
+                <div>{{ refDataNameReply }}</div>
                 {% if refDataConditionsAUuid == uuids.refDataConditionsCC0AUuid -%}
                   It is freely available for any use (public domain or CC0).
                 {%- elif refDataConditionsAUuid == uuids.refDataConditionsCCBYAUuid -%}
@@ -242,12 +242,12 @@
             {%- set nrefDataPrefix = [nrefDataPath, i]|reply_path -%}
             {%- set nrefDataUsedPrefix = [nrefDataPrefix, uuids.nrefDataUseQUuid, uuids.nrefDataUseYesAUuid]|reply_path -%}
             {%- set nrefDataNamePath = [nrefDataPrefix, uuids.nrefDataNameQUuid]|reply_path -%}
-            {%- set nrefDataNameReply = repliesMap[nrefDataNamePath] -%}
+            {%- set nrefDataNameReply = repliesMap[nrefDataNamePath]|reply_str_value -%}
             {%- set nrefDataConditionsPath = [nrefDataUsedPrefix, uuids.nrefDataConditionsQUuid]|reply_path -%}
             {%- set nrefDataConditionsAUuid = repliesMap[nrefDataConditionsPath]|reply_str_value -%}
             {%- if nrefDataConditionsAUuid -%}
               <li>
-                <div>{{ macros.integrationFairSharing(nrefDataNameReply) }}</div>
+                <div>{{ nrefDataNameReply }}</div>
                 {% if nrefDataConditionsAUuid == uuids.nrefDataConditionsCC0AUuid -%}
                   It is freely available for any use (public domain or CC0).
                 {%- elif nrefDataConditionsAUuid == uuids.nrefDataConditionsCCBYAUuid -%}
@@ -281,7 +281,7 @@
           {% if isPublishedDataAUuid == uuids.isPublishedDataNoAUuid %}
             (not published)
           {% elif isPublishedDataAUuid == uuids.isPublishedDataYesAUuid %}
-            (published)
+            (will be published)
           {%- set prefix = [isPublishedDataPath, uuids.isPublishedDataYesAUuid]|reply_path -%}
           {# Distributions #}
           {% set distrosPath = [prefix, uuids.publishedDistrosQUuid]|reply_path -%}
