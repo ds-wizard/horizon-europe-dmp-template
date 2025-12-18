@@ -27,7 +27,11 @@
   {%- if reply and reply.value.value.type == "IntegrationType" -%}
     {%- if reply.value.value.raw -%}
       {%- set replyObject = reply.value.value.raw -%}
-      <a href="https://doi.org/{{ replyObject.doi }}" target="_blank">{{ replyObject.name }}</a>
+      {%- if replyObject.doi -%}
+        <a href="https://doi.org/{{ replyObject.doi }}" target="_blank">{{ replyObject.name }}</a>
+      {%- else -%}
+        <a href="https://fairsharing.org/{{ replyObject.id }}" target="_blank">{{ replyObject.name }}</a>
+      {%- endif -%}
     {%- else -%}
       {{ reply.value.value.value.rsplit(" ![]")[0]|replace("**", "")|markdown|replace("<p>", "")|replace("</p>", "") }}
     {%- endif -%}
