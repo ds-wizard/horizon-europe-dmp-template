@@ -1,6 +1,6 @@
 <div id="q-other-outputs" class="question">
   <div class="answer">
-    <p>We use <a href="{{ globals.linkUrl }}" target="_blank">{{ globals.fullName }}</a> for planning our data management and creating this DMP. The management and planning of other research outputs is done separately and is included in this Section. Still, we benefit from data stewardship guidance (e.g. FAIR principles, openness, or security) and it is reflected in our plans with respect to other research outputs.</p>
+    <p>We use <a href="{{ dc.config.service_url }}" target="_blank">{{ dc.config.service_name }}</a> for planning our data management and creating this DMP. The management and planning of other research outputs is done separately and is included in this Section. Still, we benefit from data stewardship guidance (e.g. FAIR principles, openness, or security) and it is reflected in our plans with respect to other research outputs.</p>
 
   {# Other outputs decision #}
   {%- set otherOutputsDecisionPath = [uuids.otherOutCUuid, uuids.otherOutDecisionQUuid ]|reply_path -%}

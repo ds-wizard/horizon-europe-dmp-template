@@ -1,7 +1,7 @@
 <div id="q-other-issues" class="question">
   <div class="answer">
     {%- set project_url = dc.config.client_url ~ "/projects/" ~ dc.qtn.uuid -%}
-    <p>We use the <a href="{{ globals.linkUrl }}" target="_blank">{{ globals.fullName }}</a> with its <em>{{ dc.pkg.name }}</em> (ID: <span class="package-id"><span class="organization-id">{{ dc.pkg.organization_id }}</span>:<span class="km-id">{{ dc.pkg.km_id }}</span>:<span class="version">{{ dc.pkg.version }}</span></span>) knowledge model to make our DMP. More specifically, we use the <a href="{{ dc.config.client_url }}" target="_blank">{{ dc.config.client_url }}</a> {{ globals.name }} instance where the project has direct URL: <a href="{{ project_url }}" target="_blank">{{ project_url }}</a>.</p>
+    <p>We use the <a href="{{ dc.config.service_url }}" target="_blank">{{ dc.config.service_name }}</a> with its <em>{{ dc.pkg.name }}</em> (ID: <span class="package-id"><span class="organization-id">{{ dc.pkg.organization_id }}</span>:<span class="km-id">{{ dc.pkg.km_id }}</span>:<span class="version">{{ dc.pkg.version }}</span></span>) knowledge model to make our DMP. More specifically, we use the <a href="{{ dc.config.client_url }}" target="_blank">{{ dc.config.client_url }}</a> {{ dc.config.service_name_short }} instance where the project has direct URL: <a href="{{ project_url }}" target="_blank">{{ project_url }}</a>.</p>
 
     {# Applied policies #}
     {%- set policiesPath = [uuids.adminDetailsCUuid, uuids.policiesQUuid]|reply_path -%}
