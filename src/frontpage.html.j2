@@ -1,10 +1,12 @@
+{%- set eu_header = assets("assets/eu-header.png") -%}
+{%- set eu_flag = assets("assets/eu-flag.png") -%}
 <header>
   <center>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/European_Commission_Document_SVG.svg/320px-European_Commission_Document_SVG.svg.png" height="78" width="160" class="eu-header" />
+  <img src="{{ eu_header.data_url }}" height="78" width="160" class="eu-header" />
   </center>
-  <h1>{{ ctx.questionnaire.name }}</h1>
+  <h1>{{ ctx.project.name }}</h1>
   <center>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Flag_of_Europe.svg/320px-Flag_of_Europe.svg.png" height="213" width="320" class="eu-flag" />
+  <img src="{{ eu_flag.data_url }}" height="213" width="320" class="eu-flag" />
   </center>
   <h3>
     Horizon Europe<br/>
@@ -13,7 +15,7 @@
 
   <div class="info">
     <div class="version-info">
-      {% for version in dc.qtn.versions if version.uuid == dc.qtn.version %}
+      {% for version in dc.project.versions if version.uuid == dc.project.version %}
         <div class="version">{{version.name}}</div>
       {% endfor %}
       <div class="date">{{ dc.doc.created_at|datetime_format("%d %B %Y") }}</div>

@@ -28,6 +28,11 @@ This document template for DSW is available as open-source via GitHub Repository
 
 ## Changelog
 
+### 1.21.0
+
+- Adjusted to template metamodel version 18.0 (released in DSW 4.29.0)
+- Use images from `assets` directory instead of external links
+
 ### 1.20.1
 
 - Adjusted to template metamodel version 17.1 (released in DSW 4.26.0)

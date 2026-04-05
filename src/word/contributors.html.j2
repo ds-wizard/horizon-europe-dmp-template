@@ -51,13 +51,13 @@
     </li>
   {% endfor %}
   </ul>
-  {%- elif dc.qtn.created_by -%}
+  {%- elif dc.project.created_by -%}
   <ul>
     <li class="contributor">
-      <span class="name">{{ dc.qtn.created_by.first_name }} {{ dc.qtn.created_by.last_name }}</span>
-      <br>{{ macros.formatEmail(dc.qtn.created_by.email) }}
-      {%- if dc.qtn.created_by.affiliation %}
-      <br>Affiliation: <span class="affiliation">{{ dc.qtn.created_by.affiliation }}</span>
+      <span class="name">{{ dc.project.created_by.first_name }} {{ dc.project.created_by.last_name }}</span>
+      <br>{{ macros.formatEmail(dc.project.created_by.email) }}
+      {%- if dc.project.created_by.affiliation %}
+      <br>Affiliation: <span class="affiliation">{{ dc.project.created_by.affiliation }}</span>
       {%- endif %}
     </li>
   </ul>
