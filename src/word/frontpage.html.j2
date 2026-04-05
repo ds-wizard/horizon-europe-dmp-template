@@ -4,8 +4,8 @@
 <strong>Data Management Plan</strong>
 <br/>
 <br/>
-{% if dc.qtn.version %}
-{% for version in dc.qtn.versions if version.uuid == dc.qtn.version.uuid %}
+{% if dc.project.version %}
+{% for version in dc.project.versions if version.uuid == dc.project.version.uuid %}
 {{version.name}}
 <br/>
 {% endfor %}
