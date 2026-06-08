@@ -77,7 +77,7 @@
                     {%- elif domainSpecificRepoContactBeforeAUuid == uuids.domainSpecificRepoContactBeforeOtherAUuid %}
                       {%- set domainSpecificRepoContactBeforeOtherPath = [domainSpecificRepoContactBeforePath, uuids.domainSpecificRepoContactBeforeOtherAUuid, uuids.domainSpecificRepoContactBeforeOtherQUuid]|reply_path -%}
                       {%- set domainSpecificRepoContactBeforeOther = repliesMap[domainSpecificRepoContactBeforeOtherPath]|reply_str_value %}
-                      We have made other arrangements{{ ": " ~ domainSpecificRepoContactBeforeOther|dot if domainSpecificRepoContactBeforeOther else "." }}
+                      We have made other arrangements{{ ": " ~ domainSpecificRepoContactBeforeOther|markdown if domainSpecificRepoContactBeforeOther else "." }}
                     {%- endif -%}
                   {%- elif distroRepositoryKindAUuid == uuids.publishedDataRepositoryGeneralPurposeAUuid %}
                     <em>General-purpose repository</em>
@@ -232,7 +232,7 @@
       {%- elif provenanceAUuid == uuids.provenanceOtherAUuid -%}
         {%- set provenanceOtherPath = [provenancePath, uuids.provenanceOtherAUuid, uuids.provenanceOtherQUuid]|reply_path -%}
         {%- set provenanceOther = repliesMap[provenanceOtherPath]|reply_str_value -%}
-        <p>We will use other solution than (electronic) lab notebooks to make sure that there is good provenance of the data analysis{{ ": " ~ provenanceOther|dot if provenanceOther else "." }}
+        <p>We will use other solution than (electronic) lab notebooks to make sure that there is good provenance of the data analysis{{ ": " ~ provenanceOther|markdown if provenanceOther else "." }}
       {%- endif -%}
 
       {# Metadata standards #}
@@ -297,7 +297,7 @@
           {%- set metadataSopDescribePath = [metadataSopPath, uuids.metadataSopYesAUuid, uuids.metadataSopDescribeQUuid]|reply_path -%}
           {%- set metadataSopDescribe = repliesMap[metadataSopDescribePath]|reply_str_value -%}
           {%- if metadataSopDescribe -%}
-            {%- do sentences.append(metadataSopDescribe|dot) -%}
+            {%- do sentences.append(metadataSopDescribe|markdown) -%}
           {%- endif -%}
         {%- endif -%}
         {%- set metadataRelationsPath = [prefix, uuids.metadataRelationsQUuid]|reply_path -%}

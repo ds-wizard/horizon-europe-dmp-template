@@ -107,7 +107,7 @@
               {% if item.peer %}<li>Data peer review</li>{% endif %}
               {% if item.vocab %}<li>Use of controlled vocabularies</li>{% endif %}
               {% if item.consistency %}<li>Measuring samples for which the outcome is known to monitor consistency</li>{% endif %}
-              {% if item.other %}<li>Other quality processes{{ ": " ~ item.othertxt if item.othertxt else "" }}</li>{% endif %}
+              {% if item.other %}<li>Other quality processes{{ ": " ~ item.othertxt|markdown if item.othertxt else "" }}</li>{% endif %}
             </ul>
         </li>
       {%- endfor -%}

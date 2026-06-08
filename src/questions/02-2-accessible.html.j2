@@ -60,11 +60,11 @@
           {%- elif businessReasonsPatents %}
             of patent-related business reasons.
           {%- elif businessReasonsOther %}
-            of non-patent business reasons{{  ": " ~ notOpenBusinessReasonsOther|dot if notOpenBusinessReasonsOther else "." }}
+            of non-patent business reasons{{  ": " ~ notOpenBusinessReasonsOther|markdown if notOpenBusinessReasonsOther else "." }}
           {%- elif otherReasonsPapers %}
             we want to publish a paper first.
           {%- elif otherReasonsOther %}
-            we have other than paper-publishing reasons{{ ": " ~ notOpenOtherReasonsOther|dot if notOpenOtherReasonsOther else "." }}
+            we have other than paper-publishing reasons{{ ": " ~ notOpenOtherReasonsOther|markdown if notOpenOtherReasonsOther else "." }}
           {%- endif -%}
         {%- else %}
           of:
@@ -75,12 +75,12 @@
             {%- if businessReasonsPatents %}
               <li>patent-related business reasons</li>
             {%- elif businessReasonsOther %}
-              <li>non-patent business reasons{{ ": " ~ notOpenBusinessReasonsOther if notOpenBusinessReasonsOther else "" }}</li>
+              <li>non-patent business reasons{{ ": " ~ notOpenBusinessReasonsOther|markdown if notOpenBusinessReasonsOther else "" }}</li>
             {%- endif -%}
             {%- if otherReasonsPapers %}
               <li>we want to publish a paper first</li>
             {%- elif otherReasonsOther -%}
-              <li>we have other than paper-publishing reasons{{ ": " ~ notOpenOtherReasonsOther if notOpenOtherReasonsOther else "" }}</li>
+              <li>we have other than paper-publishing reasons{{ ": " ~ notOpenOtherReasonsOther|markdown if notOpenOtherReasonsOther else "" }}</li>
             {%- endif -%}
           </ul>
         {%- endif -%}
@@ -102,14 +102,14 @@
                 {%- set legalReasonsAuthorizeOldCommitteePath = [legalReasonsAuthorizePath, uuids.legalReasonsAuthorizeOldCommitteeAUuid, uuids.legalReasonsAuthorizeOldCommitteeQUuid]|reply_path -%}
                 {%- set legalReasonsAuthorizeOldCommittee = repliesMap[legalReasonsAuthorizeOldCommitteePath]|reply_str_value -%}
                 {%- if legalReasonsAuthorizeOldCommittee %}
-                  People can apply to the <em>{{ legalReasonsAuthorizeOldCommittee }}</em> data access committee.
+                  People can apply to the following data access committee: <em>{{ legalReasonsAuthorizeOldCommittee|markdown }}</em>
                 {%- else -%}
                   People can apply to an existing data access committee.
                 {%- endif -%}
               {%- elif legalReasonsAuthorizeAUuid == uuids.legalReasonsAuthorizeOtherAUuid %}
                 {%- set legalReasonsAuthorizeOtherPath = [legalReasonsAuthorizePath, uuids.legalReasonsAuthorizeOtherAUuid, uuids.legalReasonsAuthorizeOtherQUuid]|reply_path -%}
                 {%- set legalReasonsAuthorizeOther = repliesMap[legalReasonsAuthorizeOtherPath]|reply_str_value %}
-                For the authorization of potential users, we will make special arrangements{{ ": " ~ legalReasonsAuthorizeOther|dot if legalReasonsAuthorizeOther else "." }}
+                For the authorization of potential users, we will make special arrangements{{ ": " ~ legalReasonsAuthorizeOther|markdown if legalReasonsAuthorizeOther else "." }}
               {%- endif -%}
             </p>
           {%- endif -%}
@@ -145,7 +145,7 @@
     {%- if metadataOpenAUuid == uuids.metadataOpenNoAUuid %}
       {%- set explanation = repliesMap[[metadataOpenPath, metadataOpenAUuid, uuids.metadataOpenNoExplainQUuid]|reply_path]|reply_str_value -%}
       {%- if explanation -%}
-        <p>Metadata will not be available openly &ndash; {{ explanation|e|dot }}</p>
+        <p>Metadata will not be available openly &ndash; {{ explanation|e|markdown }}</p>
       {%- else -%}
         <p>Metadata will not be available openly.</p>
       {%- endif -%}
@@ -185,7 +185,7 @@
       {%- set ownershipOtherPath = [ownershipPath, uuids.ownershipOtherAUuid, uuids.ownershipOtherQUuid]|reply_path -%}
       {%- set ownershipOther = repliesMap[ownershipOtherPath]|reply_str_value -%}
       {%- if ownershipOther -%}
-        <p>We have made the following arrangements regarding the data ownership: {{ ownershipOther|dot }}</p>
+        <p>We have made the following arrangements regarding the data ownership: {{ ownershipOther|markdown }}</p>
       {%- endif -%}
     {%- endif -%}
 
@@ -233,7 +233,7 @@
                 {%- elif refDataConditionsAUuid == uuids.refDataConditionsOtherAUuid -%}
                   {%- set refDataConditionsOtherPath = [refDataConditionsPath, uuids.refDataConditionsOtherAUuid, uuids.refDataConditionsOtherQUuid]|reply_path -%}
                   {%- set refDataConditionsOther = repliesMap[refDataConditionsOtherPath]|reply_str_value -%}
-                  It is available under specific restrictions, which we will follow in our {{globals.projects}}{{ ": " ~ refDataConditionsOther|dot if refDataConditionsOther else "." }}
+                  It is available under specific restrictions, which we will follow in our {{globals.projects}}{{ ": " ~ refDataConditionsOther|markdown if refDataConditionsOther else "." }}
                 {%- endif -%}
               </li>
             {%- endif -%}
@@ -255,7 +255,7 @@
                 {%- elif nrefDataConditionsAUuid == uuids.nrefDataConditionsOtherAUuid -%}
                   {%- set nrefDataConditionsOtherPath = [nrefDataConditionsPath, uuids.nrefDataConditionsOtherAUuid, uuids.nrefDataConditionsOtherQUuid]|reply_path -%}
                   {%- set nrefDataConditionsOther = repliesMap[nrefDataConditionsOtherPath]|reply_str_value -%}
-                  It is available under specific restrictions, which we will follow in our {{globals.projects}}{{ ": " ~ nrefDataConditionsOther|dot if nrefDataConditionsOther else "." }}
+                  It is available under specific restrictions, which we will follow in our {{globals.projects}}{{ ": " ~ nrefDataConditionsOther|markdown if nrefDataConditionsOther else "." }}
                 {%- endif -%}
               </li>
             {%- endif -%}
@@ -317,7 +317,7 @@
                     {%- elif domainSpecificRepoContactBeforeAUuid == uuids.domainSpecificRepoContactBeforeOtherAUuid %}
                       {%- set domainSpecificRepoContactBeforeOtherPath = [domainSpecificRepoContactBeforePath, uuids.domainSpecificRepoContactBeforeOtherAUuid, uuids.domainSpecificRepoContactBeforeOtherQUuid]|reply_path -%}
                       {%- set domainSpecificRepoContactBeforeOther = repliesMap[domainSpecificRepoContactBeforeOtherPath]|reply_str_value %}
-                      We have made other arrangements{{ ": " ~ domainSpecificRepoContactBeforeOther|dot if domainSpecificRepoContactBeforeOther else "." }}
+                      We have made other arrangements{{ ": " ~ domainSpecificRepoContactBeforeOther|markdown if domainSpecificRepoContactBeforeOther else "." }}
                     {%- endif -%}
                   {%- elif distroRepositoryKindAUuid == uuids.publishedDataRepositoryGeneralPurposeAUuid %}
                     <em>General-purpose repository</em>
@@ -390,7 +390,7 @@
                         {%- set licenseRestrictMetadataPath = [publishedDataLicensePath, uuids.publishedDataLicenseRestrictAUuid, uuids.licenseRestrictMetadataQUuid]|reply_path -%}
                         {%- set licenseRestrictMetadataAUuid = repliesMap[licenseRestrictMetadataPath]|reply_str_value %}
                         
-                        Available under some restrictions, which we will follow in our {{globals.projects}}{{ ": " ~ licenseRestrictConditions|dot if licenseRestrictConditions else "." }}
+                        Available under some restrictions, which we will follow in our {{globals.projects}}{{ ": " ~ licenseRestrictConditions|markdown if licenseRestrictConditions else "." }}
                         {%- if licenseRestrictAccessAUuid == uuids.licenseRestrictAccessRequestAUuid %}
                           Re-users will be able to get access by request to the contact person.
                         {%- elif licenseRestrictAccessAUuid == uuids.licenseRestrictAccessCommitteeAUuid %}
@@ -398,7 +398,7 @@
                         {%- elif licenseRestrictAccessAUuid == uuids.licenseRestrictAccessAnotherAUuid -%}
                           {%- set licenseRestrictAccessAnotherPath = [licenseRestrictAccessPath, uuids.licenseRestrictAccessAnotherAUuid, uuids.licenseRestrictAccessAnotherQUuid]|reply_path -%}
                           {%- set licenseRestrictAccessAnother = repliesMap[licenseRestrictAccessAnotherPath]|reply_str_value %}
-                          Re-users will be able to get access through a specialized process{{ ": " ~ licenseRestrictAccessAnother|dot if licenseRestrictAccessAnother else "." }}
+                          Re-users will be able to get access through a specialized process{{ ": " ~ licenseRestrictAccessAnother|markdown if licenseRestrictAccessAnother else "." }}
                         {%- endif -%}
                         {%- if licenseRestrictMetadataAUuid == uuids.licenseRestrictMetadataYesAUuid %}
                           The conditions will be published as part of open metadata.

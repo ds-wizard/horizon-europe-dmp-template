@@ -147,7 +147,7 @@
             {%- set cpersExplainInformed = repliesMap[cpersExplainInformedPath]|reply_str_value -%}
             {%- if cpersExplainInformed -%}
               {%- do sentences.append('The data subjects will be informed as follows:') -%}
-              {%- do sentences.append(cpersExplainInformed|dot) -%}
+              {%- do sentences.append(cpersExplainInformed|markdown) -%}
             {%- endif -%}
 
             {%- set cpersReusersPath = [legalBasePath, legalBaseAUuid, uuids.cpersReusersQUuid]|reply_path -%}
@@ -162,7 +162,7 @@
             {%- set cpersDescribeProcedure = repliesMap[cpersDescribeProcedurePath]|reply_str_value -%}
             {%- if cpersDescribeProcedure -%}
               {%- do sentences.append('The procedure for obtaining consent from data subjects is set as follows:') -%}
-              {%- do sentences.append(cpersDescribeProcedure|dot) -%}
+              {%- do sentences.append(cpersDescribeProcedure|markdown) -%}
             {%- endif -%}
 
           {%- elif legalBaseAUuid == uuids.cpersGdprLegalBasisOtherAUuid -%}
@@ -187,7 +187,7 @@
           {%- set cpersGdprPurpose = repliesMap[cpersGdprPurposePath]|reply_str_value -%}
           {%- if cpersGdprPurpose -%}
             {%- do sentences.append('The purpose of processing the personal data can be described as follows:') -%}
-            {%- do sentences.append(cpersGdprPurpose|dot) -%}
+            {%- do sentences.append(cpersGdprPurpose|markdown) -%}
           {%- endif -%}
 
           {# DPIA #}
