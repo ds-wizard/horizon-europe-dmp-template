@@ -54,10 +54,7 @@
     {%- set projectAbstract = repliesMap[projectAbstractPath]|reply_str_value -%}
     {%- if projectAbstract %}
       <section class="abstract">
-        {%- set paragraphs = projectAbstract.split('\n') -%}
-        {% for paragraph in paragraphs %}
-        <p>{{ paragraph }}</p>
-        {% endfor %}
+        {{ projectAbstract|markdown }}
       </section>
     {%- endif -%}
     </div>

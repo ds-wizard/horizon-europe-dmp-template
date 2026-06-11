@@ -132,7 +132,7 @@
         <strong>{{ dataset.name }}</strong>
         <ul>
           {%- for qref in dataset.references -%}
-            <li><em>{{ qref.id|e }}</em> &ndash; {{ qref.relation|e }}</li>
+            <li><em>{{ qref.id|e }}</em> &ndash; {{ qref.relation|markdown }}</li>
           {%- endfor -%}
         </ul>
       </li>

@@ -43,7 +43,7 @@
                   {%- set mdExternalOwnershipOtherPath = [mdExternalOwnershipPath, uuids.mdExternalOwnershipOtherAUuid, uuids.mdExternalOwnershipOtherQUuid]|reply_path -%}
                   {%- set mdExternalOwnershipOther = repliesMap[mdExternalOwnershipOtherPath]|reply_str_value -%}
                   {%- if mdExternalOwnershipOther -%}
-                    For the ownership of the data we have made the following arrangements: {{ mdExternalOwnershipOther|dot }}
+                    For the ownership of the data we have made the following arrangements: {{ mdExternalOwnershipOther|markdown }}
                   {%- endif -%}
                 {%- endif -%}
               </p>
@@ -62,7 +62,7 @@
             {%- elif mdDataUtilityAUuid == uuids.mdDataUtilityOtherFieldsAUuid -%}
               {%- set mdDataUtilityOtherFieldsHowPath = [mdDataUtilityPath, uuids.mdDataUtilityOtherFieldsAUuid, uuids.mdDataUtilityOtherFieldsHowQUuid]|reply_path -%}
               {%- set mdDataUtilityOtherFieldsHow = repliesMap[mdDataUtilityOtherFieldsHowPath]|reply_str_value -%}
-              <p>Researchers working in other fields of research could be interested in using this data. {% if mdDataUtilityOtherFieldsHow -%}We think that other researchers can use this data as follows: {{ mdDataUtilityOtherFieldsHow|dot }}{%- endif -%}</p>
+              <p>Researchers working in other fields of research could be interested in using this data. {% if mdDataUtilityOtherFieldsHow -%}We think that other researchers can use this data as follows: {{ mdDataUtilityOtherFieldsHow|markdown }}{%- endif -%}</p>
             {%- endif -%}
           </li>
         {%- endfor -%}
@@ -120,7 +120,7 @@
             {%- set neqDataUtilityAUuid = repliesMap[neqDataUtilityPath]|reply_str_value -%}
             <li>
               <strong>{{ neqDataSetsName if neqDataSetsName else "(no name given)" }}</strong>
-              {% if neqDataSetsDesc -%}<span class="separator">&ndash;</span> {{ neqDataSetsDesc }}{%- endif -%}
+              {% if neqDataSetsDesc -%}<span class="separator">&ndash;</span> {{ neqDataSetsDesc|markdown }}{%- endif -%}
               {# Data utility #}
               {% if neqDataUtilityAUuid == uuids.neqDataUtilityJustUsAUuid -%}
                 <p>This data are expected to be used only by us.</p>
@@ -129,7 +129,7 @@
               {%- elif neqDataUtilityAUuid == uuids.neqDataUtilityOtherFieldsAUuid -%}
                 {%- set neqDataUtilityOtherFieldsHowPath = [neqDataUtilityPath, uuids.neqDataUtilityOtherFieldsAUuid, uuids.neqDataUtilityOtherFieldsHowQUuid]|reply_path -%}
                 {%- set neqDataUtilityOtherFieldsHow = repliesMap[neqDataUtilityOtherFieldsHowPath]|reply_str_value -%}
-                <p>Researchers working in other fields of research could be interested in using this data. {% if neqDataUtilityOtherFieldsHow -%}We think that other researchers can use this data as follows: {{ neqDataUtilityOtherFieldsHow|dot }}{%- endif -%}</p>
+                <p>Researchers working in other fields of research could be interested in using this data. {% if neqDataUtilityOtherFieldsHow -%}We think that other researchers can use this data as follows: {{ neqDataUtilityOtherFieldsHow|markdown }}{%- endif -%}</p>
               {%- endif -%}
             </li>
           {%- endfor -%}
@@ -209,7 +209,7 @@
                   {%- elif refDataUseNoWhyAUuid == uuids.refDataUseNoReasonAUuid -%}
                     {%- set reason = repliesMap[[refDataUseNoWhyPath, refDataUseNoWhyAUuid, uuids.refDataUseNoReasonQUuid]|reply_path]|reply_str_value -%}
                     {%- if reason -%}
-                      <p>We decided not use this reference dataset because of: {{ reason|dot }}</p>
+                      <p>We decided not use this reference dataset because of: {{ reason|markdown }}</p>
                     {%- endif -%}
                   {%- endif -%}
                 {%- endif -%}
@@ -220,7 +220,7 @@
                   {%- set refDataOwnerPath = [refDataUsedPrefix, uuids.refDataOwnerQUuid]|reply_path -%}
                   {%- set refDataOwner = repliesMap[refDataOwnerPath]|reply_str_value -%}
                   {%- if refDataOwner -%}
-                    <p>Owner of this dataset: {{ refDataOwner|dot }}</p>
+                    <p>Owner of this dataset: {{ refDataOwner|markdown }}</p>
                   {%- endif -%}
                   {# format #}
                   {%- set refDataFormatPath = [refDataUsedPrefix, uuids.refDataFormatQUuid]|reply_path -%}
@@ -241,7 +241,7 @@
                     {%- if refDataVersionedWhich or refDataVersionedChangeAUuid  %}
                       <p>
                       {% if refDataVersionedWhich -%}
-                        We will use version "{{ refDataVersionedWhich }}" of this dataset.
+                        We will use the following version of this dataset: {{ refDataVersionedWhich|markdown }}
                       {%- endif -%}
                       {%- if refDataVersionedChangeAUuid == uuids.refDataVersionedChangeStayAUuid %}
                         If a new version becomes available during the {{globals.projects}}, we will stay with the old version.
@@ -266,7 +266,7 @@
                   {# data use #}
                   {%- set dataUse = repliesMap[[refDataUsedPrefix, uuids.refDataUsageQUuid]|reply_path]|reply_str_value -%}
                   {%- if dataUse -%}
-                  <p>We will use the dataset as follows: {{ dataUse|dot }}</p>
+                  <p>We will use the dataset as follows: {{ dataUse|markdown }}</p>
                   {%- endif -%}
                 {%- endif -%}
               </li>
@@ -319,7 +319,7 @@
                   {%- elif nrefDataUseNoWhyAUuid == uuids.nrefDataUseNoReasonAUuid -%}
                     {%- set reason = repliesMap[[nrefDataUseNoWhyPath, nrefDataUseNoWhyAUuid, uuids.nrefDataUseNoReasonQUuid]|reply_path]|reply_str_value -%}
                     {%- if reason -%}
-                      <p>We decided not use this non-reference dataset because of: {{ reason|dot }}</p>
+                      <p>We decided not use this non-reference dataset because of: {{ reason|markdown }}</p>
                     {%- endif -%}
                   {%- endif -%}
                 {%- endif -%}
@@ -331,7 +331,7 @@
                   {%- set nrefDataOwnerPath = [nrefDataUsedPrefix, uuids.nrefDataOwnerQUuid]|reply_path -%}
                   {%- set nrefDataOwner = repliesMap[nrefDataOwnerPath]|reply_str_value -%}
                   {%- if nrefDataOwner -%}
-                    {%- do ownerSentences.append("Owner of this dataset: " ~ nrefDataOwner|dot) -%}
+                    {%- do ownerSentences.append("Owner of this dataset: " ~ nrefDataOwner|markdown) -%}
                   {%- endif -%}
                   {# owners #}
                   {%- set nrefDataOwnersPath = [nrefDataUsedPrefix, uuids.nrefDataOwnersQUuid]|reply_path -%}
@@ -393,7 +393,7 @@
                   {# data use #}
                   {%- set dataUse = repliesMap[[nrefDataUsedPrefix, uuids.nrefDataUsageQUuid]|reply_path]|reply_str_value -%}
                   {%- if dataUse -%}
-                  <p>We will use the dataset as follows: {{ dataUse|dot }}</p>
+                  <p>We will use the dataset as follows: {{ dataUse|markdown }}</p>
                   {%- endif -%}
                 {%- endif -%}
               </li>

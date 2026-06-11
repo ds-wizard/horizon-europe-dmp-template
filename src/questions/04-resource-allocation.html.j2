@@ -155,7 +155,7 @@
       {%- do coldStorageSentences.append("The minimum lifetime of the archive is " ~ years ~ end) -%}
     {%- elif coldStorageLifetimeAUuid == uuids.coldStorageLifetimeWayAUuid -%}
       {%- set way = repliesMap[[coldStorageLifetimePath, coldStorageLifetimeAUuid, uuids.coldStorageLifetimeWayQUuid]|reply_path]|reply_str_value|trim|e|dot -%}
-      {%- do coldStorageSentences.append("The minimum lifetime of the archive is specially arranged &ndash; " ~ way) -%}
+      {%- do coldStorageSentences.append("The minimum lifetime of the archive is specially arranged:" ~ way|markdown) -%}
     {%- endif -%}
     {# Extending #}
     {%- set coldStorageExtendPath = [coldStorageAfterPath, coldStorageAfterAUuid, uuids.coldStorageExtendQUuid]|reply_path -%}
@@ -236,7 +236,7 @@
       {%- set repoChargesHowPayOtherPath = [repoChargesHowPayPath, uuids.repoChargesHowPayOtherAUuid, uuids.repoChargesHowPayOtherQUuid]|reply_path -%}
       {%- set repoChargesHowPayOther = repliesMap[repoChargesHowPayOtherPath]|reply_str_value -%}
       {%- if repoChargesHowPayOther -%}
-        <p>We will be paying for costs related to the used repositories. Further notes: <span class="user-text">{{ repoChargesHowPayOther|dot }}</span></p>
+        <p>We will be paying for costs related to the used repositories. Further notes: <span class="user-text">{{ repoChargesHowPayOther|markdown }}</span></p>
       {%- endif -%}
     {%- endif -%}
   {%- endif -%}
@@ -311,7 +311,7 @@
       {%- set expertiseTrainPath = [expertisePath, uuids.additionalExpertiseYesTrainAUuid, uuids.additionalExpertiseYesTrainTrainingQUuid]|reply_path -%}
       {%- set expertiseTrainText = repliesMap[expertiseTrainPath]|reply_str_value -%}
       {%- if expertiseTrainText %}
-        The training will be: {{ expertiseTrainText|dot }}
+        The training will be: {{ expertiseTrainText|markdown }}
       {%- endif -%}
     </p>
   {%- elif expertiseAUuid == uuids.additionalExpertiseYesHireAUuid -%}
@@ -333,7 +333,7 @@
     {%- set additionalHWSWWhatPath = [additionalHWSWPath, uuids.additionalHWSWYesAUuid, uuids.additionalHWSWYesWhatQUuid]|reply_path -%}
     {%- set additionalHWSWWhat = repliesMap[additionalHWSWWhatPath]|reply_str_value -%}
     {%- if additionalHWSWWhat -%}
-      <p>We require the following hardware or software in addition to what is usually available in the institute: {{ additionalHWSWWhat|dot }}</p>
+      <p>We require the following hardware or software in addition to what is usually available in the institute: {{ additionalHWSWWhat|markdown }}</p>
     {%- else -%}
       <p>We require hardware or software in addition to what is usually available in the institute.</p>
     {%- endif -%}
