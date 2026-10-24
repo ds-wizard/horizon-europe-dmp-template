@@ -1,12 +1,12 @@
-<h2>History of changes</h2>
+<h2>{% trans %}History of changes{% endtrans %}</h2>
 
 {% if dc.project.versions|length > 0 %}
 <table>
   <thead>
     <tr>
-      <th>Version</th>
-      <th>Publication date</th>
-      <th>Changes</th>
+      <th>{% trans %}Version{% endtrans %}</th>
+      <th>{% trans %}Publication date{% endtrans %}</th>
+      <th>{% trans %}Changes{% endtrans %}</th>
     </tr>
   </thead>
   <tbody>
@@ -20,5 +20,5 @@
   </tbody>
 </table>
 {% else %}
-<p><em>There are no named versions.</em></p>
+<p><em>{% trans %}There are no named versions.{% endtrans %}</em></p>
 {% endif %}

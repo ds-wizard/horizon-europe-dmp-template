@@ -5,7 +5,7 @@
     "name": "Horizon Europe DMP",
     "description": "Data Management Plan according to the Horizon Europe template",
     "license": "Apache-2.0",
-    "metamodelVersion": "18.0",
+    "metamodelVersion": "18.3",
     "allowedPackages": [
         {
             "orgId": "dsw",
@@ -87,5 +87,6 @@
             "src/*",
             "src/**/*"
         ]
-    }
+    },
+    "language": "en"
 }

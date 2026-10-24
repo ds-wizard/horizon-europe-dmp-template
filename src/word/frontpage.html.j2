@@ -1,7 +1,7 @@
 <h1>
-<strong>Horizon Europe</strong>
+{% trans %}<strong>Horizon Europe</strong>
 <br/>
-<strong>Data Management Plan</strong>
+<strong>Data Management Plan</strong>{% endtrans %}
 <br/>
 <br/>
 {% if dc.project.version %}
@@ -17,10 +17,10 @@
 <br/>
 <img
   src="{{dc.config.logo_url}}"
-  alt="Logo"
+  alt="{{ _("Logo") }}"
   height="50"
 />
 <br/>
 <br/>
-Created in <a href="{{ dc.config.service_url }}" target="_blank">{{ dc.config.service_name }}</a>
+{% trans %}Created in{% endtrans %} <a href="{{ dc.config.service_url }}" target="_blank">{{ dc.config.service_name }}</a>
 </h1>
