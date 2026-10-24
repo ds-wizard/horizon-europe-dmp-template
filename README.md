@@ -32,6 +32,10 @@ Starting v1.22.0, AI tools (Codex, Claude Code) are used to assist in the develo
 ### 2.0.0
 
 - Adjusted to Wizard 5.0 (template metamodel version 19.0, template id `dsw.horizon-europe-dmp`, knowledge models `dsw.root` and `dsw.lifesciences`)
+- Tidier layout for PDF: page margins and a running footer with the plan's title and page numbers, the history of changes, contributors and projects follow each other instead of starting new pages, project details in a table, consistent headings and spacing
+- Names of datasets, formats, standards, software and other outputs are in bold throughout
+- Sections without any answer say "No information given." instead of being empty
+- MS Word: A4 pages, sections no longer each start a new page, the same contributors and projects (with the project number) as in PDF, no broken logo on the title page
 
 ### 1.22.0
 

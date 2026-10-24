@@ -173,7 +173,7 @@
               {%- set isUsed = refDataUsedAUuid == uuids.refDataUseYesAUuid -%}
               <li>
                 {# identification #}
-                <div>{{ refDataNameReply }}</div>
+                <div><strong>{{ refDataNameReply }}</strong></div>
                 {%- if refDataWhere -%}
                   <p>
                   {%- if refDataWhere.startswith("http://") or refDataWhere.startswith("https://") or refDataWhere.startswith("ftp://") %}
@@ -284,7 +284,7 @@
               {%- set isUsed = nrefDataUsedAUuid == uuids.nrefDataUseYesAUuid -%}
               <li>
                 {# identification #}
-                <div>{{ nrefDataNameReply }}</div>
+                <div><strong>{{ nrefDataNameReply }}</strong></div>
                 {%- if nrefDataWhere -%}
                   <p>
                   {%- if nrefDataWhere.startswith("http://") or nrefDataWhere.startswith("https://") or nrefDataWhere.startswith("ftp://") %}
@@ -472,7 +472,7 @@
           {# identification #}
           {%- set formatName = macros.integrationFairSharing(formatNameReply)|trim -%}
           {%- if formatName -%}
-            <div>{{ formatName }}</div>
+            <div><strong>{{ formatName }}</strong></div>
           {%- endif -%}
           {%- set formatText -%}
             {# standard? #}

@@ -1,18 +1,17 @@
 <!DOCTYPE HTML>
-{%- set km = ctx.knowledgeModel -%}
 {%- set repliesMap = ctx.questionnaire.replies -%}
 {%- set report = ctx.questionnaire.report -%}
 {%- set dc = ctx|to_context_obj -%}
 {% import "src/macros.html.j2" as macros with context %}
 {% import "src/uuids.j2" as uuids with context %}
 {% import "src/globals.j2" as globals with context %}
-<html lang="en">
+<html lang="{{ dc.document.language or 'en' }}">
   <head>
     <title>{% trans %}Data Management Plan{% endtrans %}</title>
     <meta charset="utf-8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     <style>
       {% include "src/style.css" %}
     </style>

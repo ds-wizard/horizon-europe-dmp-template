@@ -3,7 +3,9 @@
 <div id="dmp-projects">
   <h2>{% trans %}Projects{% endtrans %}</h2>
 
+  {%- if projectsItems|length > 0 %}
   <p>{% trans count=globals.projectsCount %}The data and work described in this DMP are for the following project.{% pluralize %}The data and work described in this DMP are for the following projects.{% endtrans %}</p>
+  {%- endif %}
 
   {% for projectsItem in projectsItems %}
     <div class="project">
@@ -25,17 +27,13 @@
     {%- set projectEnd = repliesMap[projectEndPath]|reply_str_value -%}
     {%- set fundersPath = [projectsPath, projectsItem, uuids.fundersQUuid]|reply_path -%}
     {%- set fundersItems = repliesMap[fundersPath]|reply_items -%}
-      <dl>
-        <dt>{% trans %}Acronym{% endtrans %}</dt>
-        <dd>{{ projectAcronym if projectAcronym else "N/A" }}</dd>
-        <dt>{% trans %}Project Number{% endtrans %}</dt>
-        <dd>{{ projectNumber if projectNumber else "N/A" }}</dd>
-        <dt>{% trans %}Start date{% endtrans %}</dt>
-        <dd>{{ projectStart if projectStart else "N/A" }}</dd>
-        <dt>{% trans %}End date{% endtrans %}</dt>
-        <dd>{{ projectEnd if projectEnd else "N/A" }}</dd>
-        <dt>{% trans %}Funding{% endtrans %}</dt>
-        <dd>
+      <table class="project-details">
+        <colgroup><col width="28%"><col width="72%"></colgroup>
+        <tr><th>{% trans %}Acronym{% endtrans %}</th><td>{{ projectAcronym if projectAcronym else _("N/A") }}</td></tr>
+        <tr><th>{% trans %}Project Number{% endtrans %}</th><td>{{ projectNumber if projectNumber else _("N/A") }}</td></tr>
+        <tr><th>{% trans %}Start date{% endtrans %}</th><td>{{ projectStart if projectStart else _("N/A") }}</td></tr>
+        <tr><th>{% trans %}End date{% endtrans %}</th><td>{{ projectEnd if projectEnd else _("N/A") }}</td></tr>
+        <tr><th>{% trans %}Funding{% endtrans %}</th><td>
           {%- if fundersItems|length > 0 %}
             <ul>
             {%- for fundersItem in fundersItems %}
@@ -51,8 +49,8 @@
           {%- else -%}
             {% trans %}Did not apply for any funding yet.{% endtrans %}
           {%- endif -%}
-        </dd>
-      </dl>
+        </td></tr>
+      </table>
 
     {%- set projectAbstractPath = [projectsPath, projectsItem, uuids.projectAbstractQUuid]|reply_path -%}
     {%- set projectAbstract = repliesMap[projectAbstractPath]|reply_str_value -%}
@@ -63,6 +61,6 @@
     {%- endif -%}
     </div>
   {% else %}
-    <p style="font-style:italic;">{% trans %}There are no projects described for this DMP.{% endtrans %}</p>
+    <p class="empty-value"><em>{% trans %}There are no projects described for this DMP.{% endtrans %}</em></p>
   {% endfor %}
 </div>

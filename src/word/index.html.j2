@@ -1,12 +1,11 @@
 <!DOCTYPE HTML>
-{%- set km = ctx.knowledgeModel -%}
 {%- set repliesMap = ctx.questionnaire.replies -%}
 {%- set report = ctx.questionnaire.report -%}
 {%- set dc = ctx|to_context_obj -%}
 {% import "src/macros.html.j2" as macros with context %}
 {% import "src/uuids.j2" as uuids with context %}
 {% import "src/globals.j2" as globals with context %}
-<html lang="en">
+<html lang="{{ dc.document.language or 'en' }}">
   <head>
     <title>{{ ctx.project.name }}</title>
     <meta charset="utf-8">
@@ -15,8 +14,9 @@
     <article class="dmp">
       {% include "src/word/frontpage.html.j2" with context %}
       {% include "src/word/versions.html.j2" with context %}
-      {% include "src/word/contributors.html.j2" with context %}
-      {% include "src/word/projects.html.j2" with context %}
+      {% include "src/contributors.html.j2" with context %}
+      {% include "src/projects.html.j2" with context %}
+      <p>\newpage</p>
       {% include "src/content.html.j2" with context %}
     </article>
   </body>

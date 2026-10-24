@@ -2,7 +2,11 @@
   <section id="sec-data-summary" class="dmp-section">
     <h2>{% trans %}1. Data Summary{% endtrans %}</h2>
 
-    {% include "src/questions/01-data-summary.html.j2" with context %}
+    {%- set answer -%}{% include "src/questions/01-data-summary.html.j2" with context %}{%- endset %}
+    {{ answer }}
+    {%- if not answer|striptags|trim %}
+    <p class="empty-value"><em>{% trans %}No information given.{% endtrans %}</em></p>
+    {%- endif %}
   </section>
 
   <section id="sec-fair-data" class="dmp-section">
@@ -10,49 +14,85 @@
 
     <h3>{% trans %}2.1. Making data findable, including provisions for metadata{% endtrans %}</h3>
 
-    {% include "src/questions/02-1-findable.html.j2" with context %}
+    {%- set answer -%}{% include "src/questions/02-1-findable.html.j2" with context %}{%- endset %}
+    {{ answer }}
+    {%- if not answer|striptags|trim %}
+    <p class="empty-value"><em>{% trans %}No information given.{% endtrans %}</em></p>
+    {%- endif %}
 
     <h3>{% trans %}2.2. Making data accessible{% endtrans %}</h3>
 
-    {% include "src/questions/02-2-accessible.html.j2" with context %}
+    {%- set answer -%}{% include "src/questions/02-2-accessible.html.j2" with context %}{%- endset %}
+    {{ answer }}
+    {%- if not answer|striptags|trim %}
+    <p class="empty-value"><em>{% trans %}No information given.{% endtrans %}</em></p>
+    {%- endif %}
 
     <h3>{% trans %}2.3. Making data interoperable{% endtrans %}</h3>
 
-    {% include "src/questions/02-3-interoperable.html.j2" with context %}
+    {%- set answer -%}{% include "src/questions/02-3-interoperable.html.j2" with context %}{%- endset %}
+    {{ answer }}
+    {%- if not answer|striptags|trim %}
+    <p class="empty-value"><em>{% trans %}No information given.{% endtrans %}</em></p>
+    {%- endif %}
 
     <h3>{% trans %}2.4. Increase data re-use{% endtrans %}</h3>
 
-    {% include "src/questions/02-4-reusable.html.j2" with context %}
+    {%- set answer -%}{% include "src/questions/02-4-reusable.html.j2" with context %}{%- endset %}
+    {{ answer }}
+    {%- if not answer|striptags|trim %}
+    <p class="empty-value"><em>{% trans %}No information given.{% endtrans %}</em></p>
+    {%- endif %}
   </section>
 
   <section id="sec-other-outputs" class="dmp-section">
     <h2>{% trans %}3. Other research outputs{% endtrans %}</h2>
 
-    {% include "src/questions/03-other-outputs.html.j2" with context %}
+    {%- set answer -%}{% include "src/questions/03-other-outputs.html.j2" with context %}{%- endset %}
+    {{ answer }}
+    {%- if not answer|striptags|trim %}
+    <p class="empty-value"><em>{% trans %}No information given.{% endtrans %}</em></p>
+    {%- endif %}
   </section>
 
   <section id="sec-resource-allocation" class="dmp-section">
     <h2>{% trans %}4. Allocation of resources{% endtrans %}</h2>
 
-    {% include "src/questions/04-resource-allocation.html.j2" with context %}
+    {%- set answer -%}{% include "src/questions/04-resource-allocation.html.j2" with context %}{%- endset %}
+    {{ answer }}
+    {%- if not answer|striptags|trim %}
+    <p class="empty-value"><em>{% trans %}No information given.{% endtrans %}</em></p>
+    {%- endif %}
   </section>
 
   <section id="sec-data-security" class="dmp-section">
     <h2>{% trans %}5. Data security{% endtrans %}</h2>
 
-    {% include "src/questions/05-data-security.html.j2" with context %}
+    {%- set answer -%}{% include "src/questions/05-data-security.html.j2" with context %}{%- endset %}
+    {{ answer }}
+    {%- if not answer|striptags|trim %}
+    <p class="empty-value"><em>{% trans %}No information given.{% endtrans %}</em></p>
+    {%- endif %}
   </section>
 
   <section id="sec-ethical-aspects" class="dmp-section">
     <h2>{% trans %}6. Ethics{% endtrans %}</h2>
 
-    {% include "src/questions/06-ethics.html.j2" with context %}
+    {%- set answer -%}{% include "src/questions/06-ethics.html.j2" with context %}{%- endset %}
+    {{ answer }}
+    {%- if not answer|striptags|trim %}
+    <p class="empty-value"><em>{% trans %}No information given.{% endtrans %}</em></p>
+    {%- endif %}
   </section>
 
   <section id="sec-other-issues" class="dmp-section">
     <h2>{% trans %}7. Other issues{% endtrans %}</h2>
 
-    {% include "src/questions/07-other-issues.html.j2" with context %}
+    {%- set answer -%}{% include "src/questions/07-other-issues.html.j2" with context %}{%- endset %}
+    {{ answer }}
+    {%- if not answer|striptags|trim %}
+    <p class="empty-value"><em>{% trans %}No information given.{% endtrans %}</em></p>
+    {%- endif %}
   </section>
 
 </div>

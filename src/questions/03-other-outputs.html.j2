@@ -37,11 +37,11 @@
               {%- set swListedInCataloguePath = [pathPrefix, uuids.swListedInCatalogueQUuid]|reply_path -%}
               {%- set swListedInCatalogueAUuid = repliesMap[swListedInCataloguePath]|reply_str_value -%}
               {%- if swPackage -%}
-                <em>{{ swPackage }}</em>
+                <strong>{{ swPackage }}</strong>
               {%- else -%}
-                <em>{% trans %}Unnamed software package{% endtrans %}</em>
+                <strong>{% trans %}Unnamed software package{% endtrans %}</strong>
               {%- endif -%}
-              :<br>
+              <br>
               {%- if swOpenLicenseAUuid == uuids.swOpenLicenseNoAUuid -%}
                 {% trans %}It will not be released under an open source license.{% endtrans %}
               {%- elif swOpenLicenseAUuid == uuids.swOpenLicenseYesDecidedAUuid -%}
@@ -101,11 +101,11 @@
               {%- set otherOutputAvailableReply = repliesMap[otherOutputAvailablePath]|reply_str_value -%}
 
               {%- if otherOutputNameReply -%}
-                <em>{{ otherOutputNameReply }}</em>
+                <strong>{{ otherOutputNameReply }}</strong>
               {%- else -%}
-                <em>{% trans %}Unnamed research output{% endtrans %}</em>
+                <strong>{% trans %}Unnamed research output{% endtrans %}</strong>
               {%- endif -%}
-              :<br>
+              <br>
               {%- if otherOutputWhyValuableReply %}
                 {% trans value=(otherOutputWhyValuableReply|trim|dot) %}It is valuable because {{ value }}{% endtrans %}
               {%- endif -%}

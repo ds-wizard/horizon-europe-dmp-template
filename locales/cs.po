@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Horizon Europe DMP 2.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-10-24 16:10+0200\n"
+"POT-Creation-Date: 2026-10-24 18:19+0200\n"
 "PO-Revision-Date: 2026-10-23 19:00+0200\n"
 "Last-Translator: Content AI Workspace (test translation)\n"
 "Language: cs\n"
@@ -153,11 +153,11 @@ msgstr[2] ""
 "%(names)s odpovídají za správu a odbornou péči o data včetně zpracování dat,"
 " datových politik, datových směrnic a dostupnosti dat."
 
-#: src/projects.html.j2:48 src/word/projects.html.j2:44
+#: src/projects.html.j2:46
 msgid "(applied)"
 msgstr "(podáno)"
 
-#: src/projects.html.j2:48 src/word/projects.html.j2:44
+#: src/projects.html.j2:46
 msgid "(granted)"
 msgstr "(uděleno)"
 
@@ -178,15 +178,15 @@ msgstr "(název neuveden)"
 msgid "(not published)"
 msgstr "(nebude zveřejněna)"
 
-#: src/projects.html.j2:48 src/word/projects.html.j2:44
+#: src/projects.html.j2:46
 msgid "(planned)"
 msgstr "(plánováno)"
 
-#: src/projects.html.j2:15 src/word/projects.html.j2:15
+#: src/projects.html.j2:17
 msgid "(project name not given)"
 msgstr "(název projektu neuveden)"
 
-#: src/projects.html.j2:48 src/word/projects.html.j2:44
+#: src/projects.html.j2:46
 msgid "(rejected)"
 msgstr "(zamítnuto)"
 
@@ -200,43 +200,43 @@ msgstr "(bude zveřejněna)"
 msgid "1. Data Summary"
 msgstr "1. Shrnutí dat"
 
-#: src/content.html.j2:9
+#: src/content.html.j2:13
 msgid "2. FAIR Data"
 msgstr "2. FAIR data"
 
-#: src/content.html.j2:11
+#: src/content.html.j2:15
 msgid "2.1. Making data findable, including provisions for metadata"
 msgstr "2.1. Dohledatelnost dat včetně opatření pro metadata"
 
-#: src/content.html.j2:15
+#: src/content.html.j2:23
 msgid "2.2. Making data accessible"
 msgstr "2.2. Přístupnost dat"
 
-#: src/content.html.j2:19
+#: src/content.html.j2:31
 msgid "2.3. Making data interoperable"
 msgstr "2.3. Interoperabilita dat"
 
-#: src/content.html.j2:23
+#: src/content.html.j2:39
 msgid "2.4. Increase data re-use"
 msgstr "2.4. Zvýšení opětovného využití dat"
 
-#: src/content.html.j2:29
+#: src/content.html.j2:49
 msgid "3. Other research outputs"
 msgstr "3. Další výstupy výzkumu"
 
-#: src/content.html.j2:35
+#: src/content.html.j2:59
 msgid "4. Allocation of resources"
 msgstr "4. Přidělení zdrojů"
 
-#: src/content.html.j2:41
+#: src/content.html.j2:69
 msgid "5. Data security"
 msgstr "5. Bezpečnost dat"
 
-#: src/content.html.j2:47
+#: src/content.html.j2:79
 msgid "6. Ethics"
 msgstr "6. Etika"
 
-#: src/content.html.j2:53
+#: src/content.html.j2:89
 msgid "7. Other issues"
 msgstr "7. Další otázky"
 
@@ -306,12 +306,11 @@ msgstr "Uživatel těchto dat potřebuje k jejich používání specifický soft
 msgid "ARK: <strong>%(identifier)s</strong>"
 msgstr "ARK: <strong>%(identifier)s</strong>"
 
-#: src/projects.html.j2:29 src/word/projects.html.j2:27
+#: src/projects.html.j2:32
 msgid "Acronym"
 msgstr "Zkratka"
 
 #: src/contributors.html.j2:49 src/contributors.html.j2:60
-#: src/word/contributors.html.j2:49 src/word/contributors.html.j2:60
 msgid "Affiliation:"
 msgstr "Afiliace:"
 
@@ -450,11 +449,11 @@ msgstr "Změny"
 msgid "Concerning the legal reasons, a data sharing agreement will be required."
 msgstr "Pokud jde o právní důvody, bude vyžadována smlouva o sdílení dat."
 
-#: src/contributors.html.j2:4 src/word/contributors.html.j2:4
+#: src/contributors.html.j2:4
 msgid "Contributors"
 msgstr "Přispěvatelé"
 
-#: src/word/frontpage.html.j2:25
+#: src/word/frontpage.html.j2:18
 msgid "Created in"
 msgstr "Vytvořeno v"
 
@@ -466,7 +465,7 @@ msgstr "DDI (Data Documentation Initiative)"
 msgid "DOI:"
 msgstr "DOI:"
 
-#: src/index.html.j2:11
+#: src/index.html.j2:10
 msgid "Data Management Plan"
 msgstr "Plán správy dat"
 
@@ -538,7 +537,7 @@ msgstr "Data, která vytváříme"
 msgid "Data will be released only as soon as restrictions fall away."
 msgstr "Data budou zveřejněna, jakmile omezení pominou."
 
-#: src/projects.html.j2:52 src/word/projects.html.j2:48
+#: src/projects.html.j2:50
 msgid "Did not apply for any funding yet."
 msgstr "Zatím jsme o žádné financování nežádali."
 
@@ -566,7 +565,7 @@ msgstr "Z důvodu ochrany soukromí musí data zůstat ve stejné instituci."
 msgid "Each of those will use the following conventions: %(value)s"
 msgstr "Každá z nich bude používat následující konvence: %(value)s"
 
-#: src/projects.html.j2:35 src/word/projects.html.j2:31
+#: src/projects.html.j2:35
 msgid "End date"
 msgstr "Datum ukončení"
 
@@ -643,7 +642,7 @@ msgstr "Volně dostupná pro jakékoli použití (volné dílo nebo CC0)."
 msgid "Freely available with obligation to quote the source (e.g. CC-BY)."
 msgstr "Volně dostupná s povinností citovat zdroj (např. CC-BY)."
 
-#: src/projects.html.j2:37 src/word/projects.html.j2:33
+#: src/projects.html.j2:36
 msgid "Funding"
 msgstr "Financování"
 
@@ -921,10 +920,6 @@ msgstr ""
 "Časově omezené embargo nebude použito, protože všechna data budou otevřena "
 "okamžitě."
 
-#: src/word/frontpage.html.j2:20
-msgid "Logo"
-msgstr "Logo"
-
 #: src/questions/04-resource-allocation.html.j2:104
 msgid ""
 "Making our data FAIR is not a cost that can be separated from the rest of "
@@ -998,6 +993,18 @@ msgid ""
 "Moreover, we have made the following agreements about naming the files: "
 "%(agreements)s"
 msgstr "Kromě toho jsme se dohodli na tomto pojmenování souborů: %(agreements)s"
+
+#: src/projects.html.j2:32 src/projects.html.j2:33 src/projects.html.j2:34
+#: src/projects.html.j2:35
+msgid "N/A"
+msgstr "neuvedeno"
+
+#: src/content.html.j2:8 src/content.html.j2:20 src/content.html.j2:28
+#: src/content.html.j2:36 src/content.html.j2:44 src/content.html.j2:54
+#: src/content.html.j2:64 src/content.html.j2:74 src/content.html.j2:84
+#: src/content.html.j2:94
+msgid "No information given."
+msgstr "Neuvedeno."
 
 #: src/questions/01-data-summary.html.j2:93
 msgid "Non-equipment datasets"
@@ -1094,7 +1101,7 @@ msgstr "Zájemci mohou požádat následující komisi pro přístup k datům: %
 msgid "People can apply to the following data access committee: <em>%(value)s</em>"
 msgstr "Žádosti lze podávat této komisi pro přístup k datům: <em>%(value)s</em>"
 
-#: src/projects.html.j2:31
+#: src/projects.html.j2:33
 msgid "Project Number"
 msgstr "Číslo projektu"
 
@@ -1124,7 +1131,7 @@ msgstr ""
 "Členové projektu nebudou ukládat data ani software na počítače v laboratoři "
 "ani na externí pevné disky k nim připojené."
 
-#: src/projects.html.j2:4 src/word/projects.html.j2:4
+#: src/projects.html.j2:4
 msgid "Projects"
 msgstr "Projekty"
 
@@ -1182,11 +1189,11 @@ msgid ""
 " this data."
 msgstr "O využití těchto dat by mohli mít zájem výzkumníci z jiných oborů."
 
-#: src/contributors.html.j2:46 src/word/contributors.html.j2:46
+#: src/contributors.html.j2:46
 msgid "Role"
 msgstr "Role"
 
-#: src/contributors.html.j2:46 src/word/contributors.html.j2:46
+#: src/contributors.html.j2:46
 msgid "Roles"
 msgstr "Role"
 
@@ -1211,7 +1218,7 @@ msgstr[2] ""
 msgid "Standardized data capture / recording"
 msgstr "Standardizovaný sběr / záznam dat"
 
-#: src/projects.html.j2:33 src/word/projects.html.j2:29
+#: src/projects.html.j2:34
 msgid "Start date"
 msgstr "Datum zahájení"
 
@@ -1328,7 +1335,7 @@ msgstr[2] ""
 "Náklady spojené s použitými repozitáři ponese (jedna z) institucí zapojených"
 " do projektů."
 
-#: src/projects.html.j2:6 src/word/projects.html.j2:6
+#: src/projects.html.j2:7
 msgid "The data and work described in this DMP are for the following project."
 msgid_plural "The data and work described in this DMP are for the following projects."
 msgstr[0] "Data a práce popsané v tomto DMP se týkají tohoto projektu."
@@ -1503,7 +1510,7 @@ msgstr ""
 msgid "The equipment is very well described and known."
 msgstr "Vybavení je velmi dobře popsané a známé."
 
-#: src/contributors.html.j2:6 src/word/contributors.html.j2:6
+#: src/contributors.html.j2:6
 msgid "The following contributors are related to the project of this DMP:"
 msgid_plural "The following contributors are related to the projects of this DMP:"
 msgstr[0] "S projektem tohoto DMP souvisejí následující přispěvatelé:"
@@ -1774,7 +1781,7 @@ msgid ""
 "above."
 msgstr "Kromě výše popsaných nejsou žádné další výstupy výzkumu."
 
-#: src/contributors.html.j2:65 src/word/contributors.html.j2:65
+#: src/contributors.html.j2:65
 msgid "There are no contributors described for this DMP."
 msgstr "Pro tento DMP nejsou popsáni žádní přispěvatelé."
 
@@ -1786,7 +1793,7 @@ msgstr "Nejsou žádné pojmenované verze"
 msgid "There are no named versions."
 msgstr "Nejsou žádné pojmenované verze."
 
-#: src/projects.html.j2:66 src/word/projects.html.j2:62
+#: src/projects.html.j2:64
 msgid "There are no projects described for this DMP."
 msgstr "Pro tento DMP nejsou popsány žádné projekty."
 
@@ -2861,7 +2868,7 @@ msgstr "zajištění interoperability"
 msgid "ensuring reusability"
 msgstr "zajištění opětovné použitelnosti"
 
-#: src/projects.html.j2:48 src/word/projects.html.j2:44
+#: src/projects.html.j2:46
 msgid "grant number not yet given"
 msgstr "číslo grantu zatím neuvedeno"
 

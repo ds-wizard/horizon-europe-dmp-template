@@ -34,7 +34,7 @@
   <ul>
   {% for contributor in contributors %}
     <li class="contributor">
-      <span class="name">{{ contributor.name }}</span>
+      <strong class="name">{{ contributor.name }}</strong>
       {%- if contributor.email and contributor.orcid %}
         <br>{{ macros.formatEmail(contributor.email) }}, {{ macros.formatOrcid(contributor.orcid) }}
       {%- elif contributor.email %}
@@ -54,7 +54,7 @@
   {%- elif dc.project.created_by -%}
   <ul>
     <li class="contributor">
-      <span class="name">{{ dc.project.created_by.first_name }} {{ dc.project.created_by.last_name }}</span>
+      <strong class="name">{{ dc.project.created_by.first_name }} {{ dc.project.created_by.last_name }}</strong>
       <br>{{ macros.formatEmail(dc.project.created_by.email) }}
       {%- if dc.project.created_by.affiliation %}
       <br>{% trans %}Affiliation:{% endtrans %} <span class="affiliation">{{ dc.project.created_by.affiliation }}</span>
@@ -62,6 +62,6 @@
     </li>
   </ul>
   {%- else -%}
-  <p style="font-style:italic;">{% trans %}There are no contributors described for this DMP.{% endtrans %}</p>
+  <p class="empty-value"><em>{% trans %}There are no contributors described for this DMP.{% endtrans %}</em></p>
   {%- endif -%}
 </div>

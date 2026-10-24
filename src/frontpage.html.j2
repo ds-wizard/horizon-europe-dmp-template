@@ -1,13 +1,13 @@
 {%- set eu_header = assets("assets/eu-header.png") -%}
 {%- set eu_flag = assets("assets/eu-flag.png") -%}
 <header>
-  <center>
-  <img src="{{ eu_header.data_url }}" height="78" width="160" class="eu-header" />
-  </center>
+  <div class="logo">
+  <img src="{{ eu_header.data_url }}" height="78" width="160" class="eu-header" alt="" />
+  </div>
   <h1>{{ ctx.project.name }}</h1>
-  <center>
-  <img src="{{ eu_flag.data_url }}" height="213" width="320" class="eu-flag" />
-  </center>
+  <div class="logo">
+  <img src="{{ eu_flag.data_url }}" height="213" width="320" class="eu-flag" alt="" />
+  </div>
   <h3>
     {% trans %}Horizon Europe<br/>
     Data Management Plan{% endtrans %}
