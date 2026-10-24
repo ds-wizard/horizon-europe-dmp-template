@@ -31,6 +31,7 @@ Starting v1.22.0, AI tools (Codex, Claude Code) are used to assist in the develo
 
 ### 1.22.0
 
+- Support for template localization (Wizard 4.35+, metamodel 18.3), with a Czech test translation in `locales/cs.po`
 - Fixed sections that were never rendered because of missing or wrong UUIDs and paths: data storage and file conventions, access control of a shared working space, metadata standards, database change handling, reasons for not needing specific software, consistency monitoring in quality processes, mapping of new vocabularies, harmonization results, encryption of cold storage, and the current version on the front page
 - Fixed projects requiring ethical approval listed once per authority (and not at all without one)
 - Fixed the HTML structure (block elements inside paragraphs, unclosed and stray tags, empty paragraphs and lists, duplicate section ids)

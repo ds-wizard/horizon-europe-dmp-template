@@ -1,7 +1,7 @@
 <div id="q-resource-allocation" class="question">
   <div class="answer">
 
-  <p>FAIR is a central part of our data management; it is considered at every decision in our data management plan. We use the FAIR data process ourselves to make our use of the data as efficient as possible.</p>
+  <p>{% trans %}FAIR is a central part of our data management; it is considered at every decision in our data management plan. We use the FAIR data process ourselves to make our use of the data as efficient as possible.{% endtrans %}</p>
 
   {# Costs #}
     {%- set projectPath = [uuids.adminDetailsCUuid, uuids.projectsQUuid]|reply_path -%}
@@ -16,12 +16,12 @@
             {%- set projectItemNumberQUuid = [projectItem, uuids.projectNumberQUuid]|reply_path -%}
             {%- set projectItemNumberReply = repliesMap[projectItemNumberQUuid]|reply_str_value -%}
               <li>
-                <strong>{{ projectItemNameReply if projectItemNameReply else "(no name given)" }}{{ " - " + projectItemNumberReply if projectItemNumberReply }}</strong>
+                <strong>{{ projectItemNameReply if projectItemNameReply else _("(no name given)") }}{{ " - " + projectItemNumberReply if projectItemNumberReply }}</strong>
                 {%- set projectCostPath = [projectItem, uuids.costQUuid]|reply_path -%}
                 {%- set projectCostItems = repliesMap[projectCostPath]|reply_items -%}
 
                 {%- if projectCostItems|length > 0  -%}
-                <p>The following resources will be dedicated to data management and ensuring that data will be FAIR:</p>
+                <p>{% trans %}The following resources will be dedicated to data management and ensuring that data will be FAIR:{% endtrans %}</p>
                     <ul>
                     {%- for j in projectCostItems -%}
                         {%- set projectCostItem = [projectCostPath, j]|reply_path -%}
@@ -37,7 +37,7 @@
                         {%- elif projectCostItemDescriptionReply %}
                         {{ projectCostItemDescriptionReply|trim|dot }}
                         {%- else %}
-                        <strong>(no name given)</strong>
+                        <strong>{% trans %}(no name given){% endtrans %}</strong>
                         {%- endif -%}
 
                         {%- set projectCostItemCurrencyQUuid = [projectCostItem, uuids.costCurrencyQUuid]|reply_path  -%}
@@ -48,7 +48,7 @@
                         {%- set projectCostItemAmountReply = repliesMap[projectCostItemAmountQUuid]|reply_str_value -%}
 
                         {%- if  projectCostItemAmountReply and projectCostItemCurrencyReply -%}
-                            <p>The amount is {{projectCostItemAmountReply}} {{macros.integrationCurrency(projectCostItemCurrencyReply)}}.</p>
+                            <p>{% trans amount=projectCostItemAmountReply, currency=(macros.integrationCurrency(projectCostItemCurrencyReply)) %}The amount is {{ amount }} {{ currency }}.{% endtrans %}</p>
                         {%- endif -%}
 
                         {%- set projectCostItemAllocationQUuid = [projectCostItem, uuids.costAllocationQUuid]|reply_path  -%}
@@ -57,31 +57,25 @@
                         
                           {%- set projectCostItemAllocations = [] -%}
                           {%- if uuids.costAllocationFindabilityAUuid in projectCostItemAllocationItems -%}
-                            {%- do projectCostItemAllocations.append("ensuring findability") -%}
+                            {%- do projectCostItemAllocations.append(_("ensuring findability")) -%}
                           {%- endif -%}
                           {%- if uuids.costAllocationAccessibilityAUuid in projectCostItemAllocationItems -%}
-                            {%- do projectCostItemAllocations.append("ensuring accessibility") -%}
+                            {%- do projectCostItemAllocations.append(_("ensuring accessibility")) -%}
                           {%- endif -%}
                           {%- if uuids.costAllocationInteroperabilityAUuid in projectCostItemAllocationItems -%}
-                            {%- do projectCostItemAllocations.append("ensuring interoperability") -%}
+                            {%- do projectCostItemAllocations.append(_("ensuring interoperability")) -%}
                           {%- endif -%}
                           {%- if uuids.costAllocationReusabilityAUuid in projectCostItemAllocationItems -%}
-                            {%- do projectCostItemAllocations.append("ensuring reusability") -%}
+                            {%- do projectCostItemAllocations.append(_("ensuring reusability")) -%}
                           {%- endif -%}
                           {%- if uuids.costManagementAUuid in projectCostItemAllocationItems -%}
-                            {%- do projectCostItemAllocations.append("supporting management") -%}
+                            {%- do projectCostItemAllocations.append(_("supporting management")) -%}
                           {%- endif -%}
                         
                         {%- if projectCostItemAllocations|length > 0 -%}
+                          {#- TRANSLATORS: %(purposes)s is an enumeration like "ensuring findability and ensuring accessibility" -#}
                           <p>
-                            This resource is allocated for{{+" "}}
-                            {%- if projectCostItemAllocations|length > 2 -%}
-                              {{ projectCostItemAllocations[0:-1]|join(", ") }}, and {{ projectCostItemAllocations[-1] }} of data.
-                            {%- elif projectCostItemAllocations|length == 2 -%}
-                              {{ projectCostItemAllocations[0] }} and {{ projectCostItemAllocations[1] }} of data.
-                            {%- else -%}
-                              {{ projectCostItemAllocations[0] }} of data.
-                            {%- endif %}
+                            {% trans purposes=macros.joinAnd(projectCostItemAllocations) %}This resource is allocated for {{ purposes }} of data.{% endtrans %}
                           </p>
                         {%- endif -%}
  
@@ -92,22 +86,22 @@
                           {%- set costCoverGrantIdQUuid = [projectCostItemCoverQUuid, uuids.costCoverGrantAUuid, uuids.costCoverGrantIdQUuid]|reply_path -%}
                           {%- set costCoverGrantIdReply = repliesMap[costCoverGrantIdQUuid]|reply_str_value -%}
                           {%- if costCoverGrantIdReply -%}
-                            <p>This cost will be covered by a funding grant (grant number: {{ costCoverGrantIdReply }}).</p>
+                            <p>{% trans grant=costCoverGrantIdReply %}This cost will be covered by a funding grant (grant number: {{ grant }}).{% endtrans %}</p>
                           {%- else -%}
-                            <p>This cost will be covered by a funding grant.</p>
+                            <p>{% trans %}This cost will be covered by a funding grant.{% endtrans %}</p>
                           {%- endif -%}
                         {%- elif projectCostItemCoverReply == uuids.costCoverOtherAUuid -%}
                           {%- set costCoverOtherHowQUuid = [projectCostItemCoverQUuid,uuids.costCoverOtherAUuid, uuids.costCoverOtherHowQUuid]|reply_path  -%}
                           {%- set costCoverOtherHowReply = repliesMap[costCoverOtherHowQUuid]|reply_str_value -%}
                           {%- if costCoverOtherHowReply -%}
-                            <p>This cost will be covered as follows: {{ costCoverOtherHowReply|trim|dot }}</p>
+                            <p>{% trans value=(costCoverOtherHowReply|trim|dot) %}This cost will be covered as follows: {{ value }}{% endtrans %}</p>
                           {%- endif -%}
                         {%- endif -%}
                         </li>
                     {%- endfor -%}
                     </ul>
                 {%- else -%}
-                <p>Making our data FAIR is not a cost that can be separated from the rest of the project.</p>
+                <p>{% trans %}Making our data FAIR is not a cost that can be separated from the rest of the project.{% endtrans %}</p>
                 {%- endif -%}
             </li>
         {%- endfor -%}
@@ -125,11 +119,11 @@
   {%- set coldStorageSentences = [] -%}
 
   {%- if coldStorageDuring and coldStorageAfter -%}
-    {%- do coldStorageSentences.append("We will be archiving data in cold storage systems for long-term preservation after the " ~ globals.projects ~ " but also already during the " ~ globals.projects ~ ".") -%}
+    {%- do coldStorageSentences.append(ngettext("We will be archiving data in cold storage systems for long-term preservation after the project but also already during the project.", "We will be archiving data in cold storage systems for long-term preservation after the projects but also already during the projects.", globals.projectsCount)) -%}
   {%- elif coldStorageDuring -%}
-    {%- do coldStorageSentences.append("We will be archiving data in cold storage systems for long-term preservation already during the " ~ globals.projects ~ ".") -%}
+    {%- do coldStorageSentences.append(ngettext("We will be archiving data in cold storage systems for long-term preservation already during the project.", "We will be archiving data in cold storage systems for long-term preservation already during the projects.", globals.projectsCount)) -%}
   {%- elif coldStorageAfter -%}
-    {%- do coldStorageSentences.append("We will be archiving data in cold storage systems for long-term preservation after the " ~ globals.projects ~ ".") -%}
+    {%- do coldStorageSentences.append(ngettext("We will be archiving data in cold storage systems for long-term preservation after the project.", "We will be archiving data in cold storage systems for long-term preservation after the projects.", globals.projectsCount)) -%}
   {%- endif -%}
 
   {%- if coldStorageAfter -%}
@@ -137,28 +131,32 @@
     {%- set coldStoragePayPath = [coldStorageAfterPath, coldStorageAfterAUuid, uuids.coldStoragePayQUuid]|reply_path -%}
     {%- set coldStoragePayAUuid = repliesMap[coldStoragePayPath]|reply_str_value -%}
     {%- if coldStoragePayAUuid == uuids.coldStoragePayGrantAUuid -%}
-      {%- do coldStorageSentences.append("The costs for archiving data will be paid from the grant.") -%}
+      {%- do coldStorageSentences.append(_("The costs for archiving data will be paid from the grant.")) -%}
     {%- elif coldStoragePayAUuid == uuids.coldStoragePayDepartmentAUuid -%}
-      {%- do coldStorageSentences.append("The costs for archiving data will be paid out of departmental budgets from one or more of the " ~ globals.projects ~ " participants.") -%}
+      {%- do coldStorageSentences.append(_("The costs for archiving data will be paid out of departmental budgets from one or more of the project participants.")) -%}
     {%- elif coldStoragePayAUuid == uuids.coldStoragePayInstituteAUuid -%}
-      {%- do coldStorageSentences.append("The used data archiving service is budgeted by one or more of the participating institutes.") -%}
+      {%- do coldStorageSentences.append(_("The used data archiving service is budgeted by one or more of the participating institutes.")) -%}
     {%- endif -%}
     {# Lifetime #}
     {%- set coldStorageLifetimePath = [coldStorageAfterPath, coldStorageAfterAUuid, uuids.coldStorageLifetimeQUuid]|reply_path -%}
     {%- set coldStorageLifetimeAUuid = repliesMap[coldStorageLifetimePath]|reply_str_value -%}
     {%- if coldStorageLifetimeAUuid == uuids.coldStorageLifetime5yAUuid -%}
-      {%- do coldStorageSentences.append("The minimum lifetime of the archive is 5 years.") -%}
+      {%- do coldStorageSentences.append(_("The minimum lifetime of the archive is 5 years.")) -%}
     {%- elif coldStorageLifetimeAUuid == uuids.coldStorageLifetime10yAUuid -%}
-      {%- do coldStorageSentences.append("The minimum lifetime of the archive is 10 years.") -%}
+      {%- do coldStorageSentences.append(_("The minimum lifetime of the archive is 10 years.")) -%}
     {%- elif coldStorageLifetimeAUuid == uuids.coldStorageLifetime15yAUuid -%}
-      {%- do coldStorageSentences.append("The minimum lifetime of the archive is 15 years.") -%}
+      {%- do coldStorageSentences.append(_("The minimum lifetime of the archive is 15 years.")) -%}
     {%- elif coldStorageLifetimeAUuid == uuids.coldStorageLifetimeOtherAUuid -%}
       {%- set years = repliesMap[[coldStorageLifetimePath, coldStorageLifetimeAUuid, uuids.coldStorageLifetimeOtherQUuid]|reply_path]|reply_str_value|trim|e -%}
-      {%- set end = " year." if (years == "one" or years == "1") else " years." -%}
-      {%- do coldStorageSentences.append("The minimum lifetime of the archive is " ~ years ~ end) -%}
+      {%- if years == "one" or years == "1" -%}
+        {%- do coldStorageSentences.append(_("The minimum lifetime of the archive is %(years)s year.", years=years)) -%}
+      {%- else -%}
+        {#- TRANSLATORS: %(years)s is the number of years as the user wrote it -#}
+        {%- do coldStorageSentences.append(_("The minimum lifetime of the archive is %(years)s years.", years=years)) -%}
+      {%- endif -%}
     {%- elif coldStorageLifetimeAUuid == uuids.coldStorageLifetimeWayAUuid -%}
-      {%- set way = repliesMap[[coldStorageLifetimePath, coldStorageLifetimeAUuid, uuids.coldStorageLifetimeWayQUuid]|reply_path]|reply_str_value|trim|e|trim|dot -%}
-      {%- do coldStorageSentences.append("The minimum lifetime of the archive is specially arranged: " ~ way|markdown) -%}
+      {%- set way = repliesMap[[coldStorageLifetimePath, coldStorageLifetimeAUuid, uuids.coldStorageLifetimeWayQUuid]|reply_path]|reply_str_value|trim|e|dot -%}
+      {%- do coldStorageSentences.append(_("The minimum lifetime of the archive is specially arranged: %(way)s", way=way|markdown)) -%}
     {%- endif -%}
     {# Extending #}
     {%- set coldStorageExtendPath = [coldStorageAfterPath, coldStorageAfterAUuid, uuids.coldStorageExtendQUuid]|reply_path -%}
@@ -167,17 +165,17 @@
       {%- set whyPath = [coldStorageExtendPath, coldStorageExtendAUuid, uuids.coldStorageExtendNoWhyQUuid]|reply_path -%}
       {%- set whyAUuid = repliesMap[whyPath]|reply_str_value -%}
       {%- if whyAUuid == uuids.coldStorageExtendNoWhyLawAUuid -%}
-        {%- do coldStorageSentences.append("The archival period cannot be extended as it is limited by law or contract.") -%}
+        {%- do coldStorageSentences.append(_("The archival period cannot be extended as it is limited by law or contract.")) -%}
       {%- elif whyAUuid == uuids.coldStorageExtendNoWhyBudgetAUuid -%}
-        {%- do coldStorageSentences.append("The archival period cannot be extended as it is limited by budget.") -%}
+        {%- do coldStorageSentences.append(_("The archival period cannot be extended as it is limited by budget.")) -%}
       {%- endif -%}
     {%- elif coldStorageExtendAUuid == uuids.coldStorageExtendYesAUuid -%}
       {%- set whoPath = [coldStorageExtendPath, coldStorageExtendAUuid, uuids.coldStorageExtendWhoQUuid]|reply_path -%}
       {%- set whoAUuid = repliesMap[whoPath]|reply_str_value -%}
       {%- if whoAUuid == uuids.coldStorageExtendWhoOneAUuid -%}
-        {%- do coldStorageSentences.append("The archival period can be extended &ndash; one of the principal investigators involved in the " ~ globals.projects ~ " will decide.") -%}
+        {%- do coldStorageSentences.append(ngettext("The archival period can be extended &ndash; one of the principal investigators involved in the project will decide.", "The archival period can be extended &ndash; one of the principal investigators involved in the projects will decide.", globals.projectsCount)) -%}
       {%- elif whoAUuid == uuids.coldStorageExtendWhoLibAUuid -%}
-        {%- do coldStorageSentences.append("The archival period can be extended &ndash; library or archive staff will decide.") -%}
+        {%- do coldStorageSentences.append(_("The archival period can be extended &ndash; library or archive staff will decide.")) -%}
       {%- endif -%}
       {%- set basePath = [coldStorageExtendPath, coldStorageExtendAUuid, uuids.coldStorageExtendBaseQUuid]|reply_path -%}
       {%- set basesUuids = repliesMap[basePath]|reply_items -%}
@@ -186,35 +184,35 @@
       {%- set predicted = uuids.coldStorageExtendBasePredAUuid in basesUuids -%}
       {%- set budget = uuids.coldStorageExtendBaseBudgetAUuid in basesUuids -%}
       {%- if actual and predicted -%}
-        {%- set dataUse = "both the actual and predicted use of the archived data" -%}
+        {%- set dataUse = _("both the actual and predicted use of the archived data") -%}
       {%- elif actual -%}
-        {%- set dataUse = "the actual use of the archived data" -%}
+        {%- set dataUse = _("the actual use of the archived data") -%}
       {%- elif predicted -%}
-        {%- set dataUse = "the predicted use of the archived data" -%}
+        {%- set dataUse = _("the predicted use of the archived data") -%}
       {%- endif -%}
       {%- if budget and dataUse -%}
-        {%- do coldStorageSentences.append("The decision whether or not to extend the archival period will be based on available budget as well as " ~ dataUse ~ ".") -%}
+        {%- do coldStorageSentences.append(_("The decision whether or not to extend the archival period will be based on available budget as well as %(use)s.", use=dataUse)) -%}
       {%- elif budget -%}
-        {%- do coldStorageSentences.append("The decision whether or not to extend the archival period will be based on available budget.") -%}
+        {%- do coldStorageSentences.append(_("The decision whether or not to extend the archival period will be based on available budget.")) -%}
       {%- elif actual or predicted -%}
-        {%- do coldStorageSentences.append("The decision whether or not to extend the archival period will be based on " ~ dataUse ~ ".") -%}
+        {%- do coldStorageSentences.append(_("The decision whether or not to extend the archival period will be based on %(use)s.", use=dataUse)) -%}
       {%- endif -%}
     {%- endif -%}
     {# Upgrades (format) #}
     {%- set coldStorageFormatUpgradePath = [coldStorageAfterPath, coldStorageAfterAUuid, uuids.coldStorageFormatUpgradeQUuid]|reply_path -%}
     {%- set coldStorageFormatUpgradeAUuid = repliesMap[coldStorageFormatUpgradePath]|reply_str_value -%}
     {%- if coldStorageFormatUpgradeAUuid == uuids.coldStorageFormatUpgradeNoAUuid -%}
-      {%- do coldStorageSentences.append("Data formats in cold storage will not be upgraded over time.") -%}
+      {%- do coldStorageSentences.append(_("Data formats in cold storage will not be upgraded over time.")) -%}
     {%- elif coldStorageFormatUpgradeAUuid == uuids.coldStorageFormatUpgradeYesAUuid -%}
-      {%- do coldStorageSentences.append("Data formats in cold storage will be upgraded if they become obsolete.") -%}
+      {%- do coldStorageSentences.append(_("Data formats in cold storage will be upgraded if they become obsolete.")) -%}
     {%- endif -%}
     {# Upgrades (media) #}
     {%- set coldStorageMediaUpgradePath = [coldStorageAfterPath, coldStorageAfterAUuid, uuids.coldStorageMediaUpgradeQUuid]|reply_path -%}
     {%- set coldStorageMediaUpgradeAUuid = repliesMap[coldStorageMediaUpgradePath]|reply_str_value -%}
     {%- if coldStorageMediaUpgradeAUuid == uuids.coldStorageMediaUpgradeNoAUuid -%}
-      {%- do coldStorageSentences.append("Archived data will not be migrated to other storage media over time.") -%}
+      {%- do coldStorageSentences.append(_("Archived data will not be migrated to other storage media over time.")) -%}
     {%- elif coldStorageMediaUpgradeAUuid == uuids.coldStorageMediaUpgradeYesAUuid -%}
-      {%- do coldStorageSentences.append("Archived data will be migrated regularly to more modern storage media (e.g. newer tapes).") -%}
+      {%- do coldStorageSentences.append(_("Archived data will be migrated regularly to more modern storage media (e.g. newer tapes).")) -%}
     {%- endif -%}
   {%- endif -%}
   {%- if coldStorageSentences|length > 0 -%}
@@ -225,21 +223,21 @@
   {%- set repoChargesPath = [uuids.preservingCUuid, uuids.repoChargesQUuid]|reply_path -%}
   {%- set repoChargesAUuid = repliesMap[repoChargesPath]|reply_str_value -%}
   {%- if repoChargesAUuid == uuids.repoChargesNoAUuid -%}
-    <p>None of the used repositories charge for their services.</p>
+    <p>{% trans %}None of the used repositories charge for their services.{% endtrans %}</p>
   {%- elif repoChargesAUuid == uuids.repoChargesYesAUuid -%}
     {%- set repoChargesHowPayPath = [repoChargesPath, uuids.repoChargesYesAUuid, uuids.repoChargesHowPayQUuid]|reply_path -%}
     {%- set repoChargesHowPayAUuid = repliesMap[repoChargesHowPayPath]|reply_str_value -%}
     {%- if repoChargesHowPayAUuid == uuids.repoChargesHowPayBudgetedAUuid -%}
-      <p>We have budgeted for the costs in the {{globals.projects}} to pay charges of the used repositories.</p>
+      <p>{% trans count=globals.projectsCount %}We have budgeted for the costs in the project to pay charges of the used repositories.{% pluralize %}We have budgeted for the costs in the projects to pay charges of the used repositories.{% endtrans %}</p>
     {%- elif repoChargesHowPayAUuid == uuids.repoChargesHowPayDepartmentAUuid -%}
-      <p>The costs related to the used repositories will be carried by (one of) the departments involved in the {{globals.projects}}.</p>
+      <p>{% trans count=globals.projectsCount %}The costs related to the used repositories will be carried by (one of) the departments involved in the project.{% pluralize %}The costs related to the used repositories will be carried by (one of) the departments involved in the projects.{% endtrans %}</p>
     {%- elif repoChargesHowPayAUuid == uuids.repoChargesHowPayInstituteAUuid -%}
-      <p>The costs related to the used repositories will be carried by (one of) the institutes involved in the {{globals.projects}}.</p>
+      <p>{% trans count=globals.projectsCount %}The costs related to the used repositories will be carried by (one of) the institutes involved in the project.{% pluralize %}The costs related to the used repositories will be carried by (one of) the institutes involved in the projects.{% endtrans %}</p>
     {%- elif repoChargesHowPayAUuid == uuids.repoChargesHowPayOtherAUuid -%}
       {%- set repoChargesHowPayOtherPath = [repoChargesHowPayPath, uuids.repoChargesHowPayOtherAUuid, uuids.repoChargesHowPayOtherQUuid]|reply_path -%}
       {%- set repoChargesHowPayOther = repliesMap[repoChargesHowPayOtherPath]|reply_str_value -%}
       {%- if repoChargesHowPayOther -%}
-        {% call macros.para() %}We will be paying for costs related to the used repositories. Further notes: {{ repoChargesHowPayOther|markdown }}{% endcall %}
+        {% call macros.para() %}{% trans value=(repoChargesHowPayOther|markdown) %}We will be paying for costs related to the used repositories. Further notes: {{ value }}{% endtrans %}{% endcall %}
       {%- endif -%}
     {%- endif -%}
   {%- endif -%}
@@ -249,11 +247,11 @@
   {%- set budgetTimeEffortAUuid = repliesMap[budgetTimeEffortPath]|reply_str_value -%}
   {%- if budgetTimeEffortAUuid == uuids.budgetTimeEffortYesAUuid -%}
     {%- set sentences = [] -%}
-    {%- do sentences.append("We have a reserved budget for the time and effort it will take to prepare the data for publication.") -%}
+    {%- do sentences.append(_("We have a reserved budget for the time and effort it will take to prepare the data for publication.")) -%}
     {%- set howMuchPath = [budgetTimeEffortPath, budgetTimeEffortAUuid, uuids.budgetTimeEffortHowQUuid]|reply_path -%}
     {%- set howMuch = repliesMap[howMuchPath]|reply_str_value|trim -%}
     {%- if howMuch -%}
-      {%- do sentences.append("For making data or other research outputs FAIR, we budgeted: " ~ howMuch|trim|dot) -%}
+      {%- do sentences.append(_("For making data or other research outputs FAIR, we budgeted: %(budget)s", budget=howMuch|trim|dot)) -%}
     {%- endif -%}
     <p>{{ sentences|join(" ") }}</p>
   {%- endif -%}
@@ -261,7 +259,8 @@
   {%- set contributorsPath = [uuids.adminDetailsCUuid, uuids.contributorsQUuid]|reply_path -%}
   {%- set contributorsItems = repliesMap[contributorsPath]|reply_items -%}
   {%- if contributorsItems|length > 0 -%}
-    {%- macro contributorsResponsibility(contributors, contributorRoleAUuid, responsibility) -%}
+    {#- a paragraph about the contributors with the given role, the caller gets their names and count -#}
+    {%- macro contributorsResponsibility(contributors, contributorRoleAUuid) -%}
       {%- set names = [] -%}
       {%- for i in contributors -%}
         {%- set roles = repliesMap[[contributorsPath, i, uuids.contributorRoleQUuid]|reply_path]|reply_items -%}
@@ -270,60 +269,52 @@
           {%- do names.append(name) -%}
         {%- endif -%}
       {%- endfor -%}
-      {%- set nNames = names|length -%}
-      {%- if nNames > 0 -%}
-        <p>
-          {%- if nNames > 2 -%}
-            {{ names[0:-1]|join(", ") }}, and {{ names[-1] }} are {{ responsibility }}
-          {%- elif nNames == 2 -%}
-            {{ names[0] }} and {{ names[1] }} are {{ responsibility }}
-          {%- else -%}
-            {{ names[0] }} is {{ responsibility }}
-          {%- endif %}
+      {%- if names|length > 0 -%}
+        <p>{{ caller(macros.joinAnd(names), names|length) }}
         </p>
       {%- endif -%}
     {%- endmacro -%}
     {# Project managers #}
-    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleProjectManagerAUuid, "responsible for implementing the DMP, and ensuring it is reviewed and revised.") }}
+    {% call(names, n) contributorsResponsibility(contributorsItems, uuids.contributorRoleProjectManagerAUuid) %}{% trans count=n, names=names %}{{ names }} is responsible for implementing the DMP, and ensuring it is reviewed and revised.{% pluralize %}{{ names }} are responsible for implementing the DMP, and ensuring it is reviewed and revised.{% endtrans %}{% endcall %}
     {# Data curators #}
-    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDataCuratorAUuid, "responsible for reviewing, enhancing, cleaning, or standardizing metadata and the associated data submitted for storage, use and maintenance within a data centre or repository.") }}
+    {% call(names, n) contributorsResponsibility(contributorsItems, uuids.contributorRoleDataCuratorAUuid) %}{% trans count=n, names=names %}{{ names }} is responsible for reviewing, enhancing, cleaning, or standardizing metadata and the associated data submitted for storage, use and maintenance within a data centre or repository.{% pluralize %}{{ names }} are responsible for reviewing, enhancing, cleaning, or standardizing metadata and the associated data submitted for storage, use and maintenance within a data centre or repository.{% endtrans %}{% endcall %}
     {# Data collectors #}
-    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDataCollectorAUuid, "responsible for finding, gathering, and collecting data.") }}
+    {% call(names, n) contributorsResponsibility(contributorsItems, uuids.contributorRoleDataCollectorAUuid) %}{% trans count=n, names=names %}{{ names }} is responsible for finding, gathering, and collecting data.{% pluralize %}{{ names }} are responsible for finding, gathering, and collecting data.{% endtrans %}{% endcall %}
     {# Data managers #}
-    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDataManagerAUuid, "responsible for maintaining the finished resource.") }}
+    {% call(names, n) contributorsResponsibility(contributorsItems, uuids.contributorRoleDataManagerAUuid) %}{% trans count=n, names=names %}{{ names }} is responsible for maintaining the finished resource.{% pluralize %}{{ names }} are responsible for maintaining the finished resource.{% endtrans %}{% endcall %}
     {# Data stewards #}
-    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDataStewardAUuid, "responsible for the management and proficiency of data including data processing, data policies, data guidelines, and data availability.") }}
+    {% call(names, n) contributorsResponsibility(contributorsItems, uuids.contributorRoleDataStewardAUuid) %}{% trans count=n, names=names %}{{ names }} is responsible for the management and proficiency of data including data processing, data policies, data guidelines, and data availability.{% pluralize %}{{ names }} are responsible for the management and proficiency of data including data processing, data policies, data guidelines, and data availability.{% endtrans %}{% endcall %}
     {# Distributors #}
-    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDistributorAUuid, "responsible for generating and disseminating copies of the resource in either electronic or print form.") }}
+    {% call(names, n) contributorsResponsibility(contributorsItems, uuids.contributorRoleDistributorAUuid) %}{% trans count=n, names=names %}{{ names }} is responsible for generating and disseminating copies of the resource in either electronic or print form.{% pluralize %}{{ names }} are responsible for generating and disseminating copies of the resource in either electronic or print form.{% endtrans %}{% endcall %}
     {# Data protection officers #}
-    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleDataProtectorAUuid, "responsible for all issues relating to the protection of personal data and data protection policies in general.") }}
+    {% call(names, n) contributorsResponsibility(contributorsItems, uuids.contributorRoleDataProtectorAUuid) %}{% trans count=n, names=names %}{{ names }} is responsible for all issues relating to the protection of personal data and data protection policies in general.{% pluralize %}{{ names }} are responsible for all issues relating to the protection of personal data and data protection policies in general.{% endtrans %}{% endcall %}
     {# Creator of DMP #}
-    {{ contributorsResponsibility(contributorsItems, uuids.contributorRoleCreatorOfDMPAUuid, "responsible for implementing the DMP, and ensuring it is reviewed and revised.") }}
+    {% call(names, n) contributorsResponsibility(contributorsItems, uuids.contributorRoleCreatorOfDMPAUuid) %}{% trans count=n, names=names %}{{ names }} is responsible for implementing the DMP, and ensuring it is reviewed and revised.{% pluralize %}{{ names }} are responsible for implementing the DMP, and ensuring it is reviewed and revised.{% endtrans %}{% endcall %}
   {%- endif -%}
 
   {# additional expertise #}
   {%- set expertisePath = [uuids.adminDetailsCUuid, uuids.additionalExpertiseQUuid]|reply_path -%}
   {%- set expertiseAUuid = repliesMap[expertisePath]|reply_str_value -%}
   {%- if expertiseAUuid == uuids.additionalExpertiseNoAUuid -%}
-    <p>To execute the DMP, no additional specialist expertise is required.</p>
+    <p>{% trans %}To execute the DMP, no additional specialist expertise is required.{% endtrans %}</p>
   {%- elif expertiseAUuid == uuids.additionalExpertiseYesAvailableAUuid -%}
-    <p>To execute the DMP, additional specialist expertise is required and we have such trained support staff available.</p>
+    <p>{% trans %}To execute the DMP, additional specialist expertise is required and we have such trained support staff available.{% endtrans %}</p>
   {%- elif expertiseAUuid == uuids.additionalExpertiseYesTrainAUuid -%}
     {% call macros.para() %}
-      To execute the DMP, additional specialist expertise is required. We will be training existing staff.
+      {% trans %}To execute the DMP, additional specialist expertise is required. We will be training existing staff.{% endtrans %}
       {%- set expertiseTrainPath = [expertisePath, uuids.additionalExpertiseYesTrainAUuid, uuids.additionalExpertiseYesTrainTrainingQUuid]|reply_path -%}
       {%- set expertiseTrainText = repliesMap[expertiseTrainPath]|reply_str_value -%}
       {%- if expertiseTrainText %}
-        The training will be: {{ expertiseTrainText|markdown }}
+        {% trans value=(expertiseTrainText|markdown) %}The training will be: {{ value }}{% endtrans %}
       {%- endif -%}
     {% endcall %}
   {%- elif expertiseAUuid == uuids.additionalExpertiseYesHireAUuid -%}
     <p>
-      To execute the DMP, additional specialist expertise is required. We will be hiring new people with additional expertise.
+      {% trans %}To execute the DMP, additional specialist expertise is required. We will be hiring new people with additional expertise.{% endtrans %}
       {%- set expertiseHirePath = [expertisePath, uuids.additionalExpertiseYesHireAUuid, uuids.additionalExpertiseYesHireExpertiseQUuid]|reply_path -%}
       {%- set expertiseHireText = repliesMap[expertiseHirePath]|reply_str_value -%}
       {%- if expertiseHireText %}
-        The required expertise from new people is: {{ expertiseHireText|trim|dot }}
+        {% trans value=(expertiseHireText|trim|dot) %}The required expertise from new people is: {{ value }}{% endtrans %}
       {%- endif -%}
     </p>
   {%- endif -%}
@@ -331,14 +322,14 @@
   {%- set additionalHWSWPath = [uuids.adminDetailsCUuid, uuids.additionalHWSWQUuid]|reply_path -%}
   {%- set additionalHWSWAUuid = repliesMap[additionalHWSWPath]|reply_str_value -%}
   {%- if additionalHWSWAUuid == uuids.additionalHWSWNoAUuid -%}
-    <p>We do not require any hardware or software in addition to what is usually available in the institute.</p>
+    <p>{% trans %}We do not require any hardware or software in addition to what is usually available in the institute.{% endtrans %}</p>
   {%- elif additionalHWSWAUuid == uuids.additionalHWSWYesAUuid -%}
     {%- set additionalHWSWWhatPath = [additionalHWSWPath, uuids.additionalHWSWYesAUuid, uuids.additionalHWSWYesWhatQUuid]|reply_path -%}
     {%- set additionalHWSWWhat = repliesMap[additionalHWSWWhatPath]|reply_str_value -%}
     {%- if additionalHWSWWhat -%}
-      {% call macros.para() %}We require the following hardware or software in addition to what is usually available in the institute: {{ additionalHWSWWhat|markdown }}{% endcall %}
+      {% call macros.para() %}{% trans value=(additionalHWSWWhat|markdown) %}We require the following hardware or software in addition to what is usually available in the institute: {{ value }}{% endtrans %}{% endcall %}
     {%- else -%}
-      <p>We require hardware or software in addition to what is usually available in the institute.</p>
+      <p>{% trans %}We require hardware or software in addition to what is usually available in the institute.{% endtrans %}</p>
     {%- endif -%}
   {%- endif -%}
   </div>

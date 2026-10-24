@@ -1,9 +1,9 @@
 {%- set contributorsPath = [uuids.adminDetailsCUuid, uuids.contributorsQUuid]|join(".") -%}
 {%- set contributorsItems = repliesMap[contributorsPath]|reply_items -%}
 <div id="dmp-contributors">
-  <h2>Contributors</h2>
+  <h2>{% trans %}Contributors{% endtrans %}</h2>
 
-  <p>The following contributors are related to the {{globals.projects}} of this DMP:</p>
+  <p>{% trans count=globals.projectsCount %}The following contributors are related to the project of this DMP:{% pluralize %}The following contributors are related to the projects of this DMP:{% endtrans %}</p>
 
   {% set contributors = [] %}
   {%- for contributor in contributorsItems -%}
@@ -43,10 +43,10 @@
         <br>{{ macros.formatOrcid(contributor.orcid) }}
       {%- endif -%}
       {%- if contributor.roles|length > 0 %}
-        <br>{% if contributor.roles|length == 1 %}Role{% else %}Roles{% endif %}: {% for role in contributor.roles %}<span class="role">{{ role }}</span>{% if not loop.last %}, {% endif %}{% endfor %}
+        <br>{% if contributor.roles|length == 1 %}{% trans %}Role{% endtrans %}{% else %}{% trans %}Roles{% endtrans %}{% endif %}: {% for role in contributor.roles %}<span class="role">{{ role }}</span>{% if not loop.last %}, {% endif %}{% endfor %}
       {%- endif %}
       {%- if contributor.affiliation %}
-        <br>Affiliation: <span class="affiliation">{{ macros.integrationROR(contributor.affiliation) }}</span>
+        <br>{% trans %}Affiliation:{% endtrans %} <span class="affiliation">{{ macros.integrationROR(contributor.affiliation) }}</span>
       {%- endif %}
     </li>
   {% endfor %}
@@ -57,11 +57,11 @@
       <span class="name">{{ dc.project.created_by.first_name }} {{ dc.project.created_by.last_name }}</span>
       <br>{{ macros.formatEmail(dc.project.created_by.email) }}
       {%- if dc.project.created_by.affiliation %}
-      <br>Affiliation: <span class="affiliation">{{ dc.project.created_by.affiliation }}</span>
+      <br>{% trans %}Affiliation:{% endtrans %} <span class="affiliation">{{ dc.project.created_by.affiliation }}</span>
       {%- endif %}
     </li>
   </ul>
   {%- else -%}
-  <p style="font-style:italic;">There are no contributors described for this DMP.</p>
+  <p style="font-style:italic;">{% trans %}There are no contributors described for this DMP.{% endtrans %}</p>
   {%- endif -%}
 </div>

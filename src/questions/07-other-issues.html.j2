@@ -1,7 +1,12 @@
 <div id="q-other-issues" class="question">
   <div class="answer">
     {%- set project_url = dc.config.client_url ~ "/projects/" ~ dc.project.uuid -%}
-    <p>We use the <a href="{{ dc.config.service_url }}" target="_blank">{{ dc.config.service_name }}</a> with its <em>{{ dc.pkg.name }}</em> (ID: <span class="package-id"><span class="organization-id">{{ dc.pkg.organization_id }}</span>:<span class="km-id">{{ dc.pkg.km_id }}</span>:<span class="version">{{ dc.pkg.version }}</span></span>) knowledge model to make our DMP. More specifically, we use the <a href="{{ dc.config.client_url }}" target="_blank">{{ dc.config.client_url }}</a> {{ dc.config.service_name_short }} instance where the project has the direct URL: <a href="{{ project_url }}" target="_blank">{{ project_url }}</a>.</p>
+    {%- set serviceLink -%}<a href="{{ dc.config.service_url }}" target="_blank">{{ dc.config.service_name }}</a>{%- endset -%}
+    {%- set packageId -%}<span class="package-id"><span class="organization-id">{{ dc.pkg.organization_id }}</span>:<span class="km-id">{{ dc.pkg.km_id }}</span>:<span class="version">{{ dc.pkg.version }}</span></span>{%- endset -%}
+    {%- set instanceLink -%}<a href="{{ dc.config.client_url }}" target="_blank">{{ dc.config.client_url }}</a>{%- endset -%}
+    {%- set projectLink -%}<a href="{{ project_url }}" target="_blank">{{ project_url }}</a>{%- endset %}
+    {#- TRANSLATORS: %(service)s is the name of the Wizard as a link, %(instance)s the URL of the instance, %(project_url)s the URL of the project -#}
+    <p>{% trans service=serviceLink, name=dc.pkg.name, id=packageId, instance=instanceLink, service_name_short=dc.config.service_name_short, project_url=projectLink %}We use the {{ service }} with its <em>{{ name }}</em> (ID: {{ id }}) knowledge model to make our DMP. More specifically, we use the {{ instance }} {{ service_name_short }} instance where the project has the direct URL: {{ project_url }}.{% endtrans %}</p>
 
     {# Applied policies #}
     {%- set policiesPath = [uuids.adminDetailsCUuid, uuids.policiesQUuid]|reply_path -%}
@@ -20,7 +25,7 @@
       {%- endif -%}
     {%- endfor -%}
     {%- if policies|length > 0 -%}
-      <p>We will be using the following policies and procedures for data management:</p>
+      <p>{% trans %}We will be using the following policies and procedures for data management:{% endtrans %}</p>
       <ul>
         {%- for policy in policies -%}
           <li>
@@ -34,7 +39,7 @@
         {%- endfor -%}
       </ul>
     {%- else -%}
-      <p>We will not be using any extra national, funder, sectoral, or departmental policies or procedures for data management.</p>
+      <p>{% trans %}We will not be using any extra national, funder, sectoral, or departmental policies or procedures for data management.{% endtrans %}</p>
     {%- endif -%}
   </div>
 </div>

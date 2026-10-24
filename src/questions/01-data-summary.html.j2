@@ -10,8 +10,8 @@
     {# Measured datasets #}
     {%- if measuredDataItems|length > 0 -%}
       <div>
-      <h4>Instrument datasets</h4>
-      <p>The following instrument datasets will be acquired in the {{globals.projects}}:</p>
+      <h4>{% trans %}Instrument datasets{% endtrans %}</h4>
+      <p>{% trans count=globals.projectsCount %}The following instrument datasets will be acquired in the project:{% pluralize %}The following instrument datasets will be acquired in the projects:{% endtrans %}</p>
       <ul>
         {%- for datasetItem in measuredDataItems -%}
           {%- set pathPrefix = [measuredDataPath, datasetItem]|reply_path -%}
@@ -24,45 +24,45 @@
             {%- set measuredDataEquipAUuid = repliesMap[measuredDataEquipPath]|reply_str_value -%}
             {%- set mdDataUtilityPath = [pathPrefix, uuids.mdDataUtilityQUuid]|reply_path -%}
             {%- set mdDataUtilityAUuid = repliesMap[mdDataUtilityPath]|reply_str_value -%}
-            <strong>{{ measuredDataName if measuredDataName else "(no name given)" }}</strong>
+            <strong>{{ measuredDataName if measuredDataName else _("(no name given)") }}</strong>
             {# Who will collect #}
             {%- if measuredDataWhoAUuid == uuids.measuredDataWhoExpertsOwnAUuid -%}
-              <p>This dataset will be collected by experts in the {{globals.projects}}, with our own equipment.</p>
+              <p>{% trans count=globals.projectsCount %}This dataset will be collected by experts in the project, with our own equipment.{% pluralize %}This dataset will be collected by experts in the projects, with our own equipment.{% endtrans %}</p>
             {%- elif measuredDataWhoAUuid == uuids.measuredDataWhoExpertsOutAUuid -%}
-              <p>This dataset will be collected by experts in the {{globals.projects}}, at a specialized infrastructure.</p>
+              <p>{% trans count=globals.projectsCount %}This dataset will be collected by experts in the project, at a specialized infrastructure.{% pluralize %}This dataset will be collected by experts in the projects, at a specialized infrastructure.{% endtrans %}</p>
             {%- elif measuredDataWhoAUuid == uuids.measuredDataWhoExternalAUuid -%}
               {%- set mdExternalOwnershipPath = [measuredDataWhoPath, uuids.measuredDataWhoExternalAUuid, uuids.mdExternalOwnershipQUuid]|reply_path -%}
               {%- set mdExternalOwnershipAUuid = repliesMap[mdExternalOwnershipPath]|reply_str_value -%}
               {% call macros.para() %}
-                This dataset will be collected by an external party.
+                {% trans %}This dataset will be collected by an external party.{% endtrans %}
                 {% if mdExternalOwnershipAUuid == uuids.mdExternalOwnershipPartyAUuid -%}
-                  The ownership of the resulting data will remain with the external party.
+                  {% trans %}The ownership of the resulting data will remain with the external party.{% endtrans %}
                 {%- elif mdExternalOwnershipAUuid == uuids.mdExternalOwnershipPartnersAUuid -%}
-                  The project partners acquire full ownership of the data.
+                  {% trans %}The project partners acquire full ownership of the data.{% endtrans %}
                 {%- elif mdExternalOwnershipAUuid == uuids.mdExternalOwnershipOtherAUuid -%}
                   {%- set mdExternalOwnershipOtherPath = [mdExternalOwnershipPath, uuids.mdExternalOwnershipOtherAUuid, uuids.mdExternalOwnershipOtherQUuid]|reply_path -%}
                   {%- set mdExternalOwnershipOther = repliesMap[mdExternalOwnershipOtherPath]|reply_str_value -%}
                   {%- if mdExternalOwnershipOther -%}
-                    For the ownership of the data we have made the following arrangements: {{ mdExternalOwnershipOther|markdown }}
+                    {% trans value=(mdExternalOwnershipOther|markdown) %}For the ownership of the data we have made the following arrangements: {{ value }}{% endtrans %}
                   {%- endif -%}
                 {%- endif -%}
               {% endcall %}
             {%- endif -%}
             {# Equipment standard? #}
             {% if measuredDataEquipAUuid == uuids.measuredDataEquipDescribedAUuid -%}
-              <p>The equipment is very well described and known.</p>
+              <p>{% trans %}The equipment is very well described and known.{% endtrans %}</p>
             {%- elif measuredDataEquipAUuid == uuids.measuredDataEquipCareAUuid -%}
-              <p>The equipment is less well described or not completely standard, so we will need to take extra care documenting the process.</p>
+              <p>{% trans %}The equipment is less well described or not completely standard, so we will need to take extra care documenting the process.{% endtrans %}</p>
             {%- endif -%}
             {# Data utility #}
             {% if mdDataUtilityAUuid == uuids.mdDataUtilityJustUsAUuid -%}
-              <p>This data are expected to be used only by us.</p>
+              <p>{% trans %}This data are expected to be used only by us.{% endtrans %}</p>
             {%- elif mdDataUtilityAUuid == uuids.mdDataUtilitySameFieldAUuid -%}
-              <p>Other researchers working in the same field of research could be interested in using this data.</p>
+              <p>{% trans %}Other researchers working in the same field of research could be interested in using this data.{% endtrans %}</p>
             {%- elif mdDataUtilityAUuid == uuids.mdDataUtilityOtherFieldsAUuid -%}
               {%- set mdDataUtilityOtherFieldsHowPath = [mdDataUtilityPath, uuids.mdDataUtilityOtherFieldsAUuid, uuids.mdDataUtilityOtherFieldsHowQUuid]|reply_path -%}
               {%- set mdDataUtilityOtherFieldsHow = repliesMap[mdDataUtilityOtherFieldsHowPath]|reply_str_value -%}
-              {% call macros.para() %}Researchers working in other fields of research could be interested in using this data. {% if mdDataUtilityOtherFieldsHow -%}We think that other researchers can use this data as follows: {{ mdDataUtilityOtherFieldsHow|markdown }}{%- endif -%}{% endcall %}
+              {% call macros.para() %}{% trans %}Researchers working in other fields of research could be interested in using this data.{% endtrans %} {% if mdDataUtilityOtherFieldsHow -%}{% trans value=(mdDataUtilityOtherFieldsHow|markdown) %}We think that other researchers can use this data as follows: {{ value }}{% endtrans %}{%- endif -%}{% endcall %}
             {%- endif -%}
           </li>
         {%- endfor -%}
@@ -90,27 +90,21 @@
     {%- set eRecords = neqDataERecordsAUuid == uuids.neqDataERecordsYesAUuid -%}
     {%- if questionnaires or caseReport or eRecords or neqDataSetsItems|length > 0 -%}
       <div>
-      <h4>Non-equipment datasets</h4>
+      <h4>{% trans %}Non-equipment datasets{% endtrans %}</h4>
       {# Types #}
       {%- set typesNames = [] -%}
-      {%- if questionnaires -%}{%- do typesNames.append("questionnaires") -%}{%- endif -%}
-      {%- if caseReport -%}{%- do typesNames.append("case report forms") -%}{%- endif -%}
-      {%- if eRecords -%}{%- do typesNames.append("electronic patient records") -%}{%- endif -%}
+      {%- if questionnaires -%}{%- do typesNames.append(_("questionnaires")) -%}{%- endif -%}
+      {%- if caseReport -%}{%- do typesNames.append(_("case report forms")) -%}{%- endif -%}
+      {%- if eRecords -%}{%- do typesNames.append(_("electronic patient records")) -%}{%- endif -%}
       {%- set typesCount = typesNames|length -%}
       {% call macros.para() %}
         {%- if typesCount > 0 -%}
-          We collect data from
-          {% if typesCount == 1 -%}
-              {{ typesNames[0] }}.
-          {%- elif typesCount == 2 -%}
-              {{ typesNames[0] }} and {{ typesNames[1] }}.
-          {%- else -%}
-              {{ typesNames[0] }}, {{ typesNames[1] }}, and {{ typesNames[2] }}.
-          {%- endif -%}
+          {#- TRANSLATORS: %(types)s is an enumeration of questionnaires, case report forms, and electronic patient records -#}
+          {% trans types=macros.joinAnd(typesNames) %}We collect data from {{ types }}.{% endtrans %}
         {% endif %}
         {# Datasets #}
         {%- if neqDataSetsItems|length > 0 -%}
-          The non-equipment datasets are:
+          {% trans %}The non-equipment datasets are:{% endtrans %}
           <ul>
           {%- for neqDataSetItem in neqDataSetsItems -%}
             {%- set pathPrefix = [neqDataSetsPath, neqDataSetItem]|reply_path -%}
@@ -119,17 +113,17 @@
             {%- set neqDataUtilityPath = [pathPrefix, uuids.neqDataUtilityQUuid]|reply_path -%}
             {%- set neqDataUtilityAUuid = repliesMap[neqDataUtilityPath]|reply_str_value -%}
             <li>
-              <strong>{{ neqDataSetsName if neqDataSetsName else "(no name given)" }}</strong>
+              <strong>{{ neqDataSetsName if neqDataSetsName else _("(no name given)") }}</strong>
               {% if neqDataSetsDesc -%}<span class="separator">&ndash;</span> {{ neqDataSetsDesc|markdown }}{%- endif -%}
               {# Data utility #}
               {% if neqDataUtilityAUuid == uuids.neqDataUtilityJustUsAUuid -%}
-                <p>This data are expected to be used only by us.</p>
+                <p>{% trans %}This data are expected to be used only by us.{% endtrans %}</p>
               {%- elif neqDataUtilityAUuid == uuids.neqDataUtilitySameFieldAUuid -%}
-                <p>Other researchers working in the same field of research could be interested in using this data.</p>
+                <p>{% trans %}Other researchers working in the same field of research could be interested in using this data.{% endtrans %}</p>
               {%- elif neqDataUtilityAUuid == uuids.neqDataUtilityOtherFieldsAUuid -%}
                 {%- set neqDataUtilityOtherFieldsHowPath = [neqDataUtilityPath, uuids.neqDataUtilityOtherFieldsAUuid, uuids.neqDataUtilityOtherFieldsHowQUuid]|reply_path -%}
                 {%- set neqDataUtilityOtherFieldsHow = repliesMap[neqDataUtilityOtherFieldsHowPath]|reply_str_value -%}
-                {% call macros.para() %}Researchers working in other fields of research could be interested in using this data. {% if neqDataUtilityOtherFieldsHow -%}We think that other researchers can use this data as follows: {{ neqDataUtilityOtherFieldsHow|markdown }}{%- endif -%}{% endcall %}
+                {% call macros.para() %}{% trans %}Researchers working in other fields of research could be interested in using this data.{% endtrans %} {% if neqDataUtilityOtherFieldsHow -%}{% trans value=(neqDataUtilityOtherFieldsHow|markdown) %}We think that other researchers can use this data as follows: {{ value }}{% endtrans %}{%- endif -%}{% endcall %}
               {%- endif -%}
             </li>
           {%- endfor -%}
@@ -164,10 +158,10 @@
     {%- endfor -%}
     {%- if (refDataItems|length + nrefDataItems|length) > 0 -%}
       <div>
-        <h4>Re-used datasets</h4>
+        <h4>{% trans %}Re-used datasets{% endtrans %}</h4>
         {%- if refDataItems|length > 0 -%}
           <div>
-          <p>We identified the following reference datasets considered for potential re-use:</p>
+          <p>{% trans %}We identified the following reference datasets considered for potential re-use:{% endtrans %}</p>
           <ul>
             {%- for item in refDataItems -%}
               {%- set refDataPrefix = [refDataPath, item]|reply_path -%}
@@ -183,14 +177,14 @@
                 {%- if refDataWhere -%}
                   <p>
                   {%- if refDataWhere.startswith("http://") or refDataWhere.startswith("https://") or refDataWhere.startswith("ftp://") %}
-                    It is available via: <a href="{{ refDataWhere }}" target="_blank">{{ refDataWhere }}</a>.
+                    {% set link %}<a href="{{ refDataWhere }}" target="_blank">{{ refDataWhere }}</a>{% endset %}{% trans where=link %}It is available via: {{ where }}.{% endtrans %}
                   {%- else %}
-                    It is available via: {{ refDataWhere }}.
+                    {% trans where=refDataWhere %}It is available via: {{ where }}.{% endtrans %}
                   {%- endif %}
                   {% if isUsed %}
-                    It is used in the project.
+                    {% trans %}It is used in the project.{% endtrans %}
                   {%- elif isNotUsed %}
-                    It was considered but will not be used in the project.
+                    {% trans %}It was considered but will not be used in the project.{% endtrans %}
                   {%- endif -%}
                   </p>
                 {%- endif -%}
@@ -200,17 +194,17 @@
                   {%- set refDataUseNoWhyPath = [refDataNotUsedPrefix, uuids.refDataUseNoWhyQUuid]|reply_path -%}
                   {%- set refDataUseNoWhyAUuid = repliesMap[refDataUseNoWhyPath]|reply_str_value -%}
                   {%- if refDataUseNoWhyAUuid == uuids.refDataUseNoDataAUuid -%}
-                    <p>We decided not to use this reference dataset because it misses the data we need.</p>
+                    <p>{% trans %}We decided not to use this reference dataset because it misses the data we need.{% endtrans %}</p>
                   {%- elif refDataUseNoWhyAUuid == uuids.refDataUseNoAspectAUuid -%}
-                    <p>We decided not to use this reference dataset because it misses required aspects.</p>
+                    <p>{% trans %}We decided not to use this reference dataset because it misses required aspects.{% endtrans %}</p>
                   {%- elif refDataUseNoWhyAUuid == uuids.refDataUseNoQualityAUuid -%}
-                    <p>We decided not to use this reference dataset because it is not of sufficient quality.</p>
+                    <p>{% trans %}We decided not to use this reference dataset because it is not of sufficient quality.{% endtrans %}</p>
                   {%- elif refDataUseNoWhyAUuid == uuids.refDataUseNoCondAUuid -%}
-                    <p>We decided not to use this reference dataset because its conditions of use do not allow us to use it.</p>
+                    <p>{% trans %}We decided not to use this reference dataset because its conditions of use do not allow us to use it.{% endtrans %}</p>
                   {%- elif refDataUseNoWhyAUuid == uuids.refDataUseNoReasonAUuid -%}
                     {%- set reason = repliesMap[[refDataUseNoWhyPath, refDataUseNoWhyAUuid, uuids.refDataUseNoReasonQUuid]|reply_path]|reply_str_value -%}
                     {%- if reason -%}
-                      {% call macros.para() %}We decided not to use this reference dataset because of: {{ reason|markdown }}{% endcall %}
+                      {% call macros.para() %}{% trans value=(reason|markdown) %}We decided not to use this reference dataset because of: {{ value }}{% endtrans %}{% endcall %}
                     {%- endif -%}
                   {%- endif -%}
                 {%- endif -%}
@@ -221,15 +215,15 @@
                   {%- set refDataOwnerPath = [refDataUsedPrefix, uuids.refDataOwnerQUuid]|reply_path -%}
                   {%- set refDataOwner = repliesMap[refDataOwnerPath]|reply_str_value -%}
                   {%- if refDataOwner -%}
-                    {% call macros.para() %}Owner of this dataset: {{ refDataOwner|markdown }}{% endcall %}
+                    {% call macros.para() %}{% trans value=(refDataOwner|markdown) %}Owner of this dataset: {{ value }}{% endtrans %}{% endcall %}
                   {%- endif -%}
                   {# format #}
                   {%- set refDataFormatPath = [refDataUsedPrefix, uuids.refDataFormatQUuid]|reply_path -%}
                   {%- set refDataFormatAUuid = repliesMap[refDataFormatPath]|reply_str_value -%}
                   {%- if refDataFormatAUuid == uuids.refDataFormatUseAUuid -%}
-                    <p>The dataset can be used in the provided format without any conversion needed.</p>
+                    <p>{% trans %}The dataset can be used in the provided format without any conversion needed.{% endtrans %}</p>
                   {%- elif refDataFormatAUuid == uuids.refDataFormatConvertAUuid -%}
-                    <p>We will first need to convert the format before using it.</p>
+                    <p>{% trans %}We will first need to convert the format before using it.{% endtrans %}</p>
                   {%- endif -%}
                   {# version #}
                   {%- set refDataVersionedPath = [refDataUsedPrefix, uuids.refDataVersionedQUuid]|reply_path -%}
@@ -242,14 +236,14 @@
                     {%- if refDataVersionedWhich or refDataVersionedChangeAUuid  %}
                       {% call macros.para() %}
                       {% if refDataVersionedWhich -%}
-                        We will use the following version of this dataset: {{ refDataVersionedWhich|markdown }}
+                        {% trans value=(refDataVersionedWhich|markdown) %}We will use the following version of this dataset: {{ value }}{% endtrans %}
                       {%- endif -%}
                       {%- if refDataVersionedChangeAUuid == uuids.refDataVersionedChangeStayAUuid %}
-                        If a new version becomes available during the {{globals.projects}}, we will stay with the old version.
+                        {% trans count=globals.projectsCount %}If a new version becomes available during the project, we will stay with the old version.{% pluralize %}If a new version becomes available during the projects, we will stay with the old version.{% endtrans %}
                       {%- elif refDataVersionedChangeAUuid == uuids.refDataVersionedChangeNewAUuid %}
-                        If a new version becomes available during the {{globals.projects}}, new analyses will be done with the new version.
+                        {% trans count=globals.projectsCount %}If a new version becomes available during the project, new analyses will be done with the new version.{% pluralize %}If a new version becomes available during the projects, new analyses will be done with the new version.{% endtrans %}
                       {%- elif refDataVersionedChangeAUuid == uuids.refDataVersionedChangeAllAUuid %}
-                        If a new version becomes available during the {{globals.projects}}, all analyses will be redone with the new version.
+                        {% trans count=globals.projectsCount %}If a new version becomes available during the project, all analyses will be redone with the new version.{% pluralize %}If a new version becomes available during the projects, all analyses will be redone with the new version.{% endtrans %}
                       {%- endif -%}
                       {% endcall %}
                     {%- endif -%}
@@ -258,16 +252,16 @@
                   {%- set refDataReproducePath = [refDataUsedPrefix, uuids.refDataReproduceQUuid]|reply_path -%}
                   {%- set refDataReproduceAUuid = repliesMap[refDataReproducePath]|reply_str_value -%}
                   {%- if refDataReproduceAUuid == uuids.refDataReproduceProviderAUuid -%}
-                    <p>The provider keeps old versions around so the same reference data will be available to reproduce our results.</p>
+                    <p>{% trans %}The provider keeps old versions around so the same reference data will be available to reproduce our results.{% endtrans %}</p>
                   {%- elif refDataReproduceAUuid == uuids.refDataReproduceCopyAUuid -%}
-                    <p>We will keep a copy of the dataset and make it available with our results for the reproducibility.</p>
+                    <p>{% trans %}We will keep a copy of the dataset and make it available with our results for the reproducibility.{% endtrans %}</p>
                   {%- elif refDataReproduceAUuid == uuids.refDataReproduceBothAUuid -%}
-                    <p>The original dataset will be available both from the provider and from us together with our results for the reproducibility.</p>
+                    <p>{% trans %}The original dataset will be available both from the provider and from us together with our results for the reproducibility.{% endtrans %}</p>
                   {%- endif -%}
                   {# data use #}
                   {%- set dataUse = repliesMap[[refDataUsedPrefix, uuids.refDataUsageQUuid]|reply_path]|reply_str_value -%}
                   {%- if dataUse -%}
-                  {% call macros.para() %}We will use the dataset as follows: {{ dataUse|markdown }}{% endcall %}
+                  {% call macros.para() %}{% trans value=(dataUse|markdown) %}We will use the dataset as follows: {{ value }}{% endtrans %}{% endcall %}
                   {%- endif -%}
                 {%- endif -%}
               </li>
@@ -277,7 +271,7 @@
         {%- endif -%}
         {%- if nrefDataItems|length > 0 -%}
           <div>
-          <p>We identified the following non-reference datasets considered for potential re-use:</p>
+          <p>{% trans %}We identified the following non-reference datasets considered for potential re-use:{% endtrans %}</p>
           <ul>
             {%- for item in nrefDataItems -%}
               {%- set nrefDataPrefix = [nrefDataPath, item]|reply_path -%}
@@ -294,14 +288,14 @@
                 {%- if nrefDataWhere -%}
                   <p>
                   {%- if nrefDataWhere.startswith("http://") or nrefDataWhere.startswith("https://") or nrefDataWhere.startswith("ftp://") %}
-                    It is available via: <a href="{{ nrefDataWhere }}" target="_blank">{{ nrefDataWhere }}</a>.
+                    {% set link %}<a href="{{ nrefDataWhere }}" target="_blank">{{ nrefDataWhere }}</a>{% endset %}{% trans where=link %}It is available via: {{ where }}.{% endtrans %}
                   {%- else %}
-                    It is available via: {{ nrefDataWhere }}.
+                    {% trans where=nrefDataWhere %}It is available via: {{ where }}.{% endtrans %}
                   {%- endif %}
                   {% if isUsed %}
-                    It is used in the project.
+                    {% trans %}It is used in the project.{% endtrans %}
                   {%- elif isNotUsed %}
-                    It was considered but will not be used in the project.
+                    {% trans %}It was considered but will not be used in the project.{% endtrans %}
                   {%- endif -%}
                   </p>
                 {%- endif -%}
@@ -311,17 +305,17 @@
                   {%- set nrefDataUseNoWhyPath = [nrefDataNotUsedPrefix, uuids.nrefDataUseNoWhyQUuid]|reply_path -%}
                   {%- set nrefDataUseNoWhyAUuid = repliesMap[nrefDataUseNoWhyPath]|reply_str_value -%}
                   {%- if nrefDataUseNoWhyAUuid == uuids.nrefDataUseNoDataAUuid -%}
-                    <p>We decided not to use this non-reference dataset because it misses the data we need.</p>
+                    <p>{% trans %}We decided not to use this non-reference dataset because it misses the data we need.{% endtrans %}</p>
                   {%- elif nrefDataUseNoWhyAUuid == uuids.nrefDataUseNoAspectAUuid -%}
-                    <p>We decided not to use this non-reference dataset because it misses required aspects.</p>
+                    <p>{% trans %}We decided not to use this non-reference dataset because it misses required aspects.{% endtrans %}</p>
                   {%- elif nrefDataUseNoWhyAUuid == uuids.nrefDataUseNoQualityAUuid -%}
-                    <p>We decided not to use this non-reference dataset because it is not of sufficient quality.</p>
+                    <p>{% trans %}We decided not to use this non-reference dataset because it is not of sufficient quality.{% endtrans %}</p>
                   {%- elif nrefDataUseNoWhyAUuid == uuids.nrefDataUseNoCondAUuid -%}
-                    <p>We decided not to use this non-reference dataset because its conditions of use do not allow us to use it.</p>
+                    <p>{% trans %}We decided not to use this non-reference dataset because its conditions of use do not allow us to use it.{% endtrans %}</p>
                   {%- elif nrefDataUseNoWhyAUuid == uuids.nrefDataUseNoReasonAUuid -%}
                     {%- set reason = repliesMap[[nrefDataUseNoWhyPath, nrefDataUseNoWhyAUuid, uuids.nrefDataUseNoReasonQUuid]|reply_path]|reply_str_value -%}
                     {%- if reason -%}
-                      {% call macros.para() %}We decided not to use this non-reference dataset because of: {{ reason|markdown }}{% endcall %}
+                      {% call macros.para() %}{% trans value=(reason|markdown) %}We decided not to use this non-reference dataset because of: {{ value }}{% endtrans %}{% endcall %}
                     {%- endif -%}
                   {%- endif -%}
                 {%- endif -%}
@@ -333,7 +327,7 @@
                   {%- set nrefDataOwnerPath = [nrefDataUsedPrefix, uuids.nrefDataOwnerQUuid]|reply_path -%}
                   {%- set nrefDataOwner = repliesMap[nrefDataOwnerPath]|reply_str_value -%}
                   {%- if nrefDataOwner -%}
-                    {%- do ownerSentences.append("Owner of this dataset: " ~ nrefDataOwner|markdown) -%}
+                    {%- do ownerSentences.append(_("Owner of this dataset: %(owner)s", owner=nrefDataOwner|markdown)) -%}
                   {%- endif -%}
                   {# owners #}
                   {%- set nrefDataOwnersPath = [nrefDataUsedPrefix, uuids.nrefDataOwnersQUuid]|reply_path -%}
@@ -342,12 +336,12 @@
                     {%- set nrefDataOwnersNoReqPath = [nrefDataOwnersPath, nrefDataOwnersAUuid, uuids.nrefDataOwnersNoReqQUuid]|reply_path -%}
                     {%- set nrefDataOwnersNoReqAUuid = repliesMap[nrefDataOwnersNoReqPath]|reply_str_value -%}
                     {%- if nrefDataOwnersNoReqAUuid == uuids.nrefDataOwnersNoReqYesAUuid -%}
-                      {%- do ownerSentences.append("We will need to request access to the dataset from its owners.") -%}
+                      {%- do ownerSentences.append(_("We will need to request access to the dataset from its owners.")) -%}
                     {%- endif -%}
                   {%- elif nrefDataOwnersAUuid == uuids.nrefDataOwnersYesAUuid -%}
-                    {%- do ownerSentences.append("The owners of the dataset will collaborate on this " ~ globals.projects ~ ".") -%}
+                    {%- do ownerSentences.append(ngettext("The owners of the dataset will collaborate on this project.", "The owners of the dataset will collaborate on these projects.", globals.projectsCount)) -%}
                   {%- elif nrefDataOwnersAUuid == uuids.nrefDataOwnersWeAUuid -%}
-                    {%- do ownerSentences.append("We are owners of the dataset.") -%}
+                    {%- do ownerSentences.append(_("We are owners of the dataset.")) -%}
                   {%- endif -%}
                   {%- if ownerSentences|length > 0 -%}
                     {% call macros.para() %}{{ ownerSentences|join(" ") }}{% endcall %}
@@ -356,9 +350,9 @@
                   {%- set nrefDataFormatPath = [nrefDataUsedPrefix, uuids.nrefDataFormatQUuid]|reply_path -%}
                   {%- set nrefDataFormatAUuid = repliesMap[nrefDataFormatPath]|reply_str_value -%}
                   {%- if nrefDataFormatAUuid == uuids.nrefDataFormatUseAUuid -%}
-                    <p>The dataset can be used in the provided format without any conversion needed.</p>
+                    <p>{% trans %}The dataset can be used in the provided format without any conversion needed.{% endtrans %}</p>
                   {%- elif nrefDataFormatAUuid == uuids.nrefDataFormatConvertAUuid -%}
-                    <p>We will first need to convert the format before using it.</p>
+                    <p>{% trans %}We will first need to convert the format before using it.{% endtrans %}</p>
                   {%- endif -%}
                   {# data access #}
                   {%- set nrefDataAccessPath = [nrefDataUsedPrefix, uuids.nrefDataAccessQUuid]|reply_path -%}
@@ -366,11 +360,11 @@
                   {%- if nrefDataAccessAUuid %}
                     <p>
                     {% if nrefDataAccessAUuid == uuids.nrefDataAccessHaveCopyAUuid -%}
-                      We already have a copy of this dataset.
+                      {% trans %}We already have a copy of this dataset.{% endtrans %}
                     {%- elif nrefDataAccessAUuid == uuids.nrefDataAccessWillDownloadAUuid -%}
-                      We will download or get a copy.
+                      {% trans %}We will download or get a copy.{% endtrans %}
                     {%- elif nrefDataAccessAUuid == uuids.nrefDataAccessWillOnlineAUuid -%}
-                      We will use its online version without downloading it.
+                      {% trans %}We will use its online version without downloading it.{% endtrans %}
                     {%- endif -%}
                     </p>
                   {%- endif -%}
@@ -378,24 +372,24 @@
                   {%- set nrefDataFixedPath = [nrefDataUsedPrefix, uuids.nrefDataFixedQUuid]|reply_path -%}
                   {%- set nrefDataFixedAUuid = repliesMap[nrefDataFixedPath]|reply_str_value -%}
                   {%- if nrefDataFixedAUuid == uuids.nrefDataFixedFixedAUuid -%}
-                    <p>It is a fixed dataset; changes will not influence the reproducibility of our results.</p>
+                    <p>{% trans %}It is a fixed dataset; changes will not influence the reproducibility of our results.{% endtrans %}</p>
                   {%- elif nrefDataFixedAUuid == uuids.nrefDataFixedChangeAUuid -%}
-                    <p>The dataset may get updated in the future; therefore, we need to make a snapshot.</p>
+                    <p>{% trans %}The dataset may get updated in the future; therefore, we need to make a snapshot.{% endtrans %}</p>
                   {%- endif -%}
                   {# complete #}
                   {%- set nrefDataCompletePath = [nrefDataUsedPrefix, uuids.nrefDataCompleteQUuid]|reply_path -%}
                   {%- set nrefDataCompleteAUuid = repliesMap[nrefDataCompletePath]|reply_str_value -%}
                   {%- if nrefDataCompleteAUuid == uuids.nrefDataCompleteUseAUuid -%}
-                    <p>We will use the complete dataset.</p>
+                    <p>{% trans %}We will use the complete dataset.{% endtrans %}</p>
                   {%- elif nrefDataCompleteAUuid == uuids.nrefDataCompleteDocumentAUuid -%}
-                    <p>Only part of the dataset will be used; any filtering or selection will be well documented.</p>
+                    <p>{% trans %}Only part of the dataset will be used; any filtering or selection will be well documented.{% endtrans %}</p>
                   {%- elif nrefDataCompleteAUuid == uuids.nrefDataCompleteSubsetAUuid -%}
-                    <p>We will make sure the selected subset will be available together with our results.</p>
+                    <p>{% trans %}We will make sure the selected subset will be available together with our results.{% endtrans %}</p>
                   {%- endif -%}
                   {# data use #}
                   {%- set dataUse = repliesMap[[nrefDataUsedPrefix, uuids.nrefDataUsageQUuid]|reply_path]|reply_str_value -%}
                   {%- if dataUse -%}
-                  {% call macros.para() %}We will use the dataset as follows: {{ dataUse|markdown }}{% endcall %}
+                  {% call macros.para() %}{% trans value=(dataUse|markdown) %}We will use the dataset as follows: {{ value }}{% endtrans %}{% endcall %}
                   {%- endif -%}
                 {%- endif -%}
               </li>
@@ -409,13 +403,13 @@
     {%- set dataHarmoPath = [preexistingPath, uuids.preexistingYesAUuid, uuids.dataHarmoQUuid]|reply_path -%}
     {%- set dataHarmoAUuid = repliesMap[dataHarmoPath]|reply_str_value -%}
     {%- if dataHarmoAUuid == uuids.dataHarmoNoAUuid -%}
-      <p>There is no need to harmonize different sources of existing data in our case.</p>
+      <p>{% trans %}There is no need to harmonize different sources of existing data in our case.{% endtrans %}</p>
     {%- elif dataHarmoAUuid == uuids.dataHarmoYesAUuid -%}
       {%- set dataHarmoOthersPath = [dataHarmoPath, dataHarmoAUuid, uuids.dataHarmoOthersQUuid]|reply_path %}
       {%- set dataHarmoOthersAUuid = repliesMap[dataHarmoOthersPath]|reply_str_value %}
-      <p>We will need to harmonize different sources of existing data.
+      <p>{% trans %}We will need to harmonize different sources of existing data.{% endtrans %}
       {%- if dataHarmoOthersAUuid == uuids.dataHarmoOthersYesAUuid %}
-        Our harmonization results will be made available to others.
+        {% trans %}Our harmonization results will be made available to others.{% endtrans %}
       {%- endif %}
       </p>
     {%- endif -%}
@@ -424,11 +418,11 @@
     {%- set dataCompReadAUuid = repliesMap[dataCompReadPath]|reply_str_value -%}
     {%- if dataCompReadAUuid == uuids.dataCompReadYesAUuid -%}
     {%- set dataCompReadSentences = [] -%}
-      {%- do dataCompReadSentences.append("We will be using data that needs to be (re-)made computer readable first.") -%}
+      {%- do dataCompReadSentences.append(_("We will be using data that needs to be (re-)made computer readable first.")) -%}
       {%- set dataCompReadOthersPath = [dataCompReadPath, dataCompReadAUuid, uuids.dataCompReadOthersQUuid]|reply_path -%}
       {%- set dataCompReadOthersAUuid = repliesMap[dataCompReadOthersPath]|reply_str_value -%}
       {%- if dataCompReadOthersAUuid == uuids.dataCompReadOthersYesAUuid -%}
-        {%- do dataCompReadSentences.append("We will provide machine readable, standardized metadata to others.") -%}
+        {%- do dataCompReadSentences.append(_("We will provide machine readable, standardized metadata to others.")) -%}
         {%- set standards = [] -%}
         {%- set standardItemsPath = [dataCompReadOthersPath, dataCompReadOthersAUuid, uuids.dataCompReadOthersYesStandardsQUuid]|reply_path -%}
         {%- set standardItems = repliesMap[standardItemsPath]|reply_items -%}
@@ -443,22 +437,22 @@
           {%- for standardReply in standards %}
             {% do standardLinks.append(macros.integrationFairSharing(standardReply)) %}
           {% endfor %}
-          {%- do dataCompReadSentences.append("For that, we will use the following formats: " ~ standardLinks|join(", ") ~ ".") -%}
+          {%- do dataCompReadSentences.append(_("For that, we will use the following formats: %(formats)s.", formats=standardLinks|join(", "))) -%}
         {%- endif -%}
       {%- endif -%}
       {%- set dataCompReadItselfPath = [dataCompReadPath, dataCompReadAUuid, uuids.dataCompReadItselfQUuid]|reply_path -%}
       {%- set dataCompReadItselfAUuid = repliesMap[dataCompReadItselfPath]|reply_str_value -%}
       {%- if dataCompReadItselfAUuid == uuids.dataCompReadItselfYesRepoAUuid %}
-        {%- do dataCompReadSentences.append("The data itself will be made available in computer readable form to others through a standard repository.") -%}
+        {%- do dataCompReadSentences.append(_("The data itself will be made available in computer readable form to others through a standard repository.")) -%}
       {%- elif dataCompReadItselfAUuid == uuids.dataCompReadItselfYesOtherAUuid %}
-        {%- do dataCompReadSentences.append("The data itself will be made available in computer readable form to others.") -%}
+        {%- do dataCompReadSentences.append(_("The data itself will be made available in computer readable form to others.")) -%}
       {%- endif -%}
       {%- if dataCompReadSentences|length > 0 -%}
         <p>{{ dataCompReadSentences|join(" ") }}</p>
       {%- endif -%}
     {%- endif -%}
   {%- elif preexistingAUuid == uuids.preexistingNoAUuid -%}
-    <p>We will not be using any existing datasets.</p>
+    <p>{% trans %}We will not be using any existing datasets.{% endtrans %}</p>
   {%- endif -%}
 
   {# Format/Type with volume #}
@@ -483,18 +477,18 @@
           {%- set formatText -%}
             {# standard? #}
             {%- if formatsIsStandardAUuid == uuids.formatsIsStandardYesAUuid %}
-              It is a standardized format.
+              {% trans %}It is a standardized format.{% endtrans %}
             {%- elif formatsIsStandardAUuid == uuids.formatsIsStandardNoAUuid -%}
               {%- set formatsWhyNonStandardPath = [formatsIsStandardPath, uuids.formatsIsStandardNoAUuid, uuids.formatsWhyNonStandardQUuid]|reply_path -%}
               {%- set formatsWhyNonStandardAUuid = repliesMap[formatsWhyNonStandardPath]|reply_str_value -%}
               {%- if formatsWhyNonStandardAUuid == uuids.formatsWhyNSThereIsNoStandardAUuid %}
-                It is not a standardized format because there is no standardized format for this data type.
+                {% trans %}It is not a standardized format because there is no standardized format for this data type.{% endtrans %}
               {%- elif formatsWhyNonStandardAUuid == uuids.formatsWhyNSItIsOptimizedAUuid %}
-                It is not a standardized format but it is optimized for processing speed and/or volume.
+                {% trans %}It is not a standardized format but it is optimized for processing speed and/or volume.{% endtrans %}
               {%- elif formatsWhyNonStandardAUuid == uuids.formatsWhyNSAnotherReasonAUuid -%}
                 {%- set formatsWhyNSAnotherReasonPath = [formatsWhyNonStandardPath, uuids.formatsWhyNSAnotherReasonAUuid, uuids.formatsWhyNSAnotherReasonQUuid]|reply_path -%}
                 {%- set formatsWhyNSAnotherReason = repliesMap[formatsWhyNSAnotherReasonPath]|reply_str_value -%}
-                It is not a standardized format.
+                {% trans %}It is not a standardized format.{% endtrans %}
                 {%- if formatsWhyNSAnotherReason %}
                   {{ formatsWhyNSAnotherReason|capitalize|trim|dot }}
                 {%- endif -%}
@@ -502,29 +496,29 @@
             {%- endif -%}
             {# long-term suitable? #}
             {%- if formatsIsLTSuitableAUuid == uuids.formatsIsLTSuitableYesAUuid %}
-              This is a suitable format for long-term archiving.
+              {% trans %}This is a suitable format for long-term archiving.{% endtrans %}
             {%- elif formatsIsLTSuitableAUuid == uuids.formatsIsLTSuitableNoAUuid -%}
               {%- set formatsConvertLTSuitablePath = [formatsIsLTSuitablePath, uuids.formatsIsLTSuitableNoAUuid, uuids.formatsConvertLTSuitableQUuid]|reply_path -%}
               {%- set formatsConvertLTSuitableAUuid = repliesMap[formatsConvertLTSuitablePath]|reply_str_value -%}
               {%- if formatsConvertLTSuitableAUuid == uuids.formatsConvertLTSuitableYesAUuid %}
-                This is not a suitable format for long-term archiving; however, we plan to convert it to a suitable format before the end of the project.
+                {% trans %}This is not a suitable format for long-term archiving; however, we plan to convert it to a suitable format before the end of the project.{% endtrans %}
               {%- elif formatsConvertLTSuitableAUuid == uuids.formatsConvertLTSuitableNoAUuid %}
-                We are aware that this is not a suitable format for long-term archiving.
+                {% trans %}We are aware that this is not a suitable format for long-term archiving.{% endtrans %}
               {%- endif -%}
             {%- endif -%}
             {# volume #}
             {%- if formatsVolumeAUuid == uuids.formatsVolumeSmallAUuid %}
-              We will have only a small amount of data stored in this format.
+              {% trans %}We will have only a small amount of data stored in this format.{% endtrans %}
             {%- elif formatsVolumeAUuid == uuids.formatsVolumeTotalAUuid -%}
               {%- set formatsVolumeTotalGB = repliesMap[[formatsVolumePath, uuids.formatsVolumeTotalAUuid, uuids.formatsVolumeTotalGBQUuid]|reply_path]|reply_str_value -%}
               {%- if formatsVolumeTotalGB %}
-                We expect to have {{ formatsVolumeTotalGB }} GB of data in this format.
+                {% trans size=formatsVolumeTotalGB %}We expect to have {{ size }} GB of data in this format.{% endtrans %}
               {%- endif -%}
             {%- elif formatsVolumeAUuid == uuids.formatsVolumeFileSizeAUuid -%}
               {%- set formatsVolumeFiles = repliesMap[[formatsVolumePath, uuids.formatsVolumeFileSizeAUuid, uuids.formatsVolumeFilesQUuid]|reply_path]|reply_str_value -%}
               {%- set formatsVolumeFileGB = repliesMap[[formatsVolumePath, uuids.formatsVolumeFileSizeAUuid, uuids.formatsVolumeFileGBQUuid]|reply_path]|reply_str_value -%}
               {%- if formatsVolumeFiles and formatsVolumeFileGB %}
-                We expect to have {{ formatsVolumeFiles }} files of average size {{ formatsVolumeFileGB }} GB (i.e. approximately {{ (formatsVolumeFiles|int * formatsVolumeFileGB|float)|round(2) }} GB in total).
+                {% trans files=formatsVolumeFiles, size=formatsVolumeFileGB, value=((formatsVolumeFiles|int * formatsVolumeFileGB|float)|round(2)) %}We expect to have {{ files }} files of average size {{ size }} GB (i.e. approximately {{ value }} GB in total).{% endtrans %}
               {%- endif -%}
             {%- endif -%}
           {%- endset -%}
@@ -538,9 +532,9 @@
     {%- endfor -%}
   {%- endset -%}
   {%- if formatsList|trim -%}
-    <h4>Data formats and types</h4>
+    <h4>{% trans %}Data formats and types{% endtrans %}</h4>
     <div>
-    <p>We will be using the following data formats and types:</p>
+    <p>{% trans %}We will be using the following data formats and types:{% endtrans %}</p>
     <ul>{{ formatsList }}</ul>
     </div>
   {%- endif -%}
@@ -559,19 +553,19 @@
     {%- set storageConvRelDbPath = [stConvPrefix, uuids.storageConvRelDbQUuid]|reply_path -%}
     {%- set storageConvRelDbAUuid = repliesMap[storageConvRelDbPath]|reply_str_value -%}
     {%- if storageSpaceAUuid or storageConvFSysAUuid or storageConvObjStoreAUuid or storageConvRelDbAUuid -%}
-      <h4>Data storage and file conventions</h4>
+      <h4>{% trans %}Data storage and file conventions{% endtrans %}</h4>
       {# Storage space #}
       {%- if storageSpaceAUuid == uuids.storageSpaceLittleAUuid -%}
-        <p>The {{globals.projects}} will require so little storage space for all data and software (including temporary storage) that it is not a problem.</p>
+        <p>{% trans count=globals.projectsCount %}The project will require so little storage space for all data and software (including temporary storage) that it is not a problem.{% pluralize %}The projects will require so little storage space for all data and software (including temporary storage) that it is not a problem.{% endtrans %}</p>
       {%- elif storageSpaceAUuid == uuids.storageSpaceSpecifyAUuid -%}
         {%- set size = repliesMap[[storageSpacePath, storageSpaceAUuid, uuids.storageSpaceSpecifyQUuid]|reply_path]|reply_str_value -%}
         {%- if size -%}
-        <p>We estimate the storage space that the {{globals.projects}} will require for all data and software (including temporary storage) to {{ size }} gigabytes.</p>
+        <p>{% trans count=globals.projectsCount, size=size %}We estimate the storage space that the project will require for all data and software (including temporary storage) to {{ size }} gigabytes.{% pluralize %}We estimate the storage space that the projects will require for all data and software (including temporary storage) to {{ size }} gigabytes.{% endtrans %}</p>
         {%- endif -%}
       {%- endif -%}
       {# File System #}
       {%- if storageConvFSysAUuid == uuids.storageConvFSysNoAUuid -%}
-        <p>We will not use a filesystem with files and folders.</p>
+        <p>{% trans %}We will not use a filesystem with files and folders.{% endtrans %}</p>
       {%- elif storageConvFSysAUuid == uuids.storageConvFSysYesAUuid -%}
         {%- set scFSysPrefix = [storageConvFSysPath, uuids.storageConvFSysYesAUuid]|reply_path -%}
         {# Folder types #}
@@ -587,79 +581,83 @@
         {%- set folders = [subjectFolders, analysisFolders, workflowStepFolders] -%}
         {% call macros.para() %}
         {%- if folders|any -%}
-          We will use a filesystem with files and folders with the following folder conventions:
+          {% trans %}We will use a filesystem with files and folders with the following folder conventions:{% endtrans %}
           <ul>
             {%- if subjectFolders -%}
               {%- set scFSysSubjFoldersConvs = repliesMap[[scFSysSubjFoldersPath, uuids.scFSysSubjFoldersYesAUuid, uuids.scFSysSubjFoldersConvsQUuid]|reply_path]|reply_str_value -%}
               <li>
-                There will be a <strong>folder for each sample/subject</strong>.
+                {% trans %}There will be a <strong>folder for each sample/subject</strong>.{% endtrans %}
                 {% if scFSysSubjFoldersConvs %}
-                  Each of those will use the following conventions: {{ scFSysSubjFoldersConvs|trim|dot }}
+                  {% trans value=(scFSysSubjFoldersConvs|trim|dot) %}Each of those will use the following conventions: {{ value }}{% endtrans %}
                 {%- endif -%}
               </li>
             {%- endif -%}
             {%- if analysisFolders -%}
               {%- set scFSysAnalysisFoldersConvs = repliesMap[[scFSysAnalysisFoldersPath, uuids.scFSysAnalysisFoldersYesAUuid, uuids.scFSysAnalysisFoldersConvsQUuid]|reply_path]|reply_str_value -%}
               <li>
-                There will be a <strong>(sub)folder for each (repeated) analysis</strong>.
+                {% trans %}There will be a <strong>(sub)folder for each (repeated) analysis</strong>.{% endtrans %}
                 {% if scFSysAnalysisFoldersConvs %}
-                  Each of those will use the following conventions: {{ scFSysAnalysisFoldersConvs|trim|dot }}
+                  {% trans value=(scFSysAnalysisFoldersConvs|trim|dot) %}Each of those will use the following conventions: {{ value }}{% endtrans %}
                 {%- endif -%}
               </li>
             {%- endif -%}
             {%- if workflowStepFolders -%}
               {%- set scFSysWorkflowStepFoldersConvs = repliesMap[[scFSysWorkflowStepFoldersPath, uuids.scFSysWorkflowStepFoldersYesAUuid, uuids.scFSysWorkflowStepFoldersConvsQUuid]|reply_path]|reply_str_value -%}
               <li>
-                There will be a <strong>(sub)folder for each step in the analysis workflow</strong>.
+                {% trans %}There will be a <strong>(sub)folder for each step in the analysis workflow</strong>.{% endtrans %}
                 {% if scFSysWorkflowStepFoldersConvs %}
-                  Each of those will use the following conventions: {{ scFSysWorkflowStepFoldersConvs|trim|dot }}
+                  {% trans value=(scFSysWorkflowStepFoldersConvs|trim|dot) %}Each of those will use the following conventions: {{ value }}{% endtrans %}
                 {%- endif -%}
               </li>
             {%- endif -%}
           </ul>
         {%- else -%}
-          We will use a filesystem with files and folders.
+          {% trans %}We will use a filesystem with files and folders.{% endtrans %}
         {%- endif -%}
         {# Versioning #}
         {%- set scDocumentVersioningPath = [scFSysPrefix, uuids.scDocumentVersioningQUuid]|reply_path -%}
         {%- set scDocumentVersioningAUuid = repliesMap[scDocumentVersioningPath]|reply_str_value -%}
         {%- if scDocumentVersioningAUuid == uuids.scDocumentVersioningYesAUuid %}
-          We document how we manage file versioning for files and folders.
+          {% trans %}We document how we manage file versioning for files and folders.{% endtrans %}
         {%- endif -%}
         {# Agreements about file names #}
         {%- set scFSysAppointmentsPath = [scFSysPrefix, uuids.scFSysAppointmentsQUuid]|reply_path -%}
         {%- set scFSysAppointments = repliesMap[scFSysAppointmentsPath]|reply_str_value -%}
         {%- if scFSysAppointments %}
-          {{ "Moreover, we" if folders|any else "We" }} have made the following agreements about naming the files: {{ scFSysAppointments|trim|dot }}
+          {%- if folders|any %}
+          {% trans agreements=(scFSysAppointments|trim|dot) %}Moreover, we have made the following agreements about naming the files: {{ agreements }}{% endtrans %}
+          {%- else %}
+          {% trans agreements=(scFSysAppointments|trim|dot) %}We have made the following agreements about naming the files: {{ agreements }}{% endtrans %}
+          {%- endif -%}
         {%- endif -%}
         {% endcall %}
       {%- endif -%}
       {# Object Store #}
       {%- if storageConvObjStoreAUuid == uuids.storageConvObjStoreNoAUuid -%}
-        <p>We will not be storing data in an "object store" system.</p>
+        <p>{% trans %}We will not be storing data in an "object store" system.{% endtrans %}</p>
       {%- elif storageConvObjStoreAUuid == uuids.storageConvObjStoreYesAUuid -%}
         {%- set scObjStoreNamingPath = [storageConvObjStorePath, uuids.storageConvObjStoreYesAUuid, uuids.scObjStoreNamingQUuid]|reply_path -%}
         {%- set scObjStoreNaming = repliesMap[scObjStoreNamingPath]|reply_str_value -%}
         {%- if scObjStoreNaming -%}
-          <p>We will be storing data in an "object store" system using the following naming conventions for objects in the store: {{ scObjStoreNaming|trim|dot }}</p>
+          <p>{% trans value=(scObjStoreNaming|trim|dot) %}We will be storing data in an "object store" system using the following naming conventions for objects in the store: {{ value }}{% endtrans %}</p>
         {%- else -%}
-          <p>We will be storing data in an "object store" system.</p>
+          <p>{% trans %}We will be storing data in an "object store" system.{% endtrans %}</p>
         {%- endif -%}
       {%- endif -%}
       {# Database #}
       {%- if storageConvRelDbAUuid == uuids.storageConvRelDbNoAUuid -%}
-        <p>We will not use a database system to store project data.</p>
+        <p>{% trans %}We will not use a database system to store project data.{% endtrans %}</p>
       {%- elif storageConvRelDbAUuid == uuids.storageConvRelDbYesAUuid -%}
         <p>
-        We will use a database system to store project data.
+        {% trans %}We will use a database system to store project data.{% endtrans %}
         {%- set scRelDbHandleChangesPath = [storageConvRelDbPath, uuids.storageConvRelDbYesAUuid, uuids.scRelDbHandleChangesQUuid]|reply_path -%}
         {%- set scRelDbHandleChangesAUuid = repliesMap[scRelDbHandleChangesPath]|reply_str_value -%}
         {%- if scRelDbHandleChangesAUuid == uuids.scRelDbReadOnlyAUuid %}
-          Data in the database will be read-only.
+          {% trans %}Data in the database will be read-only.{% endtrans %}
         {%- elif scRelDbHandleChangesAUuid == uuids.scRelDbCrudAUuid %}
-          We will be allowing Create, Update and Delete operations for data in the database.
+          {% trans %}We will be allowing Create, Update and Delete operations for data in the database.{% endtrans %}
         {%- elif scRelDbHandleChangesAUuid == uuids.scRelDbExpireAUuid %}
-          Modifications will be made by <em>Expiring</em> the existing data and <em>Adding</em> updated data.
+          {% trans %}Modifications will be made by <em>Expiring</em> the existing data and <em>Adding</em> updated data.{% endtrans %}
         {%- endif %}
         </p>
       {%- endif -%}

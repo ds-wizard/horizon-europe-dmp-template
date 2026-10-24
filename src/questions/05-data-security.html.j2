@@ -27,25 +27,25 @@
       {%- if storeLab or (risksCarryHomeAUuid == uuids.risksCarryHomeNoAUuid) or (risksCarryHomeAUuid == uuids.risksCarryHomeYesAUuid and (homeEncrypted or homePassword)) or (risksCertificationsAUuid == uuids.risksCertificationsYesAUuid) or (risksHttpsAUuid == uuids.risksHttpsYesAUuid) or (risksInstructedAUuid == uuids.risksInstructedYesAUuid) %}
         <p>
           {%- if storeLab %}
-            Project members will not store data or software on computers in the lab or external hard drives connected to those computers.
+            {% trans %}Project members will not store data or software on computers in the lab or external hard drives connected to those computers.{% endtrans %}
           {% endif -%}
           {% if risksCarryHomeAUuid == uuids.risksCarryHomeNoAUuid %}
-            {%- if storeLab -%}They{%- else -%}Project members{%- endif %} will not carry data with them (e.g. on laptops, USB sticks, or other external media).
+            {%- if storeLab -%}{% trans %}They{% endtrans %}{%- else -%}{% trans %}Project members{% endtrans %}{%- endif %} {% trans %}will not carry data with them (e.g. on laptops, USB sticks, or other external media).{% endtrans %}
           {% elif homeEncrypted and homePassword %}
-            {%- if storeLab -%}They{%- else -%}Project members{%- endif %} can carry data with them on encrypted data carriers and password-protected laptops.
+            {%- if storeLab -%}{% trans %}They{% endtrans %}{%- else -%}{% trans %}Project members{% endtrans %}{%- endif %} {% trans %}can carry data with them on encrypted data carriers and password-protected laptops.{% endtrans %}
           {% elif homeEncrypted %}
-            {%- if storeLab -%}They{%- else -%}Project members{%- endif %} can carry data with them on encrypted data carriers.
+            {%- if storeLab -%}{% trans %}They{% endtrans %}{%- else -%}{% trans %}Project members{% endtrans %}{%- endif %} {% trans %}can carry data with them on encrypted data carriers.{% endtrans %}
           {% elif homePassword %}
-            {%- if storeLab -%}They{%- else -%}Project members{%- endif %} can carry data with them on password-protected laptops.
+            {%- if storeLab -%}{% trans %}They{% endtrans %}{%- else -%}{% trans %}Project members{% endtrans %}{%- endif %} {% trans %}can carry data with them on password-protected laptops.{% endtrans %}
           {% endif -%}
           {%- if risksCertificationsAUuid == uuids.risksCertificationsYesAUuid %}
-            All data centers where project data is stored hold appropriate certifications.
+            {% trans %}All data centers where project data is stored hold appropriate certifications.{% endtrans %}
           {% endif -%}
           {%- if risksHttpsAUuid == uuids.risksHttpsYesAUuid %}
-            All project web services are accessible via secure HTTP (https://...).
+            {% trans %}All project web services are accessible via secure HTTP (https://...).{% endtrans %}
           {% endif -%}
           {%- if risksInstructedAUuid == uuids.risksInstructedYesAUuid %}
-            Project members have been instructed about both generic and specific risks to the {{globals.projects}}.
+            {% trans count=globals.projectsCount %}Project members have been instructed about both generic and specific risks to the project.{% pluralize %}Project members have been instructed about both generic and specific risks to the projects.{% endtrans %}
           {% endif -%}
         </p>
       {%- endif -%}
@@ -92,48 +92,46 @@
         {%- endif -%}
       {%- endfor -%}
 
-      {# helper inline join #}
-      {%- set fragments = [] -%}
+      {#- TRANSLATORS: kinds of risk in "The risk of information loss, leak, and vandalism ..." -#}
+      {%- set riskNames = {'loss': _('loss'), 'leak': _('leak'), 'vandalism': _('vandalism')} -%}
+      {%- set sentences = [] -%}
       {%- if small|length > 0 -%}
-        {%- set risks = (small[:-1]|join(', ') ~ (', and ' if small|length > 2 else ' and ') ~ small[-1]) if small|length > 1 else small[0] -%}
-        {%- set _ = fragments.append("The possible impact of information " ~ risks ~ " is small") -%}
+        {%- do sentences.append(_("The possible impact of information %(risks)s is small.", risks=macros.joinAnd(riskNames|extract(small)))) -%}
       {%- endif -%}
       {%- if low|length > 0 -%}
-        {%- set risks = (low[:-1]|join(', ') ~ (', and ' if low|length > 2 else ' and ') ~ low[-1]) if low|length > 1 else low[0] -%}
-        {%- set _ = fragments.append("The risk of information " ~ risks ~ " is acceptably low") -%}
+        {%- do sentences.append(_("The risk of information %(risks)s is acceptably low.", risks=macros.joinAnd(riskNames|extract(low)))) -%}
       {%- endif -%}
       {%- if will|length > 0 -%}
-        {%- set risks = (will[:-1]|join(', ') ~ (', and ' if will|length > 2 else ' and ') ~ will[-1]) if will|length > 1 else will[0] -%}
-        {%- set _ = fragments.append("We will mitigate the risk of information " ~ risks) -%}
+        {%- do sentences.append(_("We will mitigate the risk of information %(risks)s.", risks=macros.joinAnd(riskNames|extract(will)))) -%}
       {%- endif -%}
-      {%- if fragments|length > 0 -%}
-        <p>{{ fragments | join('. ') }}.</p>
+      {%- if sentences|length > 0 -%}
+        <p>{{ sentences|join(' ') }}</p>
       {%- endif -%}
 
       {# Personal data #}
       {%- set risksPersonalDataPath = [risksPathPrefix, uuids.risksPersonalDataQUuid]|reply_path -%}
       {%- set risksPersonalDataAUuid = repliesMap[risksPersonalDataPath]|reply_str_value -%}
       {%- if risksPersonalDataAUuid == uuids.risksPersonalDataNotUsingAUuid -%}
-        <p>We are not using any personal information.</p>
+        <p>{% trans %}We are not using any personal information.{% endtrans %}</p>
       {%- elif risksPersonalDataAUuid == uuids.risksPersonalDataPseudoAUuid -%}
         {% call macros.para() %}
-          All personal information will be processed in pseudonymized form only.
+          {% trans %}All personal information will be processed in pseudonymized form only.{% endtrans %}
           {%- set risksPseudonymizationPath = [risksPersonalDataPath, uuids.risksPersonalDataPseudoAUuid, uuids.risksPseudonymizationQUuid]|reply_path -%}
           {%- set risksPseudonymizationAUuid = repliesMap[risksPseudonymizationPath]|reply_str_value -%}
           {%- if risksPseudonymizationAUuid == uuids.risksPseudonymizationInsideAUuid %}
-            We pseudonymize inside the project; only a limited number of people can access the keys.
+            {% trans %}We pseudonymize inside the project; only a limited number of people can access the keys.{% endtrans %}
           {%- elif risksPseudonymizationAUuid == uuids.risksPseudonymizationPartyAUuid %}
-            Pseudonymization is handled by an independent party in order to allow data coupling.
+            {% trans %}Pseudonymization is handled by an independent party in order to allow data coupling.{% endtrans %}
           {%- elif risksPseudonymizationAUuid == uuids.risksPseudonymizationAnotherAUuid -%}
             {%- set risksPseudonymizationAnotherQUuid = [risksPseudonymizationPath, uuids.risksPseudonymizationAnotherAUuid, uuids.risksPseudonymizationAnotherQUuid]|reply_path -%}
             {%- set risksPseudonymizationAnother = repliesMap[risksPseudonymizationAnotherQUuid]|reply_str_value %}
-            We have a specific way of pseudonymization{{ ": " ~ risksPseudonymizationAnother|markdown if risksPseudonymizationAnother else "." }}
+            {# TRANSLATORS: %(value)s is ": " followed by the answer, or "." (or nothing in a list item) #}{% trans value=(": " ~ risksPseudonymizationAnother|markdown if risksPseudonymizationAnother else ".") %}We have a specific way of pseudonymization{{ value }}{% endtrans %}
           {%- endif -%}
         {% endcall %}
       {%- elif risksPersonalDataAUuid == uuids.risksPersonalDataAnonymousAUuid -%}
-        <p>All personal data will be collected anonymously.</p>
+        <p>{% trans %}All personal data will be collected anonymously.{% endtrans %}</p>
       {%- elif risksPersonalDataAUuid == uuids.risksPersonalDataAnonymizedAUuid -%}
-        <p>All personal data will be anonymized as early as possible.</p>
+        <p>{% trans %}All personal data will be anonymized as early as possible.{% endtrans %}</p>
       {%- endif -%}
     {%- endif -%}
 
@@ -145,13 +143,13 @@
       {%- set sharedAccessControlPath = [sharedWorkspacePrefix, uuids.sharedAccessControlQUuid]|reply_path -%}
       {%- set sharedAccessControlAUuid = repliesMap[sharedAccessControlPath]|reply_str_value -%}
       {%- if sharedAccessControlAUuid == uuids.sharedAccessControlMembersRWAUuid -%}
-        <p>Only project members have read/write access to the data.</p>
+        <p>{% trans %}Only project members have read/write access to the data.{% endtrans %}</p>
       {%- elif sharedAccessControlAUuid == uuids.sharedAccessControlInstituteRAUuid -%}
-        <p>Anyone in the institute has read access to the data; all project members have read/write access.</p>
+        <p>{% trans %}Anyone in the institute has read access to the data; all project members have read/write access.{% endtrans %}</p>
       {%- elif sharedAccessControlAUuid == uuids.sharedAccessControlMembersRAUuid -%}
-        <p>Only project members will have read access; only selected project members will be able to write data.</p>
+        <p>{% trans %}Only project members will have read access; only selected project members will be able to write data.{% endtrans %}</p>
       {%- elif sharedAccessControlAUuid == uuids.sharedAccessControlMembersRequestAUuid -%}
-        <p>Anyone in the institute can read data; only project members can request write access.</p>
+        <p>{% trans %}Anyone in the institute can read data; only project members can request write access.{% endtrans %}</p>
       {%- endif -%}
     {%- endif -%}
 
@@ -166,11 +164,11 @@
       {%- set coldStorageProtectAUuid = repliesMap[coldStorageProtectPath]|reply_str_value -%}
 
       {%- if coldStorageRemoteDisasterAUuid == uuids.coldStorageRemoteDisasterYesAUuid -%}
-        {%- do coldSentences.append("The archive will be stored in a remote location to protect the data against disasters.") -%}
+        {%- do coldSentences.append(_("The archive will be stored in a remote location to protect the data against disasters.")) -%}
       {%- endif -%}
 
       {%- if coldStorageProtectAUuid == uuids.coldStorageProtectYesAUuid -%}
-        {%- do coldSentences.append("The archive needs to be protected against loss or theft.") -%}
+        {%- do coldSentences.append(_("The archive needs to be protected against loss or theft.")) -%}
 
         {%- set coldStorageProtectEncPath = [coldStorageProtectPath, uuids.coldStorageProtectYesAUuid, uuids.coldStorageProtectEncQUuid]|reply_path -%}
         {%- set coldStorageProtectEncAUuid = repliesMap[coldStorageProtectEncPath]|reply_str_value -%}
@@ -178,18 +176,18 @@
         {%- set coldStorageProtectPhysicalAUuid = repliesMap[coldStorageProtectPhysicalPath]|reply_str_value -%}
 
         {%- if coldStorageProtectEncAUuid == uuids.coldStorageProtectEncNoNeedAUuid -%}
-          {%- do coldSentences.append("The data does not need protection in terms of encryption.") -%}
+          {%- do coldSentences.append(_("The data does not need protection in terms of encryption.")) -%}
         {%- elif coldStorageProtectEncAUuid == uuids.coldStorageProtectEncYesAUuid -%}
           {%- set coldStorageProtectEncKeyPath = [coldStorageProtectEncPath, uuids.coldStorageProtectEncYesAUuid, uuids.coldStorageProtectEncKeyQUuid]|reply_path -%}
           {%- set coldStorageProtectEncKeyAUuid = repliesMap[coldStorageProtectEncKeyPath]|reply_str_value -%}
           {%- if coldStorageProtectEncKeyAUuid == uuids.coldStorageProtectEncKeyYesAUuid -%}
-            {%- do coldSentences.append("It will be encrypted and it is clear who has access to the key (also in case of a required data restore).") -%}
+            {%- do coldSentences.append(_("It will be encrypted and it is clear who has access to the key (also in case of a required data restore).")) -%}
           {%- else -%}
-            {%- do coldSentences.append("It will be encrypted.") -%}
+            {%- do coldSentences.append(_("It will be encrypted.")) -%}
           {%- endif -%}
         {%- endif -%}
         {%- if coldStorageProtectPhysicalAUuid == uuids.coldStorageProtectPhysicalYesAUuid -%}
-          {%- do coldSentences.append("It is clear who has physical access to the archives.") -%}
+          {%- do coldSentences.append(_("It is clear who has physical access to the archives.")) -%}
         {%- endif -%}
       {%- endif -%}
 
@@ -202,14 +200,14 @@
     {%- set collabPath = [uuids.creatingCUuid, uuids.collabQUuid]|reply_path -%}
     {%- set collabAUuid = repliesMap[collabPath]|reply_str_value -%}
     {%- if collabAUuid == uuids.collabNoAUuid -%}
-      <p>We are not running the project in a collaboration between different groups or institutes. Therefore, no collaboration agreement related to data access is needed.</p>
+      <p>{% trans %}We are not running the project in a collaboration between different groups or institutes. Therefore, no collaboration agreement related to data access is needed.{% endtrans %}</p>
     {%- elif collabAUuid == uuids.collabYesAUuid -%}
       {%- set collabAgreePath = [collabPath, collabAUuid, uuids.collabAgreeQUuid]|reply_path -%}
       {%- set collabAgreeAUuid = repliesMap[collabAgreePath]|reply_str_value -%}
       {%- if collabAgreeAUuid == uuids.collabAgreeNoAUuid -%}
-       <p>We are running the project in a collaboration between different groups and institutes. However, there is no collaboration agreement in the project that describes who can have access to what data.</p>
+       <p>{% trans %}We are running the project in a collaboration between different groups and institutes. However, there is no collaboration agreement in the project that describes who can have access to what data.{% endtrans %}</p>
       {%- elif collabAgreeAUuid == uuids.collabAgreeYesAUuid -%}
-        <p>We are running the project in a collaboration between different groups and institutes. A collaboration agreement that describes who can have access to what data in the project is in place.</p>
+        <p>{% trans %}We are running the project in a collaboration between different groups and institutes. A collaboration agreement that describes who can have access to what data in the project is in place.{% endtrans %}</p>
       {%- endif -%}
     {%- endif -%}
   </div>

@@ -1,9 +1,9 @@
 {%- set projectsPath = [uuids.adminDetailsCUuid, uuids.projectsQUuid]|reply_path -%}
 {%- set projectsItems = repliesMap[projectsPath]|reply_items -%}
 <div id="dmp-projects">
-  <h2>Projects</h2>
+  <h2>{% trans %}Projects{% endtrans %}</h2>
 
-  <p>The data and work described in this DMP are for the following {{globals.projects}}.</p>
+  <p>{% trans count=globals.projectsCount %}The data and work described in this DMP are for the following project.{% pluralize %}The data and work described in this DMP are for the following projects.{% endtrans %}</p>
 
   {% for projectsItem in projectsItems %}
     <div class="project">
@@ -12,7 +12,7 @@
     {%- if projectName -%}
       <h3>{{ projectName }}</h3>
     {%- else -%}
-      <h3 class="empty-value">(project name not given)</h3>
+      <h3 class="empty-value">{% trans %}(project name not given){% endtrans %}</h3>
     {%- endif -%}
 
     {%- set projectAcronymPath = [projectsPath, projectsItem, uuids.projectAcronymQUuid]|reply_path -%}
@@ -26,15 +26,15 @@
     {%- set fundersPath = [projectsPath, projectsItem, uuids.fundersQUuid]|reply_path -%}
     {%- set fundersItems = repliesMap[fundersPath]|reply_items -%}
       <dl>
-        <dt>Acronym</dt>
+        <dt>{% trans %}Acronym{% endtrans %}</dt>
         <dd>{{ projectAcronym if projectAcronym else "N/A" }}</dd>
-        <dt>Project Number</dt>
+        <dt>{% trans %}Project Number{% endtrans %}</dt>
         <dd>{{ projectNumber if projectNumber else "N/A" }}</dd>
-        <dt>Start date</dt>
+        <dt>{% trans %}Start date{% endtrans %}</dt>
         <dd>{{ projectStart if projectStart else "N/A" }}</dd>
-        <dt>End date</dt>
+        <dt>{% trans %}End date{% endtrans %}</dt>
         <dd>{{ projectEnd if projectEnd else "N/A" }}</dd>
-        <dt>Funding</dt>
+        <dt>{% trans %}Funding{% endtrans %}</dt>
         <dd>
           {%- if fundersItems|length > 0 %}
             <ul>
@@ -45,11 +45,11 @@
               {%- set grantNumber = repliesMap[grantNumberPath]|reply_str_value -%}
               {%- set funderStatusPath = [fundersPath, fundersItem, uuids.funderStatusQUuid]|reply_path -%}
               {%- set funderStatus = repliesMap[funderStatusPath]|reply_str_value %}
-              <li>{{ macros.integrationCrossref(funderNameReply) }}: {{ grantNumber if grantNumber else "grant number not yet given" }} {% if funderStatus == uuids.funderStatusPlannedAUuid %}(planned){% elif funderStatus == uuids.funderStatusAppliedAUuid %}(applied){% elif funderStatus == uuids.funderStatusGrantedAUuid %}(granted){% elif funderStatus == uuids.funderStatusRejectedAUuid %}(rejected){% endif %}</li>
+              <li>{{ macros.integrationCrossref(funderNameReply) }}: {{ grantNumber if grantNumber else _("grant number not yet given") }} {% if funderStatus == uuids.funderStatusPlannedAUuid %}{% trans %}(planned){% endtrans %}{% elif funderStatus == uuids.funderStatusAppliedAUuid %}{% trans %}(applied){% endtrans %}{% elif funderStatus == uuids.funderStatusGrantedAUuid %}{% trans %}(granted){% endtrans %}{% elif funderStatus == uuids.funderStatusRejectedAUuid %}{% trans %}(rejected){% endtrans %}{% endif %}</li>
             {%- endfor %}
             </ul>
           {%- else -%}
-            Did not apply for any funding yet.
+            {% trans %}Did not apply for any funding yet.{% endtrans %}
           {%- endif -%}
         </dd>
       </dl>
@@ -63,6 +63,6 @@
     {%- endif -%}
     </div>
   {% else %}
-    <p style="font-style:italic;">There are no projects described for this DMP.</p>
+    <p style="font-style:italic;">{% trans %}There are no projects described for this DMP.{% endtrans %}</p>
   {% endfor %}
 </div>

@@ -7,19 +7,19 @@
   {%- if reply and reply.value.value.type == "IntegrationType" -%}
     {%- if reply.value.value.raw -%}
       {%- set replyObject = reply.value.value.raw -%}
-      <span class="contact-orcid">ORCID: <a href="https://orcid.org/{{ replyObject["orcid-id"] }}" target="_blank">{{ replyObject["orcid-id"] }}</a></span>
+      <span class="contact-orcid">{% trans %}ORCID:{% endtrans %} <a href="https://orcid.org/{{ replyObject["orcid-id"] }}" target="_blank">{{ replyObject["orcid-id"] }}</a></span>
     {%- else -%}
       {# Extract ORCID number from the value string #}
       {%- set value = reply.value.value.value %}
       {%- set orcid = value.split('ORCID:')[-1].strip().split()[0]|replace("**", "")|markdown|replace("<p>", "")|replace("</p>", "") if 'ORCID:' in value else None %}
       {%- if orcid and orcid|length >= 15 -%}
-        <span class="contact-orcid">ORCID: {{ orcid }}</span>
+        <span class="contact-orcid">{% trans orcid=orcid %}ORCID: {{ orcid }}{% endtrans %}</span>
       {%- else -%}
-        <span class="contact-orcid">ORCID: Not found</span>
+        <span class="contact-orcid">{% trans %}ORCID: Not found{% endtrans %}</span>
       {%- endif -%}
     {%- endif -%}
   {%- elif reply and reply.value.value.type == "PlainType" -%}
-    <span class="contact-orcid">ORCID: <a href="https://orcid.org/{{ reply.value.value.value }}" target="_blank">{{ reply.value.value.value }}</a></span>
+    <span class="contact-orcid">{% trans %}ORCID:{% endtrans %} <a href="https://orcid.org/{{ reply.value.value.value }}" target="_blank">{{ reply.value.value.value }}</a></span>
   {%- endif -%}
 {%- endmacro -%}
 
@@ -155,4 +155,30 @@
     {%- set ns.rest = ns.rest[b.pos:]|trim -%}
   {%- endfor -%}
   {{ ns.parts|join }}
+{%- endmacro -%}
+
+{#- Items joined into an enumeration: "A", "A and B", "A, B, and C" -#}
+{%- macro joinAnd(items) -%}
+  {%- if items|length > 2 -%}
+    {#- TRANSLATORS: the end of an enumeration of three or more items, e.g. "A, B, and C" -#}
+    {{ _("%(items)s, and %(last)s", items=items[:-1]|join(", "), last=items[-1]) }}
+  {%- elif items|length == 2 -%}
+    {#- TRANSLATORS: an enumeration of two items, e.g. "A and B" -#}
+    {{ _("%(first)s and %(last)s", first=items[0], last=items[1]) }}
+  {%- elif items|length == 1 -%}
+    {{ items[0] }}
+  {%- endif -%}
+{%- endmacro -%}
+
+{#- Items joined into a negative enumeration after "neither": "A", "A nor B", "A, B, nor C" -#}
+{%- macro joinNor(items) -%}
+  {%- if items|length > 2 -%}
+    {#- TRANSLATORS: a negative enumeration of three or more items after "neither", e.g. "neither A, B, nor C" -#}
+    {{ _("%(items)s, nor %(last)s", items=items[:-1]|join(", "), last=items[-1]) }}
+  {%- elif items|length == 2 -%}
+    {#- TRANSLATORS: a negative enumeration of two items after "neither", e.g. "neither A nor B" -#}
+    {{ _("%(first)s nor %(last)s", first=items[0], last=items[1]) }}
+  {%- elif items|length == 1 -%}
+    {{ items[0] }}
+  {%- endif -%}
 {%- endmacro -%}

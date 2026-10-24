@@ -9,8 +9,8 @@
   <img src="{{ eu_flag.data_url }}" height="213" width="320" class="eu-flag" />
   </center>
   <h3>
-    Horizon Europe<br/>
-    Data Management Plan
+    {% trans %}Horizon Europe<br/>
+    Data Management Plan{% endtrans %}
   </h3>
 
   <div class="info">
@@ -21,9 +21,11 @@
       <div class="date">{{ dc.doc.created_at|datetime_format("%d %B %Y") }}</div>
     </div>
 
+    {%- set serviceLink -%}<a href="{{ dc.config.service_url }}" target="_blank">{{ dc.config.service_domain_name }}</a>{%- endset -%}
+    {%- set packageId -%}<span class="package-id"><span class="organization-id">{{ dc.pkg.org_id }}</span>:<span class="km-id">{{ dc.pkg.km_id }}</span>:<span class="version">{{ dc.pkg.version }}</span></span>{%- endset %}
     <p class="note">
-      Data Management Plan created in {{ dc.config.service_name }} &laquo;<a href="{{ dc.config.service_url }}" target="_blank">{{ dc.config.service_domain_name }}</a>&raquo;<br/>
-      using {{ dc.pkg.name }} v{{ dc.pkg.version }} (<span class="package-id"><span class="organization-id">{{ dc.pkg.org_id }}</span>:<span class="km-id">{{ dc.pkg.km_id }}</span>:<span class="version">{{ dc.pkg.version }}</span></span>).
+      {# TRANSLATORS: %(link)s is the domain of the Wizard as a link, %(name)s and %(version)s the knowledge model, %(id)s its ID #}
+      {% trans service_name=dc.config.service_name, link=serviceLink, name=dc.pkg.name, version=dc.pkg.version, id=packageId %}Data Management Plan created in {{ service_name }} &laquo;{{ link }}&raquo;<br/> using {{ name }} v{{ version }} ({{ id }}).{% endtrans %}
     </p>
   </div>
 </header>

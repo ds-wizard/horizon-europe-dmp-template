@@ -22,18 +22,18 @@
           {%- set formatText -%}
             {# standard? #}
             {%- if formatsIsStandardAUuid == uuids.formatsIsStandardYesAUuid %}
-              It is a standardized format.
+              {% trans %}It is a standardized format.{% endtrans %}
             {%- elif formatsIsStandardAUuid == uuids.formatsIsStandardNoAUuid -%}
               {%- set formatsWhyNonStandardPath = [formatsIsStandardPath, uuids.formatsIsStandardNoAUuid, uuids.formatsWhyNonStandardQUuid]|reply_path -%}
               {%- set formatsWhyNonStandardAUuid = repliesMap[formatsWhyNonStandardPath]|reply_str_value -%}
               {%- if formatsWhyNonStandardAUuid == uuids.formatsWhyNSThereIsNoStandardAUuid %}
-                It is not a standardized format because there is no standardized format for this data type.
+                {% trans %}It is not a standardized format because there is no standardized format for this data type.{% endtrans %}
               {%- elif formatsWhyNonStandardAUuid == uuids.formatsWhyNSItIsOptimizedAUuid %}
-                It is not a standardized format but it is optimized for processing speed and/or volume.
+                {% trans %}It is not a standardized format but it is optimized for processing speed and/or volume.{% endtrans %}
               {%- elif formatsWhyNonStandardAUuid == uuids.formatsWhyNSAnotherReasonAUuid -%}
                 {%- set formatsWhyNSAnotherReasonPath = [formatsWhyNonStandardPath, uuids.formatsWhyNSAnotherReasonAUuid, uuids.formatsWhyNSAnotherReasonQUuid]|reply_path -%}
                 {%- set formatsWhyNSAnotherReason = repliesMap[formatsWhyNSAnotherReasonPath]|reply_str_value -%}
-                It is not a standardized format.
+                {% trans %}It is not a standardized format.{% endtrans %}
                 {%- if formatsWhyNSAnotherReason %}
                   {{ formatsWhyNSAnotherReason|capitalize|trim|dot }}
                 {%- endif -%}
@@ -51,7 +51,7 @@
   {%- endset -%}
   {%- if formatsList|trim -%}
     <div>
-    <p>We will be using the following data formats and types:</p>
+    <p>{% trans %}We will be using the following data formats and types:{% endtrans %}</p>
     <ul>{{ formatsList }}</ul>
     </div>
   {%- endif -%}
@@ -79,7 +79,7 @@
   {%- endset -%}
   {%- if whatUsingList|trim -%}
     <div>
-    <p>We will be using the following standards (encodings, terminologies, vocabularies, ontologies):</p>
+    <p>{% trans %}We will be using the following standards (encodings, terminologies, vocabularies, ontologies):{% endtrans %}</p>
     <ul>{{ whatUsingList }}</ul>
     </div>
   {%- endif -%}
@@ -91,14 +91,14 @@
     {%- set newTypesVocabsPath = [newTypesPath, uuids.newTypesYesAUuid, uuids.newTypesVocabsQUuid]|reply_path -%}
     {%- set newTypesVocabsAUuid = repliesMap[newTypesVocabsPath]|reply_str_value -%}
     {%- if newTypesVocabsAUuid == uuids.newTypesVocabsNoAUuid -%}
-      <p>Although we will be using new types of data, suitable public controlled vocabularies or ontologies exist for those.</p>
+      <p>{% trans %}Although we will be using new types of data, suitable public controlled vocabularies or ontologies exist for those.{% endtrans %}</p>
     {%- elif newTypesVocabsAUuid == uuids.newTypesVocabsYesAUuid -%}
       {%- set newTypesVocabsMappingPath = [newTypesVocabsPath, uuids.newTypesVocabsYesAUuid, uuids.newTypesVocabsMappingQUuid]|reply_path -%}
       {%- set newTypesVocabsMappingAUuid = repliesMap[newTypesVocabsMappingPath]|reply_str_value -%}
       {%- if newTypesVocabsMappingAUuid == uuids.newTypesVocabsMappingNoAUuid -%}
-      <p>We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of our data.</p>
+      <p>{% trans %}We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of our data.{% endtrans %}</p>
       {%- elif newTypesVocabsMappingAUuid == uuids.newTypesVocabsMappingYesAUuid -%}
-      <p>We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of our data. Such terms will be mapped to existing vocabularies or ontologies.</p>
+      <p>{% trans %}We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of our data. Such terms will be mapped to existing vocabularies or ontologies.{% endtrans %}</p>
       {%- endif -%}
     {%- endif -%}
   {%- endif -%}
@@ -143,7 +143,7 @@
     {%- endfor -%}
   {%- endif -%}
   {%- if datasets|length > 0 -%}
-    <p>The following produced and published datasets will use qualified references:</p>
+    <p>{% trans %}The following produced and published datasets will use qualified references:{% endtrans %}</p>
     <ul>
       {%- for dataset in datasets -%}
       <li>

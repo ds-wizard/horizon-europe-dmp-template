@@ -4,20 +4,20 @@
     {%- set producedDataPath = [uuids.preservingCUuid, uuids.producedDataQUuid]|reply_path -%}
     {%- set producedDataItems = repliesMap[producedDataPath]|reply_items -%}
     {%- if producedDataItems|length > 0 -%}
-      <p>The metadata for our produced data will be kept as follows:</p>
+      <p>{% trans %}The metadata for our produced data will be kept as follows:{% endtrans %}</p>
       <ul>
       {%- for i in producedDataItems -%}
         {%- set pathPrefix = [producedDataPath, i]|reply_path -%}
         {%- set producedDataName = repliesMap[[pathPrefix, uuids.producedDataNameQUuid]|reply_path]|reply_str_value -%}
         <li>
-          <strong>{{ producedDataName if producedDataName else "(no name given)" }}</strong>
+          <strong>{{ producedDataName if producedDataName else _("(no name given)") }}</strong>
           {# If will be published #}
           {%- set isPublishedDataPath = [pathPrefix, uuids.isPublishedDataQUuid]|reply_path -%}
           {%- set isPublishedDataAUuid = repliesMap[isPublishedDataPath]|reply_str_value -%}
           {% if isPublishedDataAUuid == uuids.isPublishedDataNoAUuid %}
-            (not published)
+            {% trans %}(not published){% endtrans %}
           {% elif isPublishedDataAUuid == uuids.isPublishedDataYesAUuid %}
-            (will be published)
+            {% trans %}(will be published){% endtrans %}
           {% endif -%}
           {# How long will be stored + Metadata FAIRness #}
           {%- set publishedDataHowLongPath = [pathPrefix, uuids.publishedDataHowLongQUuid]|reply_path -%}
@@ -26,16 +26,16 @@
           {%- set publishedDataMetadataPersistentAUuid = repliesMap[publishedDataMetadataPersistentPath]|reply_str_value -%}
           {%- if publishedDataHowLongAUuid or (publishedDataMetadataPersistentAUuid == uuids.publishedDataMetadataPersistentYesAUuid) %}
             {% if publishedDataHowLongAUuid == uuids.publishedDataHowLongTechnicalAUuid -%}
-              <span class="separator">&ndash;</span> This data set will be kept available as long as technically possible.
+              <span class="separator">&ndash;</span> {% trans %}This data set will be kept available as long as technically possible.{% endtrans %}
             {%- elif publishedDataHowLongAUuid == uuids.publishedDataHowLongLegalAUuid -%}
-              <span class="separator">&ndash;</span> This data set will be kept available until it needs to be deleted for legal, contractual or regulatory reasons.
+              <span class="separator">&ndash;</span> {% trans %}This data set will be kept available until it needs to be deleted for legal, contractual or regulatory reasons.{% endtrans %}
             {%- elif publishedDataHowLongAUuid == uuids.publishedDataHowLongFixedAUuid -%}
               {%- set publishedDataHowLongFixedPath = [publishedDataHowLongPath, uuids.publishedDataHowLongFixedAUuid, uuids.publishedDataHowLongFixedQUuid]|reply_path -%}
               {%- set publishedDataHowLongFixed = repliesMap[publishedDataHowLongFixedPath]|reply_str_value -%}
-              <span class="separator">&ndash;</span> This data set will be kept available for a fixed period (prepaid){{ " of " ~ publishedDataHowLongFixed|trim|dot if publishedDataHowLongFixed else "." }}
+              <span class="separator">&ndash;</span> {% if publishedDataHowLongFixed %}{% trans period=(publishedDataHowLongFixed|trim|dot) %}This data set will be kept available for a fixed period (prepaid) of {{ period }}{% endtrans %}{% else %}{% trans %}This data set will be kept available for a fixed period (prepaid).{% endtrans %}{% endif %}
             {%- endif -%}
             {%- if publishedDataMetadataPersistentAUuid == uuids.publishedDataMetadataPersistentYesAUuid %}
-              <span class="separator">&ndash;</span> The metadata will be available even when the data no longer exists.
+              <span class="separator">&ndash;</span> {% trans %}The metadata will be available even when the data no longer exists.{% endtrans %}
             {%- endif -%}
           {%- endif -%}
         </li>
@@ -93,20 +93,20 @@
         {%- endif -%}
       {%- endfor -%}
       {%- if measuredQuality|length > 0 -%}
-      <p>The following instrument datasets acquired in the {{globals.projects}} will use the following quality processes:</p>
+      <p>{% trans count=globals.projectsCount %}The following instrument datasets acquired in the project will use the following quality processes:{% pluralize %}The following instrument datasets acquired in the projects will use the following quality processes:{% endtrans %}</p>
       <ul>
       {%- for item in measuredQuality -%}
         <li>
             <strong>{{ item.name }}</strong>
             <ul>
-              {% if item.calibrate %}<li>Calibrating measurements</li>{% endif %}
-              {% if item.repeat %}<li>Repeat samples / measurements</li>{% endif %}
-              {% if item.std %}<li>Standardized data capture / recording</li>{% endif %}
-              {% if item.valid %}<li>Data entry validation</li>{% endif %}
-              {% if item.peer %}<li>Data peer review</li>{% endif %}
-              {% if item.vocab %}<li>Use of controlled vocabularies</li>{% endif %}
-              {% if item.consistency %}<li>Measuring samples for which the outcome is known to monitor consistency</li>{% endif %}
-              {% if item.other %}<li>Other quality processes{{ ": " ~ item.othertxt|markdown if item.othertxt else "" }}</li>{% endif %}
+              {% if item.calibrate %}<li>{% trans %}Calibrating measurements{% endtrans %}</li>{% endif %}
+              {% if item.repeat %}<li>{% trans %}Repeat samples / measurements{% endtrans %}</li>{% endif %}
+              {% if item.std %}<li>{% trans %}Standardized data capture / recording{% endtrans %}</li>{% endif %}
+              {% if item.valid %}<li>{% trans %}Data entry validation{% endtrans %}</li>{% endif %}
+              {% if item.peer %}<li>{% trans %}Data peer review{% endtrans %}</li>{% endif %}
+              {% if item.vocab %}<li>{% trans %}Use of controlled vocabularies{% endtrans %}</li>{% endif %}
+              {% if item.consistency %}<li>{% trans %}Measuring samples for which the outcome is known to monitor consistency{% endtrans %}</li>{% endif %}
+              {% if item.other %}<li>{% trans value=(": " ~ item.othertxt|markdown if item.othertxt else "") %}Other quality processes{{ value }}{% endtrans %}</li>{% endif %}
             </ul>
         </li>
       {%- endfor -%}
@@ -118,9 +118,9 @@
     {%- set openImmediatelyPath = [uuids.accessCUuid, uuids.openImmediatelyQUuid]|reply_path -%}
     {%- set openImmediatelyAUuid = repliesMap[openImmediatelyPath]|reply_str_value -%}
     {%- if openImmediatelyAUuid == uuids.openImmediatelyYesAUuid -%}
-      <p>As stated already in Section 2.2, all of our data can become completely open over time.</p>
+      <p>{% trans %}As stated already in Section 2.2, all of our data can become completely open over time.{% endtrans %}</p>
     {%- elif openImmediatelyAUuid == uuids.openImmediatelyNoAUuid -%}
-      <p>As explained in Section 2.2, our data cannot become completely open.</p>
+      <p>{% trans %}As explained in Section 2.2, our data cannot become completely open.{% endtrans %}</p>
 
       {%- set notOpenSentences = [] -%}
       {%- set notOpenSentencesIP = [] -%}
@@ -141,56 +141,53 @@
           {%- set legalPrivacyAggrAUuid = repliesMap[legalPrivacyAggrPath]|reply_str_value -%}
 
           {%- if legalPrivacyWhereAUuid == uuids.legalPrivacyWhereNoAUuid -%}
-            {%- do notOpenSentences.append("There are no restrictions on where the data need to be stored for privacy reasons.") -%}
+            {%- do notOpenSentences.append(_("There are no restrictions on where the data need to be stored for privacy reasons.")) -%}
           {%- elif legalPrivacyWhereAUuid == uuids.legalPrivacyEuAUuid -%}
-            {%- do notOpenSentences.append("Due to privacy reasons, the data must stay in the EU.") -%}
+            {%- do notOpenSentences.append(_("Due to privacy reasons, the data must stay in the EU.")) -%}
           {%- elif legalPrivacyWhereAUuid == uuids.legalPrivacyCountryAUuid -%}
-            {%- do notOpenSentences.append("Due to privacy reasons, the data must stay in the same country.") -%}
+            {%- do notOpenSentences.append(_("Due to privacy reasons, the data must stay in the same country.")) -%}
           {%- elif legalPrivacyWhereAUuid == uuids.legalPrivacyInstituteAUuid -%}
-            {%- do notOpenSentences.append("Due to privacy reasons, the data must stay in the same institute.") -%}
+            {%- do notOpenSentences.append(_("Due to privacy reasons, the data must stay in the same institute.")) -%}
           {%- endif -%}
           {%- set privacyCanUse = [] -%}
           {%- set privacyCannotUse = [] -%}
           {%- if legalPrivacyPseudoAUuid == uuids.legalPrivacyPseudoNoAUuid -%}
-            {%- do privacyCannotUse.append("pseudonymization") -%}
+            {%- do privacyCannotUse.append(_("pseudonymization")) -%}
           {%- elif legalPrivacyPseudoAUuid == uuids.legalPrivacyPseudoYesAUuid -%}
-            {%- do privacyCanUse.append("pseudonymization") -%}
+            {%- do privacyCanUse.append(_("pseudonymization")) -%}
           {%- endif -%}
           {%- if legalPrivacyAnonAUuid == uuids.legalPrivacyAnonNoAUuid -%}
-            {%- do privacyCannotUse.append("anonymization") -%}
+            {%- do privacyCannotUse.append(_("anonymization")) -%}
           {%- elif legalPrivacyAnonAUuid == uuids.legalPrivacyAnonYesAUuid -%}
-            {%- do privacyCanUse.append("anonymization") -%}
+            {%- do privacyCanUse.append(_("anonymization")) -%}
           {%- endif -%}
           {%- if legalPrivacyAggrAUuid == uuids.legalPrivacyAggrNoAUuid -%}
-            {%- do privacyCannotUse.append("data aggregation") -%}
+            {%- do privacyCannotUse.append(_("data aggregation")) -%}
           {%- elif legalPrivacyAggrAUuid == uuids.legalPrivacyAggrYesAUuid -%}
-            {%- do privacyCanUse.append("data aggregation") -%}
+            {%- do privacyCanUse.append(_("data aggregation")) -%}
           {%- endif -%}
 
-          {%- if privacyCanUse|length == 1 -%}
-            {%- do notOpenSentences.append("We can use " ~ privacyCanUse[0] ~ " to make the data more openly available.") -%}
-          {%- elif privacyCanUse|length == 2 -%}
-            {%- do notOpenSentences.append("We can use " ~ privacyCanUse[0] ~ " and " ~ privacyCanUse[1] ~ " to make the data more openly available.") -%}
-          {%- elif privacyCanUse|length == 3 -%}
-            {%- do notOpenSentences.append("We can use " ~ privacyCanUse[0] ~ ", " ~ privacyCanUse[1] ~ ", and " ~ privacyCanUse[2] ~ " to make the data more openly available.") -%}
+          {#- TRANSLATORS: %(methods)s is an enumeration of pseudonymization, anonymization, and data aggregation -#}
+          {%- if privacyCanUse|length > 0 -%}
+            {%- do notOpenSentences.append(_("We can use %(methods)s to make the data more openly available.", methods=macros.joinAnd(privacyCanUse))) -%}
           {%- endif -%}
-
-          {%- set privacyCannotUseStart = "We can use " if privacyCanUse|length == 0 else "But we can use " -%}
-          {%- if privacyCannotUse|length == 1 -%}
-            {%- do notOpenSentences.append(("We cannot use " if privacyCanUse|length == 0 else "But we cannot use ") ~ privacyCannotUse[0] ~ " to make the data more openly available.") -%}
-          {%- elif privacyCannotUse|length == 2 -%}
-            {%- do notOpenSentences.append(privacyCannotUseStart ~ "neither " ~ privacyCannotUse[0] ~ " nor " ~ privacyCannotUse[1] ~ " to make the data more openly available.") -%}
-          {%- elif privacyCannotUse|length == 3 -%}
-            {%- do notOpenSentences.append(privacyCannotUseStart ~ "neither " ~ privacyCannotUse[0] ~ ", " ~ privacyCannotUse[1] ~ ", nor " ~ privacyCannotUse[2] ~ " to make the data more openly available.") -%}
+          {%- if privacyCannotUse|length == 1 and privacyCanUse|length == 0 -%}
+            {%- do notOpenSentences.append(_("We cannot use %(method)s to make the data more openly available.", method=privacyCannotUse[0])) -%}
+          {%- elif privacyCannotUse|length == 1 -%}
+            {%- do notOpenSentences.append(_("But we cannot use %(method)s to make the data more openly available.", method=privacyCannotUse[0])) -%}
+          {%- elif privacyCannotUse|length > 1 and privacyCanUse|length == 0 -%}
+            {%- do notOpenSentences.append(_("We can use neither %(methods)s to make the data more openly available.", methods=macros.joinNor(privacyCannotUse))) -%}
+          {%- elif privacyCannotUse|length > 1 -%}
+            {%- do notOpenSentences.append(_("But we can use neither %(methods)s to make the data more openly available.", methods=macros.joinNor(privacyCannotUse))) -%}
           {%- endif -%}
 
           {%- if legalPrivacyPseudoAUuid == uuids.legalPrivacyPseudoYesAUuid -%}
             {%- set legalPrivacyPseudoPartyPath = [legalPrivacyPseudoPath, legalPrivacyPseudoAUuid, uuids.legalPrivacyPseudoPartyQUuid]|reply_path -%}
             {%- set legalPrivacyPseudoPartyAUuid = repliesMap[legalPrivacyPseudoPartyPath]|reply_str_value -%}
             {%- if legalPrivacyPseudoPartyAUuid == uuids.legalPrivacyPseudoPartyNoAUuid -%}
-              {%- do notOpenSentences.append("For pseudonymization, we cannot make use of an existing 'trusted third party'.") -%}
+              {%- do notOpenSentences.append(_("For pseudonymization, we cannot make use of an existing 'trusted third party'.")) -%}
             {%- elif legalPrivacyPseudoPartyAUuid == uuids.legalPrivacyPseudoPartyYesAUuid -%}
-              {%- do notOpenSentences.append("For pseudonymization, we can make use of an existing 'trusted third party'.") -%}
+              {%- do notOpenSentences.append(_("For pseudonymization, we can make use of an existing 'trusted third party'.")) -%}
             {%- endif -%}
           {%- endif -%}
 
@@ -198,7 +195,7 @@
           {%- set personalDataManagedAccessQUuid = [legalPrivacyPath, uuids.legalPrivacyYesAUuid, uuids.notOpenLegalReasonsPrivacyAccessQUuid ]|reply_path -%}
           {%- set personalDataManagedAccessReply = repliesMap[personalDataManagedAccessQUuid]|reply_str_value -%}
           {%- if personalDataManagedAccessReply -%}
-            {% call macros.para() %}There is a procedure for users to access private data as follows: {{ personalDataManagedAccessReply|trim|dot }}{% endcall %}
+            {% call macros.para() %}{% trans value=(personalDataManagedAccessReply|trim|dot) %}There is a procedure for users to access private data as follows: {{ value }}{% endtrans %}{% endcall %}
           {%- endif -%}
 
         {%- endif -%}
@@ -206,9 +203,9 @@
         {%- set legalIpPath = [notOpenLegalReasonsPath, uuids.notOpenLegalReasonsYesAUuid, uuids.legalIpQUuid]|reply_path -%}
         {%- set legalIpAUuid = repliesMap[legalIpPath]|reply_str_value -%}
         {%- if legalIpAUuid == uuids.legalIpNoAUuid -%}
-          {%- do notOpenSentencesIP.append("There are no IP reasons why our data cannot be open.") -%}
+          {%- do notOpenSentencesIP.append(_("There are no IP reasons why our data cannot be open.")) -%}
         {%- elif legalIpAUuid == uuids.legalIpYesAUuid -%}
-          {%- do notOpenSentencesIP.append("There are IP reasons why our data cannot be open.") -%}
+          {%- do notOpenSentencesIP.append(_("There are IP reasons why our data cannot be open.")) -%}
         
           {%- set legalIpClearPath = [legalIpPath, uuids.legalIpYesAUuid, uuids.legalIpClearQUuid]|reply_path -%}
           {%- set legalIpClearAUuid = repliesMap[legalIpClearPath]|reply_str_value -%}
@@ -216,10 +213,10 @@
           {%- set legalIpPowerAUuid = repliesMap[legalIpPowerPath]|reply_str_value -%}
 
           {%- if legalIpClearAUuid == uuids.legalIpClearYesAUuid -%}
-            {%- do notOpenSentencesIP.append("It is clear who owns data and documents.") -%}
+            {%- do notOpenSentencesIP.append(_("It is clear who owns data and documents.")) -%}
           {%- endif -%}
           {%- if legalIpPowerAUuid == uuids.legalIpPowerYesAUuid -%}
-            {%- do notOpenSentencesDP.append("Someone will be given the decision power to move documents or data to a new place after the " ~ globals.projects ~ " " ~ globals.projectsHasHave ~ " finished.") -%}
+            {%- do notOpenSentencesDP.append(ngettext("Someone will be given the decision power to move documents or data to a new place after the project has finished.", "Someone will be given the decision power to move documents or data to a new place after the projects have finished.", globals.projectsCount)) -%}
           {%- endif -%}
         {%- endif -%}
       {%- endif -%}
@@ -238,14 +235,14 @@
     {%- set coldStoragePath = [uuids.preservingCUuid, uuids.coldStorageQUuid]|reply_path -%}
     {%- set coldStorageAUuid = repliesMap[coldStoragePath]|reply_str_value -%}
     {%- if coldStorageAUuid == uuids.coldStorageNoAUuid -%}
-      <p>We do not plan to be archiving data in <em>cold storage</em> systems for long-term preservation already during the {{globals.projects}}.</p>
+      <p>{% trans count=globals.projectsCount %}We do not plan to be archiving data in <em>cold storage</em> systems for long-term preservation already during the project.{% pluralize %}We do not plan to be archiving data in <em>cold storage</em> systems for long-term preservation already during the projects.{% endtrans %}</p>
     {%- elif coldStorageAUuid == uuids.coldStorageYesAUuid -%}
       {%- set coldStorageReusablePath = [coldStoragePath, uuids.coldStorageYesAUuid, uuids.coldStorageReusableQUuid]|reply_path -%}
       {%- set coldStorageReusableAUuid = repliesMap[coldStorageReusablePath]|reply_str_value -%}
       {%- if coldStorageReusableAUuid == uuids.coldStorageReusableNoAUuid -%}
-        <p>We will be archiving data in <em>cold storage</em> systems for long-term preservation already during the {{globals.projects}}.</p>
+        <p>{% trans count=globals.projectsCount %}We will be archiving data in <em>cold storage</em> systems for long-term preservation already during the project.{% pluralize %}We will be archiving data in <em>cold storage</em> systems for long-term preservation already during the projects.{% endtrans %}</p>
       {%- elif coldStorageReusableAUuid == uuids.coldStorageReusableYesAUuid -%}
-        <p>We will be archiving data in <em>cold storage</em> systems for long-term preservation already during the {{globals.projects}}. The data are expected to remain interpretable and reusable over time.</p>
+        <p>{% trans count=globals.projectsCount %}We will be archiving data in <em>cold storage</em> systems for long-term preservation already during the project. The data are expected to remain interpretable and reusable over time.{% pluralize %}We will be archiving data in <em>cold storage</em> systems for long-term preservation already during the projects. The data are expected to remain interpretable and reusable over time.{% endtrans %}</p>
       {%- endif -%}
     {%- endif -%}
 
@@ -265,19 +262,19 @@
 
       {%- set validateHow = [] -%}
       {%- if validIntegritySeveralTimesAUuid == uuids.validIntegritySeveralTimesYesAUuid -%}
-        {%- do validateHow.append("We will run a subset of our jobs several times across the different compute infrastructures.") -%}
+        {%- do validateHow.append(_("We will run a subset of our jobs several times across the different compute infrastructures.")) -%}
       {%- endif -%}
       {%- if validIntegrityInstrumentAUuid == uuids.validIntegrityInstrumentYesAUuid -%}
-        {%- do validateHow.append("We will be instrumenting the tools into pipelines and workflows using automated tools.") -%}
+        {%- do validateHow.append(_("We will be instrumenting the tools into pipelines and workflows using automated tools.")) -%}
       {%- endif -%}
       {%- if validIntegrityDuplicateAUuid == uuids.validIntegrityDuplicateYesAUuid -%}
-        {%- do validateHow.append("We will use independently developed duplicate tools or workflows for critical steps to reduce or eliminate human errors.") -%}
+        {%- do validateHow.append(_("We will use independently developed duplicate tools or workflows for critical steps to reduce or eliminate human errors.")) -%}
       {%- endif -%}
       {%- if validIntegrityCatchAUuid == uuids.validIntegrityCatchYesAUuid -%}
-        {%- do validateHow.append("We will run part of the data set repeatedly to catch unexpected changes in results.") -%}
+        {%- do validateHow.append(_("We will run part of the data set repeatedly to catch unexpected changes in results.")) -%}
       {%- endif -%}
       {%- if validateHow|length > 0 -%}
-      <p>To validate the integrity of the results, the following will be done:</p>
+      <p>{% trans %}To validate the integrity of the results, the following will be done:{% endtrans %}</p>
       <ul>
         {% for vh in validateHow -%}<li>{{ vh }}</li>{%- endfor -%}
       </ul>
