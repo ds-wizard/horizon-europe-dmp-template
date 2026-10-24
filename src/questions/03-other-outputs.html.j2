@@ -6,7 +6,7 @@
   {%- set otherOutputsDecisionPath = [uuids.otherOutCUuid, uuids.otherOutDecisionQUuid ]|reply_path -%}
   {%- set otherOutputDecisionAUuid = repliesMap[otherOutputsDecisionPath]|reply_str_value -%}
   {%- if otherOutputDecisionAUuid -%}
-    <p>We decide which additional research outputs should be retained as follows: {{ otherOutputDecisionAUuid|dot }}</p>
+    {% call macros.para() %}We decide which additional research outputs should be retained as follows: {{ otherOutputDecisionAUuid|trim|dot }}{% endcall %}
   {%- endif -%}
 
   {# Other outputs #}
@@ -106,7 +106,7 @@
               {%- endif -%}
               :<br>
               {%- if otherOutputWhyValuableReply %}
-                It is valuable because {{ otherOutputWhyValuableReply|dot }}
+                It is valuable because {{ otherOutputWhyValuableReply|trim|dot }}
               {%- endif -%}
 
               {%- if otherOutputWhoReuseReply %}

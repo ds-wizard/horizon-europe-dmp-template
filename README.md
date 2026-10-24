@@ -25,8 +25,16 @@ This document template for DSW is available as open-source via GitHub Repository
   * ORCID: [0000-0001-8575-6533](https://orcid.org/0000-0001-8575-6533/)
   * GitHub: [@jmartinkova](https://github.com/jmartinkova)
 
+Starting v1.22.0, AI tools (Codex, Claude Code) are used to assist in the development of this template. The AI tools are used to generate text, fix typos, and improve grammar. The AI tools are used to assist the human contributors in the development of the template.
 
 ## Changelog
+
+### 1.22.0
+
+- Fixed sections that were never rendered because of missing or wrong UUIDs and paths: data storage and file conventions, access control of a shared working space, metadata standards, database change handling, reasons for not needing specific software, consistency monitoring in quality processes, mapping of new vocabularies, harmonization results, encryption of cold storage, and the current version on the front page
+- Fixed projects requiring ethical approval listed once per authority (and not at all without one)
+- Fixed the HTML structure (block elements inside paragraphs, unclosed and stray tags, empty paragraphs and lists, duplicate section ids)
+- Fixed typos and grammar
 
 ### 1.21.1
 

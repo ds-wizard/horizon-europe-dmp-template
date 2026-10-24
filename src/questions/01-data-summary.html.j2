@@ -11,7 +11,7 @@
     {%- if measuredDataItems|length > 0 -%}
       <div>
       <h4>Instrument datasets</h4>
-      The following instrument datasets will be acquired in the {{globals.projects}}:
+      <p>The following instrument datasets will be acquired in the {{globals.projects}}:</p>
       <ul>
         {%- for datasetItem in measuredDataItems -%}
           {%- set pathPrefix = [measuredDataPath, datasetItem]|reply_path -%}
@@ -33,7 +33,7 @@
             {%- elif measuredDataWhoAUuid == uuids.measuredDataWhoExternalAUuid -%}
               {%- set mdExternalOwnershipPath = [measuredDataWhoPath, uuids.measuredDataWhoExternalAUuid, uuids.mdExternalOwnershipQUuid]|reply_path -%}
               {%- set mdExternalOwnershipAUuid = repliesMap[mdExternalOwnershipPath]|reply_str_value -%}
-              <p>
+              {% call macros.para() %}
                 This dataset will be collected by an external party.
                 {% if mdExternalOwnershipAUuid == uuids.mdExternalOwnershipPartyAUuid -%}
                   The ownership of the resulting data will remain with the external party.
@@ -46,7 +46,7 @@
                     For the ownership of the data we have made the following arrangements: {{ mdExternalOwnershipOther|markdown }}
                   {%- endif -%}
                 {%- endif -%}
-              </p>
+              {% endcall %}
             {%- endif -%}
             {# Equipment standard? #}
             {% if measuredDataEquipAUuid == uuids.measuredDataEquipDescribedAUuid -%}
@@ -62,7 +62,7 @@
             {%- elif mdDataUtilityAUuid == uuids.mdDataUtilityOtherFieldsAUuid -%}
               {%- set mdDataUtilityOtherFieldsHowPath = [mdDataUtilityPath, uuids.mdDataUtilityOtherFieldsAUuid, uuids.mdDataUtilityOtherFieldsHowQUuid]|reply_path -%}
               {%- set mdDataUtilityOtherFieldsHow = repliesMap[mdDataUtilityOtherFieldsHowPath]|reply_str_value -%}
-              <p>Researchers working in other fields of research could be interested in using this data. {% if mdDataUtilityOtherFieldsHow -%}We think that other researchers can use this data as follows: {{ mdDataUtilityOtherFieldsHow|markdown }}{%- endif -%}</p>
+              {% call macros.para() %}Researchers working in other fields of research could be interested in using this data. {% if mdDataUtilityOtherFieldsHow -%}We think that other researchers can use this data as follows: {{ mdDataUtilityOtherFieldsHow|markdown }}{%- endif -%}{% endcall %}
             {%- endif -%}
           </li>
         {%- endfor -%}
@@ -97,7 +97,7 @@
       {%- if caseReport -%}{%- do typesNames.append("case report forms") -%}{%- endif -%}
       {%- if eRecords -%}{%- do typesNames.append("electronic patient records") -%}{%- endif -%}
       {%- set typesCount = typesNames|length -%}
-      <p>
+      {% call macros.para() %}
         {%- if typesCount > 0 -%}
           We collect data from
           {% if typesCount == 1 -%}
@@ -129,13 +129,13 @@
               {%- elif neqDataUtilityAUuid == uuids.neqDataUtilityOtherFieldsAUuid -%}
                 {%- set neqDataUtilityOtherFieldsHowPath = [neqDataUtilityPath, uuids.neqDataUtilityOtherFieldsAUuid, uuids.neqDataUtilityOtherFieldsHowQUuid]|reply_path -%}
                 {%- set neqDataUtilityOtherFieldsHow = repliesMap[neqDataUtilityOtherFieldsHowPath]|reply_str_value -%}
-                <p>Researchers working in other fields of research could be interested in using this data. {% if neqDataUtilityOtherFieldsHow -%}We think that other researchers can use this data as follows: {{ neqDataUtilityOtherFieldsHow|markdown }}{%- endif -%}</p>
+                {% call macros.para() %}Researchers working in other fields of research could be interested in using this data. {% if neqDataUtilityOtherFieldsHow -%}We think that other researchers can use this data as follows: {{ neqDataUtilityOtherFieldsHow|markdown }}{%- endif -%}{% endcall %}
               {%- endif -%}
             </li>
           {%- endfor -%}
           </ul>
         {%- endif -%}
-      </p>
+      {% endcall %}
       </div>
     {%- endif -%}
   {%- endif -%}
@@ -166,7 +166,8 @@
       <div>
         <h4>Re-used datasets</h4>
         {%- if refDataItems|length > 0 -%}
-          <div>We identified the following reference datasets considered for potential re-use:
+          <div>
+          <p>We identified the following reference datasets considered for potential re-use:</p>
           <ul>
             {%- for item in refDataItems -%}
               {%- set refDataPrefix = [refDataPath, item]|reply_path -%}
@@ -184,7 +185,7 @@
                   {%- if refDataWhere.startswith("http://") or refDataWhere.startswith("https://") or refDataWhere.startswith("ftp://") %}
                     It is available via: <a href="{{ refDataWhere }}" target="_blank">{{ refDataWhere }}</a>.
                   {%- else %}
-                    It is available via: {{ refDataWhere }}. 
+                    It is available via: {{ refDataWhere }}.
                   {%- endif %}
                   {% if isUsed %}
                     It is used in the project.
@@ -199,17 +200,17 @@
                   {%- set refDataUseNoWhyPath = [refDataNotUsedPrefix, uuids.refDataUseNoWhyQUuid]|reply_path -%}
                   {%- set refDataUseNoWhyAUuid = repliesMap[refDataUseNoWhyPath]|reply_str_value -%}
                   {%- if refDataUseNoWhyAUuid == uuids.refDataUseNoDataAUuid -%}
-                    <p>We decided not use this reference dataset because it misses the data we need.</p>
+                    <p>We decided not to use this reference dataset because it misses the data we need.</p>
                   {%- elif refDataUseNoWhyAUuid == uuids.refDataUseNoAspectAUuid -%}
-                    <p>We decided not use this reference dataset because it misses required aspects.</p>
+                    <p>We decided not to use this reference dataset because it misses required aspects.</p>
                   {%- elif refDataUseNoWhyAUuid == uuids.refDataUseNoQualityAUuid -%}
-                    <p>We decided not use this reference dataset because it is not of sufficient quality.</p>
+                    <p>We decided not to use this reference dataset because it is not of sufficient quality.</p>
                   {%- elif refDataUseNoWhyAUuid == uuids.refDataUseNoCondAUuid -%}
-                    <p>We decided not use this reference dataset because its conditions of use do not allow us to use it.</p>
+                    <p>We decided not to use this reference dataset because its conditions of use do not allow us to use it.</p>
                   {%- elif refDataUseNoWhyAUuid == uuids.refDataUseNoReasonAUuid -%}
                     {%- set reason = repliesMap[[refDataUseNoWhyPath, refDataUseNoWhyAUuid, uuids.refDataUseNoReasonQUuid]|reply_path]|reply_str_value -%}
                     {%- if reason -%}
-                      <p>We decided not use this reference dataset because of: {{ reason|markdown }}</p>
+                      {% call macros.para() %}We decided not to use this reference dataset because of: {{ reason|markdown }}{% endcall %}
                     {%- endif -%}
                   {%- endif -%}
                 {%- endif -%}
@@ -220,7 +221,7 @@
                   {%- set refDataOwnerPath = [refDataUsedPrefix, uuids.refDataOwnerQUuid]|reply_path -%}
                   {%- set refDataOwner = repliesMap[refDataOwnerPath]|reply_str_value -%}
                   {%- if refDataOwner -%}
-                    <p>Owner of this dataset: {{ refDataOwner|markdown }}</p>
+                    {% call macros.para() %}Owner of this dataset: {{ refDataOwner|markdown }}{% endcall %}
                   {%- endif -%}
                   {# format #}
                   {%- set refDataFormatPath = [refDataUsedPrefix, uuids.refDataFormatQUuid]|reply_path -%}
@@ -239,7 +240,7 @@
                     {%- set refDataVersionedChangePath = [refDataVersionedPath, uuids.refDataVersionedYesAUuid, uuids.refDataVersionedChangeQUuid]|reply_path -%}
                     {%- set refDataVersionedChangeAUuid = repliesMap[refDataVersionedChangePath]|reply_str_value -%}
                     {%- if refDataVersionedWhich or refDataVersionedChangeAUuid  %}
-                      <p>
+                      {% call macros.para() %}
                       {% if refDataVersionedWhich -%}
                         We will use the following version of this dataset: {{ refDataVersionedWhich|markdown }}
                       {%- endif -%}
@@ -250,7 +251,7 @@
                       {%- elif refDataVersionedChangeAUuid == uuids.refDataVersionedChangeAllAUuid %}
                         If a new version becomes available during the {{globals.projects}}, all analyses will be redone with the new version.
                       {%- endif -%}
-                      </p>
+                      {% endcall %}
                     {%- endif -%}
                   {%- endif -%}
                   {# reproduce #}
@@ -266,7 +267,7 @@
                   {# data use #}
                   {%- set dataUse = repliesMap[[refDataUsedPrefix, uuids.refDataUsageQUuid]|reply_path]|reply_str_value -%}
                   {%- if dataUse -%}
-                  <p>We will use the dataset as follows: {{ dataUse|markdown }}</p>
+                  {% call macros.para() %}We will use the dataset as follows: {{ dataUse|markdown }}{% endcall %}
                   {%- endif -%}
                 {%- endif -%}
               </li>
@@ -275,7 +276,8 @@
           </div>
         {%- endif -%}
         {%- if nrefDataItems|length > 0 -%}
-          <div>We identified the following non-reference datasets considered for potential re-use:
+          <div>
+          <p>We identified the following non-reference datasets considered for potential re-use:</p>
           <ul>
             {%- for item in nrefDataItems -%}
               {%- set nrefDataPrefix = [nrefDataPath, item]|reply_path -%}
@@ -309,17 +311,17 @@
                   {%- set nrefDataUseNoWhyPath = [nrefDataNotUsedPrefix, uuids.nrefDataUseNoWhyQUuid]|reply_path -%}
                   {%- set nrefDataUseNoWhyAUuid = repliesMap[nrefDataUseNoWhyPath]|reply_str_value -%}
                   {%- if nrefDataUseNoWhyAUuid == uuids.nrefDataUseNoDataAUuid -%}
-                    <p>We decided not use this non-reference dataset because it misses the data we need.</p>
+                    <p>We decided not to use this non-reference dataset because it misses the data we need.</p>
                   {%- elif nrefDataUseNoWhyAUuid == uuids.nrefDataUseNoAspectAUuid -%}
-                    <p>We decided not use this non-reference dataset because it misses required aspects.</p>
+                    <p>We decided not to use this non-reference dataset because it misses required aspects.</p>
                   {%- elif nrefDataUseNoWhyAUuid == uuids.nrefDataUseNoQualityAUuid -%}
-                    <p>We decided not use this non-reference dataset because it is not of sufficient quality.</p>
+                    <p>We decided not to use this non-reference dataset because it is not of sufficient quality.</p>
                   {%- elif nrefDataUseNoWhyAUuid == uuids.nrefDataUseNoCondAUuid -%}
-                    <p>We decided not use this non-reference dataset because its conditions of use do not allow us to use it.</p>
+                    <p>We decided not to use this non-reference dataset because its conditions of use do not allow us to use it.</p>
                   {%- elif nrefDataUseNoWhyAUuid == uuids.nrefDataUseNoReasonAUuid -%}
                     {%- set reason = repliesMap[[nrefDataUseNoWhyPath, nrefDataUseNoWhyAUuid, uuids.nrefDataUseNoReasonQUuid]|reply_path]|reply_str_value -%}
                     {%- if reason -%}
-                      <p>We decided not use this non-reference dataset because of: {{ reason|markdown }}</p>
+                      {% call macros.para() %}We decided not to use this non-reference dataset because of: {{ reason|markdown }}{% endcall %}
                     {%- endif -%}
                   {%- endif -%}
                 {%- endif -%}
@@ -348,7 +350,7 @@
                     {%- do ownerSentences.append("We are owners of the dataset.") -%}
                   {%- endif -%}
                   {%- if ownerSentences|length > 0 -%}
-                    <p>{{ ownerSentences|join(" ") }}</p>
+                    {% call macros.para() %}{{ ownerSentences|join(" ") }}{% endcall %}
                   {%- endif -%}
                   {# format #}
                   {%- set nrefDataFormatPath = [nrefDataUsedPrefix, uuids.nrefDataFormatQUuid]|reply_path -%}
@@ -376,7 +378,7 @@
                   {%- set nrefDataFixedPath = [nrefDataUsedPrefix, uuids.nrefDataFixedQUuid]|reply_path -%}
                   {%- set nrefDataFixedAUuid = repliesMap[nrefDataFixedPath]|reply_str_value -%}
                   {%- if nrefDataFixedAUuid == uuids.nrefDataFixedFixedAUuid -%}
-                    <p>It is a fixed dataset, changes will not influence reproducibility of our results.</p>
+                    <p>It is a fixed dataset; changes will not influence the reproducibility of our results.</p>
                   {%- elif nrefDataFixedAUuid == uuids.nrefDataFixedChangeAUuid -%}
                     <p>The dataset may get updated in the future; therefore, we need to make a snapshot.</p>
                   {%- endif -%}
@@ -393,7 +395,7 @@
                   {# data use #}
                   {%- set dataUse = repliesMap[[nrefDataUsedPrefix, uuids.nrefDataUsageQUuid]|reply_path]|reply_str_value -%}
                   {%- if dataUse -%}
-                  <p>We will use the dataset as follows: {{ dataUse|markdown }}</p>
+                  {% call macros.para() %}We will use the dataset as follows: {{ dataUse|markdown }}{% endcall %}
                   {%- endif -%}
                 {%- endif -%}
               </li>
@@ -412,7 +414,7 @@
       {%- set dataHarmoOthersPath = [dataHarmoPath, dataHarmoAUuid, uuids.dataHarmoOthersQUuid]|reply_path %}
       {%- set dataHarmoOthersAUuid = repliesMap[dataHarmoOthersPath]|reply_str_value %}
       <p>We will need to harmonize different sources of existing data.
-      {%- if dataHarmoAUuid == uuids.dataHarmoOthersYesAUuid %}
+      {%- if dataHarmoOthersAUuid == uuids.dataHarmoOthersYesAUuid %}
         Our harmonization results will be made available to others.
       {%- endif %}
       </p>
@@ -426,7 +428,7 @@
       {%- set dataCompReadOthersPath = [dataCompReadPath, dataCompReadAUuid, uuids.dataCompReadOthersQUuid]|reply_path -%}
       {%- set dataCompReadOthersAUuid = repliesMap[dataCompReadOthersPath]|reply_str_value -%}
       {%- if dataCompReadOthersAUuid == uuids.dataCompReadOthersYesAUuid -%}
-        {%- do dataCompReadSentences.append("We will provide machine readable, standardised metadata to others.") -%}
+        {%- do dataCompReadSentences.append("We will provide machine readable, standardized metadata to others.") -%}
         {%- set standards = [] -%}
         {%- set standardItemsPath = [dataCompReadOthersPath, dataCompReadOthersAUuid, uuids.dataCompReadOthersYesStandardsQUuid]|reply_path -%}
         {%- set standardItems = repliesMap[standardItemsPath]|reply_items -%}
@@ -462,11 +464,8 @@
   {# Format/Type with volume #}
   {%- set formatsPath = [uuids.creatingCUuid, uuids.formatsQUuid]|reply_path -%}
   {%- set formatsItems = repliesMap[formatsPath]|reply_items -%}
-  {%- if formatsItems|length > 0 -%}
-    <h4>Data formats and types</h4>
-    <div>We will be using the following data formats and types:
-    <ul>
-      {%- for formatItem in formatsItems -%}
+  {%- set formatsList -%}
+    {%- for formatItem in formatsItems -%}
         {%- set formatPrefix = [formatsPath, formatItem]|reply_path -%}
         {%- set formatNameReply = repliesMap[[formatPrefix, uuids.formatsNameQUuid]|reply_path] -%}
         {%- set formatsIsStandardPath = [formatPrefix, uuids.formatsIsStandardQUuid]|reply_path -%}
@@ -475,11 +474,13 @@
         {%- set formatsIsLTSuitableAUuid = repliesMap[formatsIsLTSuitablePath]|reply_str_value -%}
         {%- set formatsVolumePath = [formatPrefix, uuids.formatsVolumeQUuid]|reply_path -%}
         {%- set formatsVolumeAUuid = repliesMap[formatsVolumePath]|reply_str_value -%}
-        <li>
+        {%- set item -%}
           {# identification #}
-          <div>{{ macros.integrationFairSharing(formatNameReply) }}</div>
-          {%- if formatsIsStandardAUuid or formatsIsLTSuitableAUuid or formatsVolumeAUuid -%}
-            <p>
+          {%- set formatName = macros.integrationFairSharing(formatNameReply)|trim -%}
+          {%- if formatName -%}
+            <div>{{ formatName }}</div>
+          {%- endif -%}
+          {%- set formatText -%}
             {# standard? #}
             {%- if formatsIsStandardAUuid == uuids.formatsIsStandardYesAUuid %}
               It is a standardized format.
@@ -495,7 +496,7 @@
                 {%- set formatsWhyNSAnotherReason = repliesMap[formatsWhyNSAnotherReasonPath]|reply_str_value -%}
                 It is not a standardized format.
                 {%- if formatsWhyNSAnotherReason %}
-                  {{ formatsWhyNSAnotherReason|capitalize|dot }}
+                  {{ formatsWhyNSAnotherReason|capitalize|trim|dot }}
                 {%- endif -%}
               {%- endif -%}
             {%- endif -%}
@@ -526,11 +527,21 @@
                 We expect to have {{ formatsVolumeFiles }} files of average size {{ formatsVolumeFileGB }} GB (i.e. approximately {{ (formatsVolumeFiles|int * formatsVolumeFileGB|float)|round(2) }} GB in total).
               {%- endif -%}
             {%- endif -%}
-            </p>
+          {%- endset -%}
+          {%- if formatText|trim -%}
+            <p>{{ formatText|trim }}</p>
           {%- endif -%}
-        </li>
-      {%- endfor -%}
-    </ul>
+        {%- endset -%}
+        {%- if item|trim %}
+        <li>{{ item }}</li>
+        {%- endif -%}
+    {%- endfor -%}
+  {%- endset -%}
+  {%- if formatsList|trim -%}
+    <h4>Data formats and types</h4>
+    <div>
+    <p>We will be using the following data formats and types:</p>
+    <ul>{{ formatsList }}</ul>
     </div>
   {%- endif -%}
 
@@ -547,11 +558,7 @@
     {%- set storageConvObjStoreAUuid = repliesMap[storageConvObjStorePath]|reply_str_value -%}
     {%- set storageConvRelDbPath = [stConvPrefix, uuids.storageConvRelDbQUuid]|reply_path -%}
     {%- set storageConvRelDbAUuid = repliesMap[storageConvRelDbPath]|reply_str_value -%}
-    {%- set storageConvGraphDbPath = [stConvPrefix, uuids.storageConvGraphDbQUuid]|reply_path -%}
-    {%- set storageConvGraphDbAUuid = repliesMap[storageConvGraphDbPath]|reply_str_value -%}
-    {%- set storageConvTripleStorePath = [stConvPrefix, uuids.storageConvTripleStoreQUuid]|reply_path -%}
-    {%- set storageConvTripleStoreAUuid = repliesMap[storageConvTripleStorePath]|reply_str_value -%}
-    {%- if storageConvFSysAUuid or storageConvObjStoreAUuid or storageConvRelDbAUuid or storageConvGraphDbAUuid or storageConvTripleStoreAUuid -%}
+    {%- if storageSpaceAUuid or storageConvFSysAUuid or storageConvObjStoreAUuid or storageConvRelDbAUuid -%}
       <h4>Data storage and file conventions</h4>
       {# Storage space #}
       {%- if storageSpaceAUuid == uuids.storageSpaceLittleAUuid -%}
@@ -563,9 +570,8 @@
         {%- endif -%}
       {%- endif -%}
       {# File System #}
-      <p>
       {%- if storageConvFSysAUuid == uuids.storageConvFSysNoAUuid -%}
-        We will not use a filesystem with files and folders.
+        <p>We will not use a filesystem with files and folders.</p>
       {%- elif storageConvFSysAUuid == uuids.storageConvFSysYesAUuid -%}
         {%- set scFSysPrefix = [storageConvFSysPath, uuids.storageConvFSysYesAUuid]|reply_path -%}
         {# Folder types #}
@@ -579,6 +585,7 @@
         {%- set analysisFolders = scFSysAnalysisFoldersAUuid == uuids.scFSysAnalysisFoldersYesAUuid -%}
         {%- set workflowStepFolders = scFSysWorkflowStepFoldersAUuid == uuids.scFSysWorkflowStepFoldersYesAUuid -%}
         {%- set folders = [subjectFolders, analysisFolders, workflowStepFolders] -%}
+        {% call macros.para() %}
         {%- if folders|any -%}
           We will use a filesystem with files and folders with the following folder conventions:
           <ul>
@@ -587,16 +594,16 @@
               <li>
                 There will be a <strong>folder for each sample/subject</strong>.
                 {% if scFSysSubjFoldersConvs %}
-                  Each of those will use the following conventions: {{ scFSysSubjFoldersConvs|dot }}
+                  Each of those will use the following conventions: {{ scFSysSubjFoldersConvs|trim|dot }}
                 {%- endif -%}
               </li>
             {%- endif -%}
             {%- if analysisFolders -%}
               {%- set scFSysAnalysisFoldersConvs = repliesMap[[scFSysAnalysisFoldersPath, uuids.scFSysAnalysisFoldersYesAUuid, uuids.scFSysAnalysisFoldersConvsQUuid]|reply_path]|reply_str_value -%}
               <li>
-                There will be  a <strong>(sub)folder for each (repeated) analysis</strong>. 
+                There will be a <strong>(sub)folder for each (repeated) analysis</strong>.
                 {% if scFSysAnalysisFoldersConvs %}
-                  Each of those will use the following conventions: {{ scFSysAnalysisFoldersConvs|dot }}
+                  Each of those will use the following conventions: {{ scFSysAnalysisFoldersConvs|trim|dot }}
                 {%- endif -%}
               </li>
             {%- endif -%}
@@ -605,7 +612,7 @@
               <li>
                 There will be a <strong>(sub)folder for each step in the analysis workflow</strong>.
                 {% if scFSysWorkflowStepFoldersConvs %}
-                  Each of those will use the following conventions: {{ scFSysWorkflowStepFoldersConvs|dot }}
+                  Each of those will use the following conventions: {{ scFSysWorkflowStepFoldersConvs|trim|dot }}
                 {%- endif -%}
               </li>
             {%- endif -%}
@@ -619,61 +626,43 @@
         {%- if scDocumentVersioningAUuid == uuids.scDocumentVersioningYesAUuid %}
           We document how we manage file versioning for files and folders.
         {%- endif -%}
-        {# Other appointments #}
+        {# Agreements about file names #}
         {%- set scFSysAppointmentsPath = [scFSysPrefix, uuids.scFSysAppointmentsQUuid]|reply_path -%}
         {%- set scFSysAppointments = repliesMap[scFSysAppointmentsPath]|reply_str_value -%}
         {%- if scFSysAppointments %}
-          {{ "Moreover, we" if folders|any else "We" }} have made appointments about naming the files. {{ appointmentsText|capitalize|dot }}
+          {{ "Moreover, we" if folders|any else "We" }} have made the following agreements about naming the files: {{ scFSysAppointments|trim|dot }}
         {%- endif -%}
+        {% endcall %}
       {%- endif -%}
-      </p>
       {# Object Store #}
-      <p>
       {%- if storageConvObjStoreAUuid == uuids.storageConvObjStoreNoAUuid -%}
-        We will not be storing data in an "object store" system.
+        <p>We will not be storing data in an "object store" system.</p>
       {%- elif storageConvObjStoreAUuid == uuids.storageConvObjStoreYesAUuid -%}
-        {%- set scObjStoreNamingQUuid = [storageConvObjStorePath, uuids.storageConvObjStoreYesAUuid, uuids.scObjStoreNamingQUuid]|reply_path -%}
-        {%- set scObjStoreNaming = repliesMap[scObjStoreNamingQUuid]|reply_str_value -%}
-        {%- if scObjStoreNaming -%} 
-          We will be storing data in an "object store" system using following naming conventions for objects in the store: {{ scObjStoreNaming|dot }}
+        {%- set scObjStoreNamingPath = [storageConvObjStorePath, uuids.storageConvObjStoreYesAUuid, uuids.scObjStoreNamingQUuid]|reply_path -%}
+        {%- set scObjStoreNaming = repliesMap[scObjStoreNamingPath]|reply_str_value -%}
+        {%- if scObjStoreNaming -%}
+          <p>We will be storing data in an "object store" system using the following naming conventions for objects in the store: {{ scObjStoreNaming|trim|dot }}</p>
         {%- else -%}
-          We will be storing data in an "object store" system.
+          <p>We will be storing data in an "object store" system.</p>
         {%- endif -%}
       {%- endif -%}
-      </p>
-      {# Relational Database #}
-      <p>
+      {# Database #}
       {%- if storageConvRelDbAUuid == uuids.storageConvRelDbNoAUuid -%}
-        We will not use a relational database system to store project data.
+        <p>We will not use a database system to store project data.</p>
       {%- elif storageConvRelDbAUuid == uuids.storageConvRelDbYesAUuid -%}
-        We will use a relational database system to store project data.
+        <p>
+        We will use a database system to store project data.
         {%- set scRelDbHandleChangesPath = [storageConvRelDbPath, uuids.storageConvRelDbYesAUuid, uuids.scRelDbHandleChangesQUuid]|reply_path -%}
         {%- set scRelDbHandleChangesAUuid = repliesMap[scRelDbHandleChangesPath]|reply_str_value -%}
-        {%- if scRelDbHandleChangesAUuid == uuids.scRelDbReadOnlyAnswerUuid %}
+        {%- if scRelDbHandleChangesAUuid == uuids.scRelDbReadOnlyAUuid %}
           Data in the database will be read-only.
-        {%- elif scRelDbHandleChangesAUuid == uuids.scRelDbCrudAnswerUuid %}
+        {%- elif scRelDbHandleChangesAUuid == uuids.scRelDbCrudAUuid %}
           We will be allowing Create, Update and Delete operations for data in the database.
-        {%- elif scRelDbHandleChangesAUuid == uuids.scRelDbExpireAnswerUuid %}
+        {%- elif scRelDbHandleChangesAUuid == uuids.scRelDbExpireAUuid %}
           Modifications will be made by <em>Expiring</em> the existing data and <em>Adding</em> updated data.
-        {%- endif -%}
+        {%- endif %}
+        </p>
       {%- endif -%}
-      </p>
-      {# Graph Database #}
-      <p>
-      {%- if storageConvGraphDbAUuid == uuids.storageConvGraphDbNoAUuid -%}
-        We will not use a graph database for data in the {{globals.projects}}.
-      {%- elif storageConvGraphDbAUuid == uuids.storageConvGraphDbYesAUuid -%}
-        We will use a graph database for data in the {{globals.projects}}.
-      {%- endif -%}
-      </p>
-      {# Triple Store #}
-      <p>
-      {%- if storageConvTripleStoreAUuid == uuids.storageConvTripleStoreNoAUuid -%}
-        We will not be storing data in a triple store.
-      {%- elif storageConvTripleStoreAUuid == uuids.storageConvTripleStoreYesAUuid -%}
-        We will be storing data in a triple store.
-      {%- endif -%}
-      </p>
     {%- endif -%}
   {%- endif -%}
   </div>

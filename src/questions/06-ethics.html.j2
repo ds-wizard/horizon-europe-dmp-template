@@ -42,22 +42,21 @@
               'case': projAuthCase,
             }) -%}
           {%- endif -%}
-
-          {%- do projects.append({
-            'name': projectName,
-            'acronym': projectAcronym,
-            'authorities': projAuth,
-          }) -%}
         {%- endfor -%}
+        {%- do projects.append({
+          'name': projectName,
+          'acronym': projectAcronym,
+          'authorities': projAuth,
+        }) -%}
       {%- endif -%}
     {%- endfor -%}
     {%- if projects|length > 0 -%}
       <h4>Ethical approvals</h4>
-      <p>The following project{% if projects|length > 1 %}s{% endif %} require ethical approval:</p>
+      <p>{% if projects|length > 1 %}The following projects require ethical approval:{% else %}The following project requires ethical approval:{% endif %}</p>
       <ul>
       {%- for project in projects -%}
         <li>
-          <strong>{{ project.name }}</strong> {% if project.acronym %}({{ project.acronym }}) {% endif %}
+          <strong>{{ project.name }}</strong>{% if project.acronym %} ({{ project.acronym }}){% endif %}
           {% if project.authorities|length > 0 %}
           <ul>
             {% for authority in project.authorities %}
@@ -75,7 +74,7 @@
     {%- set producedDataItems = repliesMap[producedDataPath]|reply_items -%}
     {%- if producedDataItems|length > 0 -%}
       <h4>Data we produce</h4>
-      <p>For the data we produce, the ethical aspects are as follows:
+      <p>For the data we produce, the ethical aspects are as follows:</p>
       <ul>
       {%- for i in producedDataItems -%}
         {%- set pathPrefix = [producedDataPath, i]|reply_path -%}
@@ -97,13 +96,12 @@
               <li>It contains sensitive data.</li>
             {%- endif -%}
             </ul>
-          {%- else -%}
-          <span> - <em>no information on personal nor sensitive data.</em></span>
+          {%- else %}
+          <span class="separator">&ndash;</span> <em>no information on personal or sensitive data.</em>
           {%- endif -%}
         </li>
       {%- endfor -%}
       </ul>
-      </p>
     {%- endif -%}
 
     {# Collected data - personal/GDPR and ethical legislation #}
@@ -138,9 +136,9 @@
             {%- elif cpersConsentAUuid == uuids.cpersConsentReuseAUuid -%}
               {%- do sentences.append('We collect consent for our use as well as for reuse of the data.') -%}
             {%- elif cpersConsentAUuid == uuids.cpersConsentUseAnonAUuid -%}
-              {%- do sentences.append('We will collect consent for our use of the data and for anonymization; We will anonymize the data afterwards for reuse.') -%}
+              {%- do sentences.append('We will collect consent for our use of the data and for anonymization; we will anonymize the data afterwards for reuse.') -%}
             {%- elif cpersConsentAUuid == uuids.cpersConsentAnonAUuid -%}
-              {%- do sentences.append('We ask for consent for anonymization; We will anonymize first and all further processing is on the anonymous data.') -%}
+              {%- do sentences.append('We ask for consent for anonymization; we will anonymize first and all further processing is on the anonymous data.') -%}
             {%- endif -%}
 
             {%- set cpersExplainInformedPath = [legalBasePath, legalBaseAUuid, uuids.cpersExplainInformedQUuid]|reply_path -%}
@@ -166,7 +164,7 @@
             {%- endif -%}
 
           {%- elif legalBaseAUuid == uuids.cpersGdprLegalBasisOtherAUuid -%}
-            {%- do sentences.append('We use a different legal base for collection of personal data rather than public interest or consent-based: ') -%}
+            {%- do sentences.append('We use a legal basis other than public interest or consent for the collection of personal data:') -%}
 
             {%- set cpersGdprLegalBasisOtherWhichPath = [legalBasePath, legalBaseAUuid, uuids.cpersGdprLegalBasisOtherWhichQUuid]|reply_path -%}
             {%- set cpersGdprLegalBasisOtherWhichAUuid = repliesMap[cpersGdprLegalBasisOtherWhichPath]|reply_str_value -%}
@@ -198,7 +196,7 @@
           {%- endif -%}
         {%- endif -%}
 
-        <p>{{ sentences|join(' ') }}</p>
+        {% call macros.para() %}{{ sentences|join(' ') }}{% endcall %}
       {%- endif -%}
 
       {% if ethLegAUuid == uuids.ethLegNoAUuid %}

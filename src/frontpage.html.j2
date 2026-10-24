@@ -15,7 +15,7 @@
 
   <div class="info">
     <div class="version-info">
-      {% for version in dc.project.versions if version.uuid == dc.project.version %}
+      {% for version in dc.project.versions if dc.project.version and version.uuid == dc.project.version.uuid %}
         <div class="version">{{version.name}}</div>
       {% endfor %}
       <div class="date">{{ dc.doc.created_at|datetime_format("%d %B %Y") }}</div>

@@ -43,7 +43,7 @@
         <br>{{ macros.formatOrcid(contributor.orcid) }}
       {%- endif -%}
       {%- if contributor.roles|length > 0 %}
-        <br>{% if contributor.roles|length == 0 %}Role{% else %}Roles{% endif %}: {% for role in contributor.roles %}<span class="role">{{ role }}</span>{% if not loop.last %}, {% endif %}{% endfor %}
+        <br>{% if contributor.roles|length == 1 %}Role{% else %}Roles{% endif %}: {% for role in contributor.roles %}<span class="role">{{ role }}</span>{% if not loop.last %}, {% endif %}{% endfor %}
       {%- endif %}
       {%- if contributor.affiliation %}
         <br>Affiliation: <span class="affiliation">{{ macros.integrationROR(contributor.affiliation) }}</span>
@@ -62,6 +62,6 @@
     </li>
   </ul>
   {%- else -%}
-  <div style="font-style:italic;">There are no contributors described for this DMP.</div>
+  <p style="font-style:italic;">There are no contributors described for this DMP.</p>
   {%- endif -%}
 </div>
