@@ -15,17 +15,20 @@
 
   <div class="info">
     <div class="version-info">
-      {% for version in dc.project.versions if dc.project.version and version.uuid == dc.project.version.uuid %}
+      {% for version in dc.questionnaire.versions if dc.questionnaire.version and version.uuid == dc.questionnaire.version.uuid %}
         <div class="version">{{version.name}}</div>
       {% endfor %}
-      <div class="date">{{ dc.doc.created_at|datetime_format("%d %B %Y") }}</div>
+      <div class="date">{{ dc.document.created_at|datetime_format("%d %B %Y") }}</div>
     </div>
 
     {%- set serviceLink -%}<a href="{{ dc.config.service_url }}" target="_blank">{{ dc.config.service_domain_name }}</a>{%- endset -%}
-    {%- set packageId -%}<span class="package-id"><span class="organization-id">{{ dc.pkg.org_id }}</span>:<span class="km-id">{{ dc.pkg.km_id }}</span>:<span class="version">{{ dc.pkg.version }}</span></span>{%- endset %}
+    {%- set packageId -%}<span class="package-id">{{ dc.km_package.id }}:{{ dc.km_package.version }}</span>{%- endset %}
+    {#- no package in a preview of the knowledge model editor #}
+    {%- if dc.km_package %}
     <p class="note">
       {# TRANSLATORS: %(link)s is the domain of the Wizard as a link, %(name)s and %(version)s the knowledge model, %(id)s its ID #}
-      {% trans service_name=dc.config.service_name, link=serviceLink, name=dc.pkg.name, version=dc.pkg.version, id=packageId %}Data Management Plan created in {{ service_name }} &laquo;{{ link }}&raquo;<br/> using {{ name }} v{{ version }} ({{ id }}).{% endtrans %}
+      {% trans service_name=dc.config.service_name, link=serviceLink, name=dc.km_package.name, version=dc.km_package.version, id=packageId %}Data Management Plan created in {{ service_name }} &laquo;{{ link }}&raquo;<br/> using {{ name }} v{{ version }} ({{ id }}).{% endtrans %}
     </p>
+    {%- endif %}
   </div>
 </header>

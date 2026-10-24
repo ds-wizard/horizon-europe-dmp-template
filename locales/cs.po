@@ -3,9 +3,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Horizon Europe DMP 1.22.0\n"
+"Project-Id-Version: Horizon Europe DMP 2.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-10-23 21:19+0200\n"
+"POT-Creation-Date: 2026-10-24 16:10+0200\n"
 "PO-Revision-Date: 2026-10-23 19:00+0200\n"
 "Last-Translator: Content AI Workspace (test translation)\n"
 "Language: cs\n"
@@ -472,7 +472,7 @@ msgstr "Plán správy dat"
 
 #. %(link)s is the domain of the Wizard as a link, %(name)s and %(version)s the
 #. knowledge model, %(id)s its ID
-#: src/frontpage.html.j2:28
+#: src/frontpage.html.j2:30
 #, python-format
 msgid ""
 "Data Management Plan created in %(service_name)s &laquo;%(link)s&raquo;<br/>"
@@ -2400,7 +2400,7 @@ msgstr ""
 
 #. %(service)s is the name of the Wizard as a link, %(instance)s the URL of the
 #. instance, %(project_url)s the URL of the project
-#: src/questions/07-other-issues.html.j2:9
+#: src/questions/07-other-issues.html.j2:11
 #, python-format
 msgid ""
 "We use the %(service)s with its <em>%(name)s</em> (ID: %(id)s) knowledge "
@@ -2592,7 +2592,7 @@ msgstr ""
 msgid "We will be using the following data formats and types:"
 msgstr "Budeme používat následující datové formáty a typy:"
 
-#: src/questions/07-other-issues.html.j2:28
+#: src/questions/07-other-issues.html.j2:31
 msgid "We will be using the following policies and procedures for data management:"
 msgstr "Pro správu dat budeme používat tyto zásady a postupy:"
 
@@ -2688,7 +2688,7 @@ msgstr "Data nebudeme ukládat do systému typu „object store“."
 msgid "We will not be using any existing datasets."
 msgstr "Nebudeme používat žádné existující datové sady."
 
-#: src/questions/07-other-issues.html.j2:42
+#: src/questions/07-other-issues.html.j2:45
 msgid ""
 "We will not be using any extra national, funder, sectoral, or departmental "
 "policies or procedures for data management."

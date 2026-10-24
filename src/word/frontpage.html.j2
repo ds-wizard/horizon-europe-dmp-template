@@ -4,14 +4,14 @@
 <strong>Data Management Plan</strong>{% endtrans %}
 <br/>
 <br/>
-{% if dc.project.version %}
-{% for version in dc.project.versions if version.uuid == dc.project.version.uuid %}
+{% if dc.questionnaire.version %}
+{% for version in dc.questionnaire.versions if version.uuid == dc.questionnaire.version.uuid %}
 {{version.name}}
 <br/>
 {% endfor %}
 {% endif %}
 <br/>
-{{ dc.doc.created_at|datetime_format("%d %B %Y") }}
+{{ dc.document.created_at|datetime_format("%d %B %Y") }}
 <br/>
 <br/>
 <br/>

@@ -1,6 +1,6 @@
 <h2>{% trans %}History of changes{% endtrans %}</h2>
 
-{% if dc.project.versions|length > 0 %}
+{% if dc.questionnaire.versions|length > 0 %}
 <table>
   <thead>
     <tr>
@@ -10,7 +10,7 @@
     </tr>
   </thead>
   <tbody>
-  {% for version in dc.project.versions|reverse %}
+  {% for version in dc.questionnaire.versions|reverse %}
     <tr>
       <td>{{ version.name }}</td>
       <td>{{ version.created_at|datetime_format("%d %b %Y") }}</td>

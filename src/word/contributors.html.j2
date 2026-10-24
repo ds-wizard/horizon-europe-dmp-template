@@ -16,8 +16,8 @@
     {%- if contributorName -%}
       {%- set roles = [] -%}
       {%- for role in contributorRoles -%}
-        {%- if role in dc.e.choices.keys() -%}
-          {%- do roles.append(dc.e.choices[role].label) -%}
+        {%- if role in dc.km.e.choices.keys() -%}
+          {%- do roles.append(dc.km.e.choices[role].label) -%}
         {%- endif -%}
       {%- endfor -%}
       {%- do contributors.append({

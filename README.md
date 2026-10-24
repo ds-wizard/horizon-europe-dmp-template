@@ -29,6 +29,10 @@ Starting v1.22.0, AI tools (Codex, Claude Code) are used to assist in the develo
 
 ## Changelog
 
+### 2.0.0
+
+- Adjusted to Wizard 5.0 (template metamodel version 19.0, template id `dsw.horizon-europe-dmp`, knowledge models `dsw.root` and `dsw.lifesciences`)
+
 ### 1.22.0
 
 - Support for template localization (Wizard 4.35+, metamodel 18.3), with a Czech test translation in `locales/cs.po`
