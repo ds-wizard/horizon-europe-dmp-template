@@ -3,7 +3,7 @@
 <div id="dmp-projects">
   <h2>Projects</h2>
 
-  <p>We will be working on the following projects and for those are the data and work described in this DMP.</p>
+  <p>The data and work described in this DMP are for the following {{globals.projects}}.</p>
 
   {% for projectsItem in projectsItems %}
     <div class="project">
@@ -59,6 +59,6 @@
     {%- endif -%}
     </div>
   {% else %}
-    <div style="font-style:italic;">There are no projects described for this DMP.</div>
+    <p style="font-style:italic;">There are no projects described for this DMP.</p>
   {% endfor %}
 </div>

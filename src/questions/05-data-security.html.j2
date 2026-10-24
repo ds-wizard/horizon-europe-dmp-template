@@ -95,15 +95,15 @@
       {# helper inline join #}
       {%- set fragments = [] -%}
       {%- if small|length > 0 -%}
-        {%- set risks = (small[:-1]|join(', ') ~ ', and ' ~ small[-1]) if small|length > 1 else small[0] -%}
+        {%- set risks = (small[:-1]|join(', ') ~ (', and ' if small|length > 2 else ' and ') ~ small[-1]) if small|length > 1 else small[0] -%}
         {%- set _ = fragments.append("The possible impact of information " ~ risks ~ " is small") -%}
       {%- endif -%}
       {%- if low|length > 0 -%}
-        {%- set risks = (low[:-1]|join(', ') ~ ', and ' ~ low[-1]) if low|length > 1 else low[0] -%}
+        {%- set risks = (low[:-1]|join(', ') ~ (', and ' if low|length > 2 else ' and ') ~ low[-1]) if low|length > 1 else low[0] -%}
         {%- set _ = fragments.append("The risk of information " ~ risks ~ " is acceptably low") -%}
       {%- endif -%}
       {%- if will|length > 0 -%}
-        {%- set risks = (will[:-1]|join(', ') ~ ', and ' ~ will[-1]) if will|length > 1 else will[0] -%}
+        {%- set risks = (will[:-1]|join(', ') ~ (', and ' if will|length > 2 else ' and ') ~ will[-1]) if will|length > 1 else will[0] -%}
         {%- set _ = fragments.append("We will mitigate the risk of information " ~ risks) -%}
       {%- endif -%}
       {%- if fragments|length > 0 -%}
@@ -116,12 +116,12 @@
       {%- if risksPersonalDataAUuid == uuids.risksPersonalDataNotUsingAUuid -%}
         <p>We are not using any personal information.</p>
       {%- elif risksPersonalDataAUuid == uuids.risksPersonalDataPseudoAUuid -%}
-        <p>
+        {% call macros.para() %}
           All personal information will be processed in pseudonymized form only.
           {%- set risksPseudonymizationPath = [risksPersonalDataPath, uuids.risksPersonalDataPseudoAUuid, uuids.risksPseudonymizationQUuid]|reply_path -%}
           {%- set risksPseudonymizationAUuid = repliesMap[risksPseudonymizationPath]|reply_str_value -%}
           {%- if risksPseudonymizationAUuid == uuids.risksPseudonymizationInsideAUuid %}
-            We pseudonymize inside the project, only limited people can access the keys.
+            We pseudonymize inside the project; only a limited number of people can access the keys.
           {%- elif risksPseudonymizationAUuid == uuids.risksPseudonymizationPartyAUuid %}
             Pseudonymization is handled by an independent party in order to allow data coupling.
           {%- elif risksPseudonymizationAUuid == uuids.risksPseudonymizationAnotherAUuid -%}
@@ -129,7 +129,7 @@
             {%- set risksPseudonymizationAnother = repliesMap[risksPseudonymizationAnotherQUuid]|reply_str_value %}
             We have a specific way of pseudonymization{{ ": " ~ risksPseudonymizationAnother|markdown if risksPseudonymizationAnother else "." }}
           {%- endif -%}
-        </p>
+        {% endcall %}
       {%- elif risksPersonalDataAUuid == uuids.risksPersonalDataAnonymousAUuid -%}
         <p>All personal data will be collected anonymously.</p>
       {%- elif risksPersonalDataAUuid == uuids.risksPersonalDataAnonymizedAUuid -%}
@@ -145,13 +145,13 @@
       {%- set sharedAccessControlPath = [sharedWorkspacePrefix, uuids.sharedAccessControlQUuid]|reply_path -%}
       {%- set sharedAccessControlAUuid = repliesMap[sharedAccessControlPath]|reply_str_value -%}
       {%- if sharedAccessControlAUuid == uuids.sharedAccessControlMembersRWAUuid -%}
-        <p>Only all project members have read/write access to the data.</p>
+        <p>Only project members have read/write access to the data.</p>
       {%- elif sharedAccessControlAUuid == uuids.sharedAccessControlInstituteRAUuid -%}
         <p>Anyone in the institute has read access to the data; all project members have read/write access.</p>
       {%- elif sharedAccessControlAUuid == uuids.sharedAccessControlMembersRAUuid -%}
         <p>Only project members will have read access; only selected project members will be able to write data.</p>
       {%- elif sharedAccessControlAUuid == uuids.sharedAccessControlMembersRequestAUuid -%}
-        <p>Anyone in the institute can read data, only project members can request write access.</p>
+        <p>Anyone in the institute can read data; only project members can request write access.</p>
       {%- endif -%}
     {%- endif -%}
 
@@ -177,13 +177,12 @@
         {%- set coldStorageProtectPhysicalPath = [coldStorageProtectPath, uuids.coldStorageProtectYesAUuid, uuids.coldStorageProtectPhysicalQUuid]|reply_path -%}
         {%- set coldStorageProtectPhysicalAUuid = repliesMap[coldStorageProtectPhysicalPath]|reply_str_value -%}
 
-        {%- if coldStorageRemoteDisasterAUuid == uuids.coldStorageProtectEncNoNeedAUuid -%}
+        {%- if coldStorageProtectEncAUuid == uuids.coldStorageProtectEncNoNeedAUuid -%}
           {%- do coldSentences.append("The data does not need protection in terms of encryption.") -%}
-        {%- elif coldStorageRemoteDisasterAUuid == uuids.coldStorageProtectEncYesAUuid -%}
-
+        {%- elif coldStorageProtectEncAUuid == uuids.coldStorageProtectEncYesAUuid -%}
           {%- set coldStorageProtectEncKeyPath = [coldStorageProtectEncPath, uuids.coldStorageProtectEncYesAUuid, uuids.coldStorageProtectEncKeyQUuid]|reply_path -%}
           {%- set coldStorageProtectEncKeyAUuid = repliesMap[coldStorageProtectEncKeyPath]|reply_str_value -%}
-          {%- if coldStorageProtectEncKeyAUuid == uuid.coldStorageProtectEncKeyYesAUuid -%}
+          {%- if coldStorageProtectEncKeyAUuid == uuids.coldStorageProtectEncKeyYesAUuid -%}
             {%- do coldSentences.append("It will be encrypted and it is clear who has access to the key (also in case of a required data restore).") -%}
           {%- else -%}
             {%- do coldSentences.append("It will be encrypted.") -%}
@@ -203,14 +202,14 @@
     {%- set collabPath = [uuids.creatingCUuid, uuids.collabQUuid]|reply_path -%}
     {%- set collabAUuid = repliesMap[collabPath]|reply_str_value -%}
     {%- if collabAUuid == uuids.collabNoAUuid -%}
-      <p>We are not running the project in a collaboration between different groups nor institutes. Therefore, no collaboration agreement related to data access is needed.</p>
+      <p>We are not running the project in a collaboration between different groups or institutes. Therefore, no collaboration agreement related to data access is needed.</p>
     {%- elif collabAUuid == uuids.collabYesAUuid -%}
       {%- set collabAgreePath = [collabPath, collabAUuid, uuids.collabAgreeQUuid]|reply_path -%}
       {%- set collabAgreeAUuid = repliesMap[collabAgreePath]|reply_str_value -%}
       {%- if collabAgreeAUuid == uuids.collabAgreeNoAUuid -%}
        <p>We are running the project in a collaboration between different groups and institutes. However, there is no collaboration agreement in the project that describes who can have access to what data.</p>
       {%- elif collabAgreeAUuid == uuids.collabAgreeYesAUuid -%}
-        <p>We are running the project in a collaboration between different groups and institutes. A collaboration agreement that describes who can have access to what data in the project is set.</p>
+        <p>We are running the project in a collaboration between different groups and institutes. A collaboration agreement that describes who can have access to what data in the project is in place.</p>
       {%- endif -%}
     {%- endif -%}
   </div>

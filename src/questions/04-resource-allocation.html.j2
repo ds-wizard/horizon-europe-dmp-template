@@ -15,25 +15,30 @@
 
             {%- set projectItemNumberQUuid = [projectItem, uuids.projectNumberQUuid]|reply_path -%}
             {%- set projectItemNumberReply = repliesMap[projectItemNumberQUuid]|reply_str_value -%}
-              <li> 
-                <strong>{{ projectItemNameReply if projectItemNameReply else "(no name given)" }}{{ " - " + projectItemNumberReply if projectItemNumberReply}} </strong>
+              <li>
+                <strong>{{ projectItemNameReply if projectItemNameReply else "(no name given)" }}{{ " - " + projectItemNumberReply if projectItemNumberReply }}</strong>
                 {%- set projectCostPath = [projectItem, uuids.costQUuid]|reply_path -%}
                 {%- set projectCostItems = repliesMap[projectCostPath]|reply_items -%}
 
                 {%- if projectCostItems|length > 0  -%}
-                <p>Following resources will be dedicated to data management and ensuring that data will be FAIR:</p>
+                <p>The following resources will be dedicated to data management and ensuring that data will be FAIR:</p>
                     <ul>
                     {%- for j in projectCostItems -%}
                         {%- set projectCostItem = [projectCostPath, j]|reply_path -%}
                         {%- set projectCostItemTitleQUuid = [projectCostItem, uuids.costTitleQUuid]|reply_path -%}
                         {%- set projectCostItemTitleReply = repliesMap[projectCostItemTitleQUuid]|reply_str_value -%}
-                        <li>
-                        <strong>{{ projectCostItemTitleReply if projectCostItemTitleReply else "(no name given)" }}</strong>
-                        
                         {%- set projectCostItemDescriptionQUuid = [projectCostItem, uuids.costDescriptionQUuid]|reply_path -%}
-                        {%- set projectCostItemDescriptionReply = repliesMap[projectCostItemDescriptionQUuid]|reply_str_value  -%}
-                        
-                        {{" - "+projectCostItemDescriptionReply|dot}}
+                        {%- set projectCostItemDescriptionReply = repliesMap[projectCostItemDescriptionQUuid]|reply_str_value -%}
+                        <li>
+                        {#- the title is often left unanswered; the description stands in for it -#}
+                        {%- if projectCostItemTitleReply %}
+                        <strong>{{ projectCostItemTitleReply }}</strong>
+                        {%- if projectCostItemDescriptionReply %} &ndash; {{ projectCostItemDescriptionReply|trim|dot }}{% endif -%}
+                        {%- elif projectCostItemDescriptionReply %}
+                        {{ projectCostItemDescriptionReply|trim|dot }}
+                        {%- else %}
+                        <strong>(no name given)</strong>
+                        {%- endif -%}
 
                         {%- set projectCostItemCurrencyQUuid = [projectCostItem, uuids.costCurrencyQUuid]|reply_path  -%}
                         {%- set projectCostItemCurrencyReply = repliesMap[projectCostItemCurrencyQUuid] -%}
@@ -86,17 +91,16 @@
                         {%- if projectCostItemCoverReply == uuids.costCoverGrantAUuid -%}
                           {%- set costCoverGrantIdQUuid = [projectCostItemCoverQUuid, uuids.costCoverGrantAUuid, uuids.costCoverGrantIdQUuid]|reply_path -%}
                           {%- set costCoverGrantIdReply = repliesMap[costCoverGrantIdQUuid]|reply_str_value -%}
-                          <p>This cost will be covered by funding grant
                           {%- if costCoverGrantIdReply -%}
-                            {{" "}}(grant number: {{costCoverGrantIdReply}})
+                            <p>This cost will be covered by a funding grant (grant number: {{ costCoverGrantIdReply }}).</p>
                           {%- else -%}
-                            . </p>
+                            <p>This cost will be covered by a funding grant.</p>
                           {%- endif -%}
                         {%- elif projectCostItemCoverReply == uuids.costCoverOtherAUuid -%}
                           {%- set costCoverOtherHowQUuid = [projectCostItemCoverQUuid,uuids.costCoverOtherAUuid, uuids.costCoverOtherHowQUuid]|reply_path  -%}
                           {%- set costCoverOtherHowReply = repliesMap[costCoverOtherHowQUuid]|reply_str_value -%}
                           {%- if costCoverOtherHowReply -%}
-                            <p>This cost will be covered as follows: {{costCoverOtherHowReply}}.</p>
+                            <p>This cost will be covered as follows: {{ costCoverOtherHowReply|trim|dot }}</p>
                           {%- endif -%}
                         {%- endif -%}
                         </li>
@@ -108,7 +112,6 @@
             </li>
         {%- endfor -%}
     </ul>
-    {%- else -%}
     {%- endif -%}
 
   {# Archiving (cold storage) #}
@@ -154,8 +157,8 @@
       {%- set end = " year." if (years == "one" or years == "1") else " years." -%}
       {%- do coldStorageSentences.append("The minimum lifetime of the archive is " ~ years ~ end) -%}
     {%- elif coldStorageLifetimeAUuid == uuids.coldStorageLifetimeWayAUuid -%}
-      {%- set way = repliesMap[[coldStorageLifetimePath, coldStorageLifetimeAUuid, uuids.coldStorageLifetimeWayQUuid]|reply_path]|reply_str_value|trim|e|dot -%}
-      {%- do coldStorageSentences.append("The minimum lifetime of the archive is specially arranged:" ~ way|markdown) -%}
+      {%- set way = repliesMap[[coldStorageLifetimePath, coldStorageLifetimeAUuid, uuids.coldStorageLifetimeWayQUuid]|reply_path]|reply_str_value|trim|e|trim|dot -%}
+      {%- do coldStorageSentences.append("The minimum lifetime of the archive is specially arranged: " ~ way|markdown) -%}
     {%- endif -%}
     {# Extending #}
     {%- set coldStorageExtendPath = [coldStorageAfterPath, coldStorageAfterAUuid, uuids.coldStorageExtendQUuid]|reply_path -%}
@@ -172,7 +175,7 @@
       {%- set whoPath = [coldStorageExtendPath, coldStorageExtendAUuid, uuids.coldStorageExtendWhoQUuid]|reply_path -%}
       {%- set whoAUuid = repliesMap[whoPath]|reply_str_value -%}
       {%- if whoAUuid == uuids.coldStorageExtendWhoOneAUuid -%}
-        {%- do coldStorageSentences.append("The archival period can be extended &ndash; one of the principle investigators involved in the " ~ globals.projects ~ " will decide.") -%}
+        {%- do coldStorageSentences.append("The archival period can be extended &ndash; one of the principal investigators involved in the " ~ globals.projects ~ " will decide.") -%}
       {%- elif whoAUuid == uuids.coldStorageExtendWhoLibAUuid -%}
         {%- do coldStorageSentences.append("The archival period can be extended &ndash; library or archive staff will decide.") -%}
       {%- endif -%}
@@ -190,11 +193,11 @@
         {%- set dataUse = "the predicted use of the archived data" -%}
       {%- endif -%}
       {%- if budget and dataUse -%}
-        {%- do coldStorageSentences.append("The decision whether or not to extend the renewal be based on available budget as well as " ~ dataUse ~ ".") -%}
+        {%- do coldStorageSentences.append("The decision whether or not to extend the archival period will be based on available budget as well as " ~ dataUse ~ ".") -%}
       {%- elif budget -%}
-        {%- do coldStorageSentences.append("The decision whether or not to extend the renewal be based on available budget.") -%}
+        {%- do coldStorageSentences.append("The decision whether or not to extend the archival period will be based on available budget.") -%}
       {%- elif actual or predicted -%}
-        {%- do coldStorageSentences.append("The decision whether or not to extend the renewal be based on " ~ dataUse ~ ".") -%}
+        {%- do coldStorageSentences.append("The decision whether or not to extend the archival period will be based on " ~ dataUse ~ ".") -%}
       {%- endif -%}
     {%- endif -%}
     {# Upgrades (format) #}
@@ -215,7 +218,7 @@
     {%- endif -%}
   {%- endif -%}
   {%- if coldStorageSentences|length > 0 -%}
-    <p>{{ coldStorageSentences|join(" ") }}</p>
+    {% call macros.para() %}{{ coldStorageSentences|join(" ") }}{% endcall %}
   {%- endif -%}
   
   {# Repository charges #}
@@ -236,7 +239,7 @@
       {%- set repoChargesHowPayOtherPath = [repoChargesHowPayPath, uuids.repoChargesHowPayOtherAUuid, uuids.repoChargesHowPayOtherQUuid]|reply_path -%}
       {%- set repoChargesHowPayOther = repliesMap[repoChargesHowPayOtherPath]|reply_str_value -%}
       {%- if repoChargesHowPayOther -%}
-        <p>We will be paying for costs related to the used repositories. Further notes: <span class="user-text">{{ repoChargesHowPayOther|markdown }}</span></p>
+        {% call macros.para() %}We will be paying for costs related to the used repositories. Further notes: {{ repoChargesHowPayOther|markdown }}{% endcall %}
       {%- endif -%}
     {%- endif -%}
   {%- endif -%}
@@ -250,7 +253,7 @@
     {%- set howMuchPath = [budgetTimeEffortPath, budgetTimeEffortAUuid, uuids.budgetTimeEffortHowQUuid]|reply_path -%}
     {%- set howMuch = repliesMap[howMuchPath]|reply_str_value|trim -%}
     {%- if howMuch -%}
-      {%- do sentences.append("For making data or other research outputs FAIR, we budgeted: " ~ howMuch|dot) -%}
+      {%- do sentences.append("For making data or other research outputs FAIR, we budgeted: " ~ howMuch|trim|dot) -%}
     {%- endif -%}
     <p>{{ sentences|join(" ") }}</p>
   {%- endif -%}
@@ -306,21 +309,21 @@
   {%- elif expertiseAUuid == uuids.additionalExpertiseYesAvailableAUuid -%}
     <p>To execute the DMP, additional specialist expertise is required and we have such trained support staff available.</p>
   {%- elif expertiseAUuid == uuids.additionalExpertiseYesTrainAUuid -%}
-    <p>
+    {% call macros.para() %}
       To execute the DMP, additional specialist expertise is required. We will be training existing staff.
       {%- set expertiseTrainPath = [expertisePath, uuids.additionalExpertiseYesTrainAUuid, uuids.additionalExpertiseYesTrainTrainingQUuid]|reply_path -%}
       {%- set expertiseTrainText = repliesMap[expertiseTrainPath]|reply_str_value -%}
       {%- if expertiseTrainText %}
         The training will be: {{ expertiseTrainText|markdown }}
       {%- endif -%}
-    </p>
+    {% endcall %}
   {%- elif expertiseAUuid == uuids.additionalExpertiseYesHireAUuid -%}
     <p>
       To execute the DMP, additional specialist expertise is required. We will be hiring new people with additional expertise.
       {%- set expertiseHirePath = [expertisePath, uuids.additionalExpertiseYesHireAUuid, uuids.additionalExpertiseYesHireExpertiseQUuid]|reply_path -%}
       {%- set expertiseHireText = repliesMap[expertiseHirePath]|reply_str_value -%}
       {%- if expertiseHireText %}
-        The required expertise from new people is: {{ expertiseHireText|dot }}
+        The required expertise from new people is: {{ expertiseHireText|trim|dot }}
       {%- endif -%}
     </p>
   {%- endif -%}
@@ -333,7 +336,7 @@
     {%- set additionalHWSWWhatPath = [additionalHWSWPath, uuids.additionalHWSWYesAUuid, uuids.additionalHWSWYesWhatQUuid]|reply_path -%}
     {%- set additionalHWSWWhat = repliesMap[additionalHWSWWhatPath]|reply_str_value -%}
     {%- if additionalHWSWWhat -%}
-      <p>We require the following hardware or software in addition to what is usually available in the institute: {{ additionalHWSWWhat|markdown }}</p>
+      {% call macros.para() %}We require the following hardware or software in addition to what is usually available in the institute: {{ additionalHWSWWhat|markdown }}{% endcall %}
     {%- else -%}
       <p>We require hardware or software in addition to what is usually available in the institute.</p>
     {%- endif -%}

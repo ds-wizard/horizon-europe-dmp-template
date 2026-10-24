@@ -106,3 +106,53 @@
 {%- macro integrationValue(reply) -%}
     {{ reply.value.value.value }}
 {%- endmacro -%}
+
+{#- A paragraph whose content may contain block elements, e.g. a sentence ending with an answer in
+    Markdown that has a list or several paragraphs:
+      {% call macros.para() %}...: {{ value|markdown }}{% endcall %}
+    The content is split into its top-level parts: every run of text becomes a paragraph (a lone "."
+    or "," is dropped), every block element stays as it is; without blocks it is a plain <p>. -#}
+{%- macro para() -%}
+  {%- set blocks = ['p', 'ul', 'ol', 'blockquote', 'pre', 'table', 'div', 'h4'] -%}
+  {%- set ns = namespace(rest=caller()|trim, parts=[]) -%}
+  {%- for _ in range(1000) -%}
+    {%- if not ns.rest -%}{%- break -%}{%- endif -%}
+    {#- the first block element of the rest -#}
+    {%- set first = namespace(i=-1, tag='') -%}
+    {%- for tag in blocks -%}
+      {%- for opening in ['<' ~ tag ~ '>', '<' ~ tag ~ ' '] -%}
+        {%- set i = ns.rest.find(opening) -%}
+        {%- if i >= 0 and (first.i < 0 or i < first.i) -%}
+          {%- set first.i = i -%}
+          {%- set first.tag = tag -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endfor -%}
+    {%- set text = ns.rest if first.i < 0 else ns.rest[:first.i] -%}
+    {%- if text|trim and text|trim not in ['.', ','] -%}
+      {%- do ns.parts.append('<p>'|safe ~ text|trim ~ '</p>'|safe) -%}
+    {%- endif -%}
+    {%- if first.i < 0 -%}{%- break -%}{%- endif -%}
+    {#- the end of that block element, counting nested elements of the same name -#}
+    {%- set closing = '</' ~ first.tag ~ '>' -%}
+    {%- set b = namespace(pos=first.i + 1, depth=1) -%}
+    {%- for _ in range(1000) -%}
+      {%- if b.depth == 0 -%}{%- break -%}{%- endif -%}
+      {%- set e = ns.rest.find(closing, b.pos) -%}
+      {%- set o = [ns.rest.find('<' ~ first.tag ~ '>', b.pos), ns.rest.find('<' ~ first.tag ~ ' ', b.pos)]|select('ge', 0)|list -%}
+      {%- if e < 0 -%}
+        {%- set b.pos = ns.rest|length -%}
+        {%- break -%}
+      {%- elif o and o|min < e -%}
+        {%- set b.depth = b.depth + 1 -%}
+        {%- set b.pos = o|min + 1 -%}
+      {%- else -%}
+        {%- set b.depth = b.depth - 1 -%}
+        {%- set b.pos = e + closing|length -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- do ns.parts.append(ns.rest[first.i:b.pos]) -%}
+    {%- set ns.rest = ns.rest[b.pos:]|trim -%}
+  {%- endfor -%}
+  {{ ns.parts|join }}
+{%- endmacro -%}

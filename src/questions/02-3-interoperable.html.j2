@@ -1,10 +1,9 @@
 <div id="q-interoperable" class="question">
+  <div class="answer">
   {# Format/Type with volume #}
   {%- set formatsPath = [uuids.creatingCUuid, uuids.formatsQUuid]|reply_path -%}
   {%- set formatsItems = repliesMap[formatsPath]|reply_items -%}
-  {%- if formatsItems|length > 0 -%}
-    <div>We will be using the following data formats and types:
-    <ul>
+  {%- set formatsList -%}
       {%- for formatItem in formatsItems -%}
         {%- set formatPrefix = [formatsPath, formatItem]|reply_path -%}
         {%- set formatNameReply = repliesMap[[formatPrefix, uuids.formatsNameQUuid]|reply_path] -%}
@@ -14,11 +13,13 @@
         {%- set formatsIsLTSuitableAUuid = repliesMap[formatsIsLTSuitablePath]|reply_str_value -%}
         {%- set formatsVolumePath = [formatPrefix, uuids.formatsVolumeQUuid]|reply_path -%}
         {%- set formatsVolumeAUuid = repliesMap[formatsVolumePath]|reply_str_value -%}
-        <li>
+        {%- set item -%}
           {# identification #}
-          <div>{{ macros.integrationFairSharing(formatNameReply) }}</div>
-          {%- if formatsIsStandardAUuid or formatsIsLTSuitableAUuid or formatsVolumeAUuid -%}
-            <p>
+          {%- set formatName = macros.integrationFairSharing(formatNameReply)|trim -%}
+          {%- if formatName -%}
+            <div>{{ formatName }}</div>
+          {%- endif -%}
+          {%- set formatText -%}
             {# standard? #}
             {%- if formatsIsStandardAUuid == uuids.formatsIsStandardYesAUuid %}
               It is a standardized format.
@@ -34,35 +35,52 @@
                 {%- set formatsWhyNSAnotherReason = repliesMap[formatsWhyNSAnotherReasonPath]|reply_str_value -%}
                 It is not a standardized format.
                 {%- if formatsWhyNSAnotherReason %}
-                  {{ formatsWhyNSAnotherReason|capitalize|dot }}
+                  {{ formatsWhyNSAnotherReason|capitalize|trim|dot }}
                 {%- endif -%}
               {%- endif -%}
             {%- endif -%}
-            </p>
+          {%- endset -%}
+          {%- if formatText|trim -%}
+            <p>{{ formatText|trim }}</p>
           {%- endif -%}
-        </li>
+        {%- endset -%}
+        {%- if item|trim %}
+        <li>{{ item }}</li>
+        {%- endif -%}
       {%- endfor -%}
-    </ul>
+  {%- endset -%}
+  {%- if formatsList|trim -%}
+    <div>
+    <p>We will be using the following data formats and types:</p>
+    <ul>{{ formatsList }}</ul>
     </div>
   {%- endif -%}
 
   {# Standards used #}
   {%- set whatUsingPath = [uuids.creatingCUuid, uuids.whatUsingQUuid]|reply_path -%}
   {%- set whatUsingItems = repliesMap[whatUsingPath]|reply_items -%}
-  {%- if whatUsingItems|length > 0 -%}
-    <div>We will be using the following standards (encodings, terminologies, vocabularies, ontologies):
-    <ul>
+  {%- set whatUsingList -%}
       {%- for standardItem in whatUsingItems -%}
         {%- set whatUsingNamePath = [whatUsingPath, standardItem, uuids.whatUsingNameQUuid]|reply_path -%}
         {%- set whatUsingNameReply = repliesMap[whatUsingNamePath] -%}
         {%- set whatUsingUrlPath = [whatUsingPath, standardItem, uuids.whatUsingUrlQUuid]|reply_path -%}
         {%- set whatUsingUrl = repliesMap[whatUsingUrlPath]|reply_str_value -%}
-        <li>
-          <div>{{ macros.integrationFairSharing(whatUsingNameReply) }}</div>
+        {%- set item -%}
+          {%- set whatUsingName = macros.integrationFairSharing(whatUsingNameReply)|trim -%}
+          {%- if whatUsingName %}
+          <div>{{ whatUsingName }}</div>
+          {%- endif %}
           {% if whatUsingUrl %}({{ whatUsingUrl }}){% endif %}
-        </li>
+        {%- endset -%}
+        {%- if item|trim %}
+        <li>{{ item }}</li>
+        {%- endif -%}
       {%- endfor -%}
-    </ul>
+  {%- endset -%}
+  {%- if whatUsingList|trim -%}
+    <div>
+    <p>We will be using the following standards (encodings, terminologies, vocabularies, ontologies):</p>
+    <ul>{{ whatUsingList }}</ul>
     </div>
   {%- endif -%}
 
@@ -76,7 +94,7 @@
       <p>Although we will be using new types of data, suitable public controlled vocabularies or ontologies exist for those.</p>
     {%- elif newTypesVocabsAUuid == uuids.newTypesVocabsYesAUuid -%}
       {%- set newTypesVocabsMappingPath = [newTypesVocabsPath, uuids.newTypesVocabsYesAUuid, uuids.newTypesVocabsMappingQUuid]|reply_path -%}
-      {%- set newTypesVocabsMappingAUuid = repliesMap[newTypesVocabsPath]|reply_str_value -%}
+      {%- set newTypesVocabsMappingAUuid = repliesMap[newTypesVocabsMappingPath]|reply_str_value -%}
       {%- if newTypesVocabsMappingAUuid == uuids.newTypesVocabsMappingNoAUuid -%}
       <p>We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of our data.</p>
       {%- elif newTypesVocabsMappingAUuid == uuids.newTypesVocabsMappingYesAUuid -%}
@@ -139,4 +157,5 @@
       {%- endfor -%}
     </ul>
   {%- endif -%}
+  </div>
 </div>

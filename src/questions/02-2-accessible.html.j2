@@ -14,13 +14,13 @@
       <p>The data will be accessible through a free and standard protocol
       {%- set accessibleProtocolYesWhatPath = [accessibleFreeStandardProtocolPath, uuids.accessibleFreeStandardProtocolYesAUuid, uuids.accessibleProtocolYesWhatQUuid]|reply_path -%}
       {%- set accessibleProtocolYesWhat = repliesMap[accessibleProtocolYesWhatPath]|reply_str_value -%}
-      {{ ": " ~ accessibleProtocolYesWhat|dot if accessibleProtocolYesWhat else "." }}
-      </p> 
+      {{ ": " ~ accessibleProtocolYesWhat|trim|dot if accessibleProtocolYesWhat else "." }}
+      </p>
     {%- elif accessibleFreeStandardProtocolAUuid == uuids.accessibleFreeStandardProtocolNoAUuid -%}
-    <p>The data will not be accessible through a free and standard protocol
-    {%- set accessibleProtocolNoWhyPath = [accessibleFreeStandardProtocolPath, uuids.accessibleFreeStandardProtocolNoAUuid, uuids.accessibleProtocolNoWhyQUuid]|reply_path -%}
-    {%- set accessibleProtocolNoWhy = repliesMap[accessibleProtocolNoWhyPath]|reply_str_value -%}
-      {{ " because: " ~ accessibleProtocolNoWhy if accessibleProtocolNoWhy else "." }}
+      <p>The data will not be accessible through a free and standard protocol
+      {%- set accessibleProtocolNoWhyPath = [accessibleFreeStandardProtocolPath, uuids.accessibleFreeStandardProtocolNoAUuid, uuids.accessibleProtocolNoWhyQUuid]|reply_path -%}
+      {%- set accessibleProtocolNoWhy = repliesMap[accessibleProtocolNoWhyPath]|reply_str_value -%}
+      {{ " because: " ~ accessibleProtocolNoWhy|trim|dot if accessibleProtocolNoWhy else "." }}
       </p>
     {%- endif -%}
 
@@ -52,15 +52,15 @@
       {%- set nReasons = [legalReasons, businessReasonsPatents, businessReasonsOther, otherReasonsPapers, otherReasonsOther]|sum -%}
 
       {%- if anyReason -%}
-        <p>
-        The data cannot become completely open because 
+        {% call macros.para() %}
+        The data cannot become completely open because
         {%- if nReasons == 1 -%}
           {%- if legalReasons %}
             of legal reasons.
           {%- elif businessReasonsPatents %}
             of patent-related business reasons.
           {%- elif businessReasonsOther %}
-            of non-patent business reasons{{  ": " ~ notOpenBusinessReasonsOther|markdown if notOpenBusinessReasonsOther else "." }}
+            of non-patent business reasons{{ ": " ~ notOpenBusinessReasonsOther|markdown if notOpenBusinessReasonsOther else "." }}
           {%- elif otherReasonsPapers %}
             we want to publish a paper first.
           {%- elif otherReasonsOther %}
@@ -84,13 +84,13 @@
             {%- endif -%}
           </ul>
         {%- endif -%}
-        </p>
+        {% endcall %}
 
         {%- if legalReasons -%}
           {%- set legalReasonsAuthenticatedPath = [pathPrefix, uuids.notOpenLegalReasonsQUuid, uuids.notOpenLegalReasonsYesAUuid, uuids.legalReasonsAuthenticatedQUuid]|reply_path -%}
           {%- set legalReasonsAuthenticatedAUuid = repliesMap[legalReasonsAuthenticatedPath]|reply_str_value -%}
           {%- if legalReasonsAuthenticatedAUuid == uuids.legalReasonsAuthenticatedYesAUuid -%}
-            <p>
+            {% call macros.para() %}
               Concerning the legal reasons, a data sharing agreement will be required.
               {%- set legalReasonsAuthorizePath = [legalReasonsAuthenticatedPath, uuids.legalReasonsAuthenticatedYesAUuid, uuids.legalReasonsAuthorizeQUuid]|reply_path -%}
               {%- set legalReasonsAuthorizeAUuid = repliesMap[legalReasonsAuthorizePath]|reply_str_value -%}
@@ -102,7 +102,12 @@
                 {%- set legalReasonsAuthorizeOldCommitteePath = [legalReasonsAuthorizePath, uuids.legalReasonsAuthorizeOldCommitteeAUuid, uuids.legalReasonsAuthorizeOldCommitteeQUuid]|reply_path -%}
                 {%- set legalReasonsAuthorizeOldCommittee = repliesMap[legalReasonsAuthorizeOldCommitteePath]|reply_str_value -%}
                 {%- if legalReasonsAuthorizeOldCommittee %}
-                  People can apply to the following data access committee: <em>{{ legalReasonsAuthorizeOldCommittee|markdown }}</em>
+                  {#- the name of the committee in italics, unless the answer has several lines (blocks) -#}
+                {%- if '\n' in legalReasonsAuthorizeOldCommittee|trim %}
+                  People can apply to the following data access committee: {{ legalReasonsAuthorizeOldCommittee|markdown }}
+                {%- else %}
+                  People can apply to the following data access committee: <em>{{ legalReasonsAuthorizeOldCommittee|markdown|replace("<p>", "")|replace("</p>", "")|trim }}</em>
+                {%- endif -%}
                 {%- else -%}
                   People can apply to an existing data access committee.
                 {%- endif -%}
@@ -111,7 +116,7 @@
                 {%- set legalReasonsAuthorizeOther = repliesMap[legalReasonsAuthorizeOtherPath]|reply_str_value %}
                 For the authorization of potential users, we will make special arrangements{{ ": " ~ legalReasonsAuthorizeOther|markdown if legalReasonsAuthorizeOther else "." }}
               {%- endif -%}
-            </p>
+            {% endcall %}
           {%- endif -%}
         {%- endif -%}
 
@@ -128,14 +133,14 @@
     {%- elif embargoAUuid == uuids.limitedEmbargoIndefinitelyAUuid -%}
       <p>Limited embargo cannot be used because some restricted data will be embargoed indefinitely.</p>
     {%- elif embargoAUuid == uuids.limitedEmbargoReleasedSoonAUuid -%}
-      <p>Data will be released only as soon as restrictions are falling away.</p>
+      <p>Data will be released only as soon as restrictions fall away.</p>
     {%- elif embargoAUuid == uuids.limitedEmbargoYesAUuid -%}
       {%- set embargoPeriodPath = [embargoPath, embargoAUuid, uuids.limitedEmbargoPeriodQUuid]|reply_path -%}
       {%- set embargoPeriod = repliesMap[embargoPeriodPath]|reply_str_value -%}
       {%- if embargoPeriod -%}
-        <p>Data that is not legally restrained will be released after a fixed time period ({{ embargoPeriod }}), unconditionally.</p>
+        <p>Data that is not legally restricted will be released after a fixed time period ({{ embargoPeriod }}), unconditionally.</p>
       {%- else -%}
-        <p>Data that is not legally restrained will be released after a fixed time period, unconditionally.</p>
+        <p>Data that is not legally restricted will be released after a fixed time period, unconditionally.</p>
       {%- endif -%}
     {%- endif -%}
 
@@ -145,7 +150,7 @@
     {%- if metadataOpenAUuid == uuids.metadataOpenNoAUuid %}
       {%- set explanation = repliesMap[[metadataOpenPath, metadataOpenAUuid, uuids.metadataOpenNoExplainQUuid]|reply_path]|reply_str_value -%}
       {%- if explanation -%}
-        <p>Metadata will not be available openly &ndash; {{ explanation|e|markdown }}</p>
+        {% call macros.para() %}Metadata will not be available openly &ndash; {{ explanation|e|markdown }}{% endcall %}
       {%- else -%}
         <p>Metadata will not be available openly.</p>
       {%- endif -%}
@@ -154,9 +159,9 @@
       {%- set metadataOpenFormAUuid = repliesMap[[metadataOpenPath, metadataOpenAUuid, uuids.metadataOpenFormQUuid]|reply_path]|reply_str_value -%}
       <p>
       {%- if metadataOpenInstrAUuid == uuids.metadataOpenInstrNoAUuid %}
-        Metadata will be openly available without instructions how to get access to the data.
+        Metadata will be openly available without instructions on how to get access to the data.
       {%- elif metadataOpenInstrAUuid == uuids.metadataOpenInstrYesAUuid %}
-        Metadata will be openly available including instructions how to get access to the data.
+        Metadata will be openly available including instructions on how to get access to the data.
       {%- else %}
         Metadata will be openly available.
       {%- endif %}
@@ -174,7 +179,7 @@
     {%- set ownershipPath = [uuids.creatingCUuid, uuids.ownershipQUuid]|reply_path -%}
     {%- set ownershipAUuid = repliesMap[ownershipPath]|reply_str_value -%}
     {%- if ownershipAUuid == uuids.ownershipNoOwnerAUuid -%}
-      <p>Our data is legally not copyrightable, there is no legal owner.</p>
+      <p>Our data is legally not copyrightable; there is no legal owner.</p>
     {%- elif ownershipAUuid == uuids.ownershipPIAUuid -%}
       <p>All data will be owned by the Principal Investigator.</p>
     {%- elif ownershipAUuid == uuids.ownershipInstituteAUuid -%}
@@ -185,7 +190,7 @@
       {%- set ownershipOtherPath = [ownershipPath, uuids.ownershipOtherAUuid, uuids.ownershipOtherQUuid]|reply_path -%}
       {%- set ownershipOther = repliesMap[ownershipOtherPath]|reply_str_value -%}
       {%- if ownershipOther -%}
-        <p>We have made the following arrangements regarding the data ownership: {{ ownershipOther|markdown }}</p>
+        {% call macros.para() %}We have made the following arrangements regarding the data ownership: {{ ownershipOther|markdown }}{% endcall %}
       {%- endif -%}
     {%- endif -%}
 
@@ -214,7 +219,7 @@
         {%- endif -%}
       {%- endfor -%}
       {%- if (answeredRefData|length + answeredNRefData|length) > 0 -%}
-        <p>For the reference and non-reference data sets that we reuse, conditions are as follows:
+        <p>For the reference and non-reference data sets that we reuse, conditions are as follows:</p>
         <ul>
           {%- for i in answeredRefData -%}
             {%- set refDataPrefix = [refDataPath, i]|reply_path -%}
@@ -268,7 +273,7 @@
     {%- set producedDataPath = [uuids.preservingCUuid, uuids.producedDataQUuid]|reply_path -%}
     {%- set producedDataItems = repliesMap[producedDataPath]|reply_items -%}
     {%- if producedDataItems|length > 0 -%}
-      <p>For our produced data, conditions are as follows:
+      <p>For our produced data, conditions are as follows:</p>
       <ul>
       {%- for i in producedDataItems -%}
         {%- set pathPrefix = [producedDataPath, i]|reply_path -%}
@@ -286,9 +291,7 @@
           {# Distributions #}
           {% set distrosPath = [prefix, uuids.publishedDistrosQUuid]|reply_path -%}
           {%- set distrosItems = repliesMap[distrosPath]|reply_items -%}
-          {%- if distrosItems|length > 0 -%}
-            <br>The distributions will be accessible through:
-            <ul>
+          {%- set distrosList -%}
             {%- for j in distrosItems -%}
               {%- set distroPrefix = [distrosPath, j]|reply_path -%}
               {%- set distroRepositoryKindPath = [distroPrefix, uuids.publishedDataRepositoryKindQUuid]|reply_path -%}
@@ -414,8 +417,10 @@
                 </li>
               {%- endif -%}
             {%- endfor -%}
-            </ul>
-            </p>
+          {%- endset -%}
+          {%- if distrosList|trim -%}
+            <br>The distributions will be accessible through:
+            <ul>{{ distrosList }}</ul>
           {%- endif -%}
           {# Software #}
           {%- set specificSwPath = [prefix, uuids.publishedSpecSwQUuid]|reply_path %}
@@ -423,25 +428,25 @@
           {%- if specificSwAUuid == uuids.publishedSpecSwNoAUuid -%}
             {%- set specificSwWhyQUuid = [specificSwPath, uuids.publishedSpecSwNoAUuid, uuids.publishedSpecSwNoWhyQUuid]|reply_path -%}
             {%- set specificSwWhy = repliesMap[specificSwWhyQUuid]|reply_str_value -%}
-            <br>A user of this data can use it without any specific software{{ " because: " ~ specificSwWhy|dot if specificSwWhy else "." }}</br>
+            <br>A user of this data can use it without any specific software{{ " because: " ~ specificSwWhy|trim|dot if specificSwWhy else "." }}
           {%- elif specificSwAUuid == uuids.publishedSpecSwYesAUuid -%}
             {%- set publishedSpecSwWhatPath = [specificSwPath, uuids.publishedSpecSwYesAUuid, uuids.publishedSpecSwWhatQUuid]|reply_path %}
             {%- set publishedSpecSwWhatItems = repliesMap[publishedSpecSwWhatPath]|reply_items -%}
             {%- if publishedSpecSwWhatItems|length > 0 -%}
-            <br>A user of this data need specific software to be able to use it:
+            <br>A user of this data needs specific software to be able to use it:
             <ul>
             {%- for sw in publishedSpecSwWhatItems -%}
               {%- set swPrefix = [publishedSpecSwWhatPath, sw]|reply_path -%}
               {%- set swName = repliesMap[[swPrefix, uuids.publishedSpecSwWhatNameQUuid]|reply_path]|reply_str_value -%}
               {%- set swPID = repliesMap[[swPrefix, uuids.publishedSpecSwWhatPidQUuid]|reply_path]|reply_str_value -%}
-              <li><strong>{{ swName }} {% if swPID %}({{ swPID }}){% endif %}</strong><br>
+              <li><strong>{{ swName }}{% if swPID %} ({{ swPID }}){% endif %}</strong><br>
               {%- set swDocumentation = repliesMap[[swPrefix, uuids.publishedSpecSwDocQUuid]|reply_path]|reply_str_value -%}
               {%- if swDocumentation == uuids.publishedSpecSwDocNoAUuid %}
                 {%- set swDocumentationNotWhy = repliesMap[[swPrefix, uuids.publishedSpecSwDocQUuid, uuids.publishedSpecSwDocNoAUuid, uuids.publishedSpecSwDocNoWhyQUuid]|reply_path]|reply_str_value %}
-                The documentation of this software will not be included in the metadata of this data set{{ " because: " ~ swDocumentationNotWhy|dot if swDocumentationNotWhy else "." }}
+                The documentation of this software will not be included in the metadata of this data set{{ " because: " ~ swDocumentationNotWhy|trim|dot if swDocumentationNotWhy else "." }}
 
               {%- elif swDocumentation == uuids.publishedSpecSwDocYesAUuid %}
-                The documentation of this software will be included in the metadata of data set.
+                The documentation of this software will be included in the metadata of the data set.
               {%- endif -%}
 
               {%- set swIncluded = repliesMap[[swPrefix, uuids.publishedSpecSwDocIncludeQUuid]|reply_path]|reply_str_value -%}
@@ -462,15 +467,15 @@
           {%- set publishedWhenPath = [isPublishedDataPath, uuids.isPublishedDataYesAUuid, uuids.publishedWhenQUuid]|reply_path -%}
           {%- set publishedWhenAUuid = repliesMap[publishedWhenPath]|reply_str_value -%}
           {%- if publishedWhenAUuid == uuids.publishedWhenSoonAUuid %}
-            <br>The dataset will published as soon as possible after collecting it.
+            <br>The dataset will be published as soon as possible after collecting it.
           {%- elif publishedWhenAUuid == uuids.publishedWhenCleanupAUuid %}
-            <br>The dataset will published after initial cleanup.
+            <br>The dataset will be published after initial cleanup.
           {%- elif publishedWhenAUuid == uuids.publishedWhenFinishedAUuid %}
-            <br>The dataset will published after all our processing has finished.
+            <br>The dataset will be published after all our processing has finished.
           {%- elif publishedWhenAUuid == uuids.publishedWhenWrappedAUuid %}
-            <br>The dataset will published when the {{globals.projects}} {{globals.projectsIsAre}} wrapped up.
+            <br>The dataset will be published when the {{globals.projects}} {{globals.projectsIsAre}} wrapped up.
           {%- elif publishedWhenAUuid == uuids.publishedWhenEmbargoAUuid %}
-            <br>The dataset will published after an embargo.
+            <br>The dataset will be published after an embargo.
           {%- endif %}
         </li>
       {%- endfor -%}

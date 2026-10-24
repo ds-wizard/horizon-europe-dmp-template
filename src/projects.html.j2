@@ -1,10 +1,9 @@
 {%- set projectsPath = [uuids.adminDetailsCUuid, uuids.projectsQUuid]|reply_path -%}
 {%- set projectsItems = repliesMap[projectsPath]|reply_items -%}
-{%- set gProjects = "projects" if projectsItems|length > 0 else "project" -%}
 <div id="dmp-projects">
   <h2>Projects</h2>
 
-  <p>We will be working on the following {{globals.projects}} and for those are the data and work described in this DMP.</p>
+  <p>The data and work described in this DMP are for the following {{globals.projects}}.</p>
 
   {% for projectsItem in projectsItems %}
     <div class="project">
@@ -18,7 +17,7 @@
 
     {%- set projectAcronymPath = [projectsPath, projectsItem, uuids.projectAcronymQUuid]|reply_path -%}
     {%- set projectAcronym = repliesMap[projectAcronymPath]|reply_str_value -%}
-     {%- set projectNumberPath = [projectsPath, projectsItem, uuids.projectNumberQUuid]|reply_path -%}
+    {%- set projectNumberPath = [projectsPath, projectsItem, uuids.projectNumberQUuid]|reply_path -%}
     {%- set projectNumber = repliesMap[projectNumberPath]|reply_str_value -%}
     {%- set projectStartPath = [projectsPath, projectsItem, uuids.projectStartQUuid]|reply_path -%}
     {%- set projectStart = repliesMap[projectStartPath]|reply_str_value -%}
@@ -64,6 +63,6 @@
     {%- endif -%}
     </div>
   {% else %}
-    <div style="font-style:italic;">There are no projects described for this DMP.</div>
+    <p style="font-style:italic;">There are no projects described for this DMP.</p>
   {% endfor %}
 </div>
