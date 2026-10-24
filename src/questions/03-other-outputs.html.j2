@@ -1,73 +1,64 @@
+{#- data -#}
+{%- set otherOutputs = x.otherOutputs -%}
+{%- set hasOtherOutputs = otherOutputs.hasOtherOutputs -%}
 <div id="q-other-outputs" class="question">
   <div class="answer">
     {%- set serviceLink -%}<a href="{{ dc.config.service_url }}" target="_blank">{{ dc.config.service_name }}</a>{%- endset %}
     <p>{% trans service=serviceLink %}We use {{ service }} for planning our data management and creating this DMP. The management and planning of other research outputs is done separately and is included in this Section. Still, we benefit from data stewardship guidance (e.g. FAIR principles, openness, or security) and it is reflected in our plans with respect to other research outputs.{% endtrans %}</p>
 
   {# Other outputs decision #}
-  {%- set otherOutputsDecisionPath = [uuids.otherOutCUuid, uuids.otherOutDecisionQUuid ]|reply_path -%}
-  {%- set otherOutputDecisionAUuid = repliesMap[otherOutputsDecisionPath]|reply_str_value -%}
+  {%- set otherOutputDecisionAUuid = otherOutputs.howOtherOutputs._value -%}
   {%- if otherOutputDecisionAUuid -%}
     {% call macros.para() %}{% trans value=(otherOutputDecisionAUuid|trim|dot) %}We decide which additional research outputs should be retained as follows: {{ value }}{% endtrans %}{% endcall %}
   {%- endif -%}
 
   {# Other outputs #}
-  {%- set otherOutputsPath = [uuids.otherOutCUuid, uuids.otherOutQUuid]|reply_path -%}
-  {%- set otherOutputsAUuid = repliesMap[otherOutputsPath]|reply_str_value -%}
-  {%- if otherOutputsAUuid == uuids.otherOutYesAUuid -%}
+  {%- if hasOtherOutputs._value == true -%}
 
     {# Software #}
-    {%- set otherOutputsSwPath = [otherOutputsPath, uuids.otherOutYesAUuid, uuids.swQUuid ]|reply_path -%}
-    {%- set swAUuid = repliesMap[otherOutputsSwPath]|reply_str_value -%}
-    {%- if swAUuid == uuids.swYesAUuid -%}
-      {%- set swPath = [otherOutputsSwPath, uuids.swYesAUuid, uuids.swListQUuid]|reply_path -%}
-      {%- set swList = repliesMap[swPath]|reply_items -%}
+    {%- set hasSoftwarePackages = hasOtherOutputs.hasSoftwarePackages -%}
+    {%- if hasSoftwarePackages._value == true -%}
+      {%- set swList = hasSoftwarePackages.softwarePackages -%}
 
       {%- if swList|length > 0 -%}
         <p>{% trans %}We plan to produce the following software as additional research outputs:{% endtrans %}</p>
         <ul>
           {%- for sw in swList -%}
             <li>
-              {%- set pathPrefix = [swPath, sw]|reply_path -%}
-              {%- set swPackagePath = [pathPrefix, uuids.swPackageQUuid]|reply_path -%}
-              {%- set swPackage = repliesMap[swPackagePath]|reply_str_value -%}
-              {%- set swOpenLicensePath = [pathPrefix, uuids.swOpenLicenseQUuid]|reply_path -%}
-              {%- set swOpenLicenseAUuid = repliesMap[swOpenLicensePath]|reply_str_value -%}
-              {%- set swWhereAvailablePath = [pathPrefix, uuids.swWhereAvailableQUuid]|reply_path -%}
-              {%- set swWhereAvailable = repliesMap[swWhereAvailablePath]|reply_str_value -%}
-              {%- set swListedInCataloguePath = [pathPrefix, uuids.swListedInCatalogueQUuid]|reply_path -%}
-              {%- set swListedInCatalogueAUuid = repliesMap[swListedInCataloguePath]|reply_str_value -%}
+              {%- set swPackage = sw.name._value -%}
+              {%- set swOpenLicense = sw.openSource._value -%}
+              {%- set swWhereAvailable = sw.where._value -%}
+              {%- set swListedInCatalogue = sw.catalogue._value -%}
               {%- if swPackage -%}
                 <strong>{{ swPackage }}</strong>
               {%- else -%}
                 <strong>{% trans %}Unnamed software package{% endtrans %}</strong>
               {%- endif -%}
               <br>
-              {%- if swOpenLicenseAUuid == uuids.swOpenLicenseNoAUuid -%}
+              {#- the licence question has the answers No and Yes (with the licence) -#}
+              {%- if swOpenLicense == 'no' -%}
                 {% trans %}It will not be released under an open source license.{% endtrans %}
-              {%- elif swOpenLicenseAUuid == uuids.swOpenLicenseYesDecidedAUuid -%}
-                {%- set swOpenLicenseNamePath = [swOpenLicensePath, uuids.swOpenLicenseYesDecidedAUuid, uuids.swOpenLicenseYesNameQUuid]|reply_path -%}
-                {%- set swOpenLicenseName = repliesMap[swOpenLicenseNamePath] -%}
-                {%- if swOpenLicenseName -%}
-                  {% trans value=(macros.integrationLicense(swOpenLicenseName)) %}It will be released under the open source license <em>{{ value }}</em>.{% endtrans %}
+              {%- elif swOpenLicense == 'decided' -%}
+                {%- set swOpenLicenseName = sw.openSource.license -%}
+                {%- if swOpenLicenseName._value is not none -%}
+                  {% trans value=(macros.license(swOpenLicenseName)) %}It will be released under the open source license <em>{{ value }}</em>.{% endtrans %}
                 {%- else -%}
                   {% trans %}It will be released under an open source license.{% endtrans %}
                 {%- endif -%}
-              {%- elif swOpenLicenseAUuid == uuids.swOpenLicenseYesUndecidedAUuid -%}
-                {% trans %}It will be released under an open source license, which we will decide on.{% endtrans %}
               {%- endif -%}
 
               {%- if swWhereAvailable %}
-                {%- if swListedInCatalogueAUuid == uuids.swListedInCatalogueYesAUuid %}
+                {%- if swListedInCatalogue == true %}
                   {% trans where=swWhereAvailable %}The software will be made available at {{ where }} and will be listed in a software catalogue.{% endtrans %}
-                {%- elif swListedInCatalogueAUuid == uuids.swListedInCatalogueNoAUuid %}
+                {%- elif swListedInCatalogue == false %}
                   {% trans where=swWhereAvailable %}The software will be made available at {{ where }} and will not be listed in a software catalogue.{% endtrans %}
                 {%- else %}
                   {% trans where=swWhereAvailable %}The software will be made available at {{ where }}.{% endtrans %}
                 {%- endif -%}
               {%- else -%}
-                {%- if swListedInCatalogueAUuid == uuids.swListedInCatalogueYesAUuid %}
+                {%- if swListedInCatalogue == true %}
                   {% trans %}The software will be listed in a software catalogue.{% endtrans %}
-                {%- elif swListedInCatalogueAUuid == uuids.swListedInCatalogueNoAUuid %}
+                {%- elif swListedInCatalogue == false %}
                   {% trans %}The software will not be listed in a software catalogue.{% endtrans %}
                 {%- endif -%}
               {%- endif -%}
@@ -79,26 +70,19 @@
     {%- endif -%}
 
     {# Other #}
-    {%- set otherOutputsNoSwPath = [otherOutputsPath, uuids.otherOutYesAUuid, uuids.otherOutputsNoSwQUuid ]|reply_path -%}
-    {%- set otherAUuid = repliesMap[otherOutputsNoSwPath]|reply_str_value -%}
-    {%- if otherAUuid == uuids.otherOutputsYesAUuid -%}
-      {%- set otherPath = [otherOutputsNoSwPath, uuids.otherOutputsYesAUuid, uuids.otherOutputsListQUuid]|reply_path -%}
-      {%- set otherList = repliesMap[otherPath]|reply_items -%}
+    {%- set hasNonSoftwareOutputs = hasOtherOutputs.hasNonSoftwareOutputs -%}
+    {%- if hasNonSoftwareOutputs._value == true -%}
+      {%- set otherList = hasNonSoftwareOutputs.outputs -%}
 
       {%- if otherList|length > 0 -%}
         <p>{% trans %}We plan to produce the following additional research outputs:{% endtrans %}</p>
         <ul>
           {%- for other in otherList -%}
             <li>
-              {%- set otherOutputPath = [otherPath, other]|reply_path -%}
-              {%- set otherOutputNamePath = [otherOutputPath, uuids.otherOutputNameQUuid]|reply_path -%}
-              {%- set otherOutputNameReply = repliesMap[otherOutputNamePath]|reply_str_value -%}
-              {%- set otherOutputWhyValuablePath = [otherOutputPath, uuids.otherOutputWhyValuableQUuid]|reply_path -%}
-              {%- set otherOutputWhyValuableReply = repliesMap[otherOutputWhyValuablePath]|reply_str_value -%}
-              {%- set otherOutputWhoReusePath = [otherOutputPath, uuids.otherOutputWhoReuseQUuid]|reply_path -%}
-              {%- set otherOutputWhoReuseReply = repliesMap[otherOutputWhoReusePath]|reply_str_value -%}
-              {%- set otherOutputAvailablePath = [otherOutputPath, uuids.otherOutputAvailableQUuid]|reply_path -%}
-              {%- set otherOutputAvailableReply = repliesMap[otherOutputAvailablePath]|reply_str_value -%}
+              {%- set otherOutputNameReply = other.output._value -%}
+              {%- set otherOutputWhyValuableReply = other.howValuable._value -%}
+              {%- set otherOutputWhoReuseReply = other.forWhom._value -%}
+              {%- set otherOutputAvailable = other.available -%}
 
               {%- if otherOutputNameReply -%}
                 <strong>{{ otherOutputNameReply }}</strong>
@@ -114,18 +98,16 @@
                 {% trans who=otherOutputWhoReuseReply %}It is expected to be reused by <em>{{ who }}</em>.{% endtrans %}
               {%- endif -%}
 
-              {%- if otherOutputAvailableReply == uuids.otherOutputAvailableYesAUuid %}
-                {%- set otherOutputWherePath = [otherOutputAvailablePath, uuids.otherOutputAvailableYesAUuid, uuids.otherOutputAvailableWhereQUuid]|reply_path -%}
-                {%- set otherOutputWhereReply = repliesMap[otherOutputWherePath]|reply_str_value -%}
+              {%- if otherOutputAvailable._value == true %}
+                {%- set otherOutputWhereReply = otherOutputAvailable.where._value -%}
                   {%- if otherOutputWhereReply %}
                   {% trans where=otherOutputWhereReply %}It will be made available at <em>{{ where }}</em>.{% endtrans %}
                   {%- else %}
                   {% trans %}It will be made available.{% endtrans %}
                   {%- endif -%}
 
-              {%- elif otherOutputAvailableReply == uuids.otherOutputAvailableNoAUuid %}
-                {%- set otherOutputReasonPath = [otherOutputAvailablePath, uuids.otherOutputAvailableNoAUuid, uuids.otherOutputAvailableNoReasonQUuid]|reply_path -%}
-                {%- set otherOutputReasonReply = repliesMap[otherOutputReasonPath]|reply_str_value -%}
+              {%- elif otherOutputAvailable._value == false %}
+                {%- set otherOutputReasonReply = otherOutputAvailable.whyNot._value -%}
                   {%- if otherOutputReasonReply %}
                   {% trans reason=otherOutputReasonReply %}It will not be made available because <em>{{ reason }}</em>.{% endtrans %}
                   {%- else %}
@@ -138,7 +120,7 @@
         </ul>
       {%- endif -%}
     {%- endif -%}
-  {%- elif otherOutputsAUuid == uuids.otherOutNoAUuid -%}
+  {%- elif hasOtherOutputs._value == false -%}
     <p>{% trans %}There are no additional research outputs beyond those already described above.{% endtrans %}</p>
   {%- endif -%}
     

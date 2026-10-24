@@ -1,3 +1,5 @@
+{#- data -#}
+{%- set policyItems = x.administrativeInformation.policies -%}
 <div id="q-other-issues" class="question">
   <div class="answer">
     {%- set project_url = dc.config.client_url ~ "/projects/" ~ dc.project.uuid -%}
@@ -12,13 +14,11 @@
     {%- endif %}
 
     {# Applied policies #}
-    {%- set policiesPath = [uuids.adminDetailsCUuid, uuids.policiesQUuid]|reply_path -%}
-    {%- set policiesItems = repliesMap[policiesPath]|reply_items -%}
     {%- set policies = [] -%}
-    {%- for item in policiesItems -%}
-      {%- set name = repliesMap[[policiesPath, item, uuids.policiesNameQUuid]|reply_path]|reply_str_value -%}
-      {%- set ref = repliesMap[[policiesPath, item, uuids.policiesReferenceQUuid]|reply_path]|reply_str_value -%}
-      {%- set text = repliesMap[[policiesPath, item, uuids.policiesDescriptionQUuid]|reply_path]|reply_str_value -%}
+    {%- for item in policyItems -%}
+      {%- set name = item.name._value or '' -%}
+      {%- set ref = item.url._value or '' -%}
+      {%- set text = item.description._value or '' -%}
       {%- if name or ref -%}
         {%- do policies.append({
           'name': name|trim|e,

@@ -1,0 +1,69 @@
+{#-
+  Data model of the document.
+
+  1. Extraction: the replies of the project as nested objects named by the json.key annotations of
+     the knowledge model (dc|extract_replies, version 2). A question is an object with _value (the
+     reply, or the json.value of the selected answer), a list question a list of item objects, a
+     multi-choice question a list of choice objects. Chapters are the top level, e.g.
+     x.creatingData. Every annotated question is present, also when it is not answered (_value
+     none, [] for lists), so paths along the knowledge model never fail in the templates.
+  2. Mapping: answers and choices without json.value get a code from FALLBACK_VALUES.
+
+  Templates use x (exported) and compare _value with the json.value of answers and choices.
+-#}
+
+{#- Codes of answers and choices that have no json.value in the knowledge model (dsw.root 2.8.1);
+    remove an entry once the knowledge model annotates it -#}
+{%- set FALLBACK_VALUES = {
+  '2c6ee59d-4dc9-4dcb-ac13-d969c317a117': 'contactPerson',
+  '21047dec-71ee-40e4-868a-3ed75a027ff6': 'creatorOfDmp',
+  'fc789e2d-01ee-432d-82f9-1b659f58eaf8': 'dataCollector',
+  '618cb529-0c24-4762-a739-7983004d1b2b': 'dataCurator',
+  '627ab8dc-8026-498d-ba7a-3df122e29ede': 'dataManager',
+  'bc82b138-9816-46dd-8ff8-cea2826a3ad4': 'dataProtectionOfficer',
+  '3022098b-0e2c-4fad-9f28-cf2e1325521d': 'dataSteward',
+  '27dccf06-3b67-4c75-8888-6549e4da2d31': 'distributor',
+  'd84664d4-9bb6-40ff-bde5-3c1ed58ce522': 'findability',
+  '9ffe7d27-a04c-481e-8e20-09b6afd8fabf': 'accessibility',
+  '8258c093-d1c8-4d41-801e-44e2c8ce6c86': 'interoperability',
+  '350a6e85-d4b2-4a44-831d-4562e5668208': 'reusability',
+  'd2a9d717-c0b2-44ee-8a6d-8476831b6225': 'management',
+  '8e7cd80f-9a32-48a6-a65c-0d3a0f0a6d3a': 'grant',
+  '2e37f71b-b7aa-4182-888a-8b7a5156b53c': 'other',
+  '59ed0193-8211-4ee8-8d36-0640d99ce870': 'planned',
+  '85fad342-a89d-414b-bc83-286a7417bb78': 'applied',
+  'dcbeab22-d188-4fa0-b50b-5c9d1a2fbefe': 'granted',
+  '8c0c9f28-4672-46ba-a939-48c2c892d790': 'rejected',
+  '320eb6c2-c0ef-465b-980f-5c988439eeaf': 'planned',
+  'd0308e38-13ee-44e7-8fa3-a29e0d0bfe86': 'applied',
+  'e0a59549-b078-4d7c-9ead-4b37f1549b82': 'granted',
+  '1f2e2b12-97d1-4f72-bad1-8fe6f6075d78': 'rejected',
+  'd8ecede2-f952-4b08-8a68-20d97849733f': 'explore',
+  '22e612e0-c72d-42fa-9a37-a55232e72c72': 'specify',
+  '6d18bfff-0f53-469b-934e-9806dda9d4fb': 'explore',
+  'b2f76c0a-847a-403c-9ed6-09cad10e625e': 'explore',
+  '5af813b7-cb41-4eb9-afe7-ca364771b74e': 'explore',
+  '0d64d3c6-4312-47a9-92ad-0bc9440d6e45': 'explore',
+  'f7f2ff16-eee0-42a7-a89a-bd7291cef5fc': 'explore',
+  'cd2d1e0d-c5ad-4d0e-afa2-5ed143323cb7': 'projectManager',
+  'c05f27a2-30ac-44fd-9ac9-cd6f62b16d0c': 'explore',
+  '30d1e85c-0e3e-482f-97f9-22a7658b329e': 'explore',
+} -%}
+
+{#- Sets the codes of FALLBACK_VALUES in obj and the objects below it -#}
+{%- macro fallback(obj) -%}
+  {%- if obj is mapping -%}
+    {%- if obj._value is none and obj._uuid in FALLBACK_VALUES -%}
+      {%- do obj.update({'_value': FALLBACK_VALUES[obj._uuid]}) -%}
+    {%- endif -%}
+    {%- for k, v in obj.items() if not k.startswith('_') -%}{{ fallback(v) }}{%- endfor -%}
+  {%- elif obj is sequence and obj is not string -%}
+    {%- for item in obj -%}{{ fallback(item) }}{%- endfor -%}
+  {%- endif -%}
+{%- endmacro -%}
+
+{#- 1. extraction -#}
+{%- set x = dc|extract_replies({'version': '2'}) -%}
+
+{#- 2. mapping -#}
+{{- fallback(x) -}}

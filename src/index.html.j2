@@ -1,9 +1,8 @@
 <!DOCTYPE HTML>
-{%- set repliesMap = ctx.questionnaire.replies -%}
-{%- set report = ctx.questionnaire.report -%}
 {%- set dc = ctx|to_context_obj -%}
 {% import "src/macros.html.j2" as macros with context %}
-{% import "src/uuids.j2" as uuids with context %}
+{% import "src/data/model.j2" as model with context %}
+{%- set x = model.x -%}
 {% import "src/globals.j2" as globals with context %}
 <html lang="{{ dc.document.language or 'en' }}">
   <head>

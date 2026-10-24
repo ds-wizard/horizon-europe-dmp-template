@@ -1,38 +1,32 @@
+{#- data -#}
+{%- set formats = x.creatingData.usesDataFormats -%}
+{%- set vocabularies = x.creatingData.usesVocabularies -%}
+{%- set newTypes = x.creatingData.usesNewDataTypes -%}
+{%- set producedDatasets = x.preservingData.producedDatasets -%}
 <div id="q-interoperable" class="question">
   <div class="answer">
   {# Format/Type with volume #}
-  {%- set formatsPath = [uuids.creatingCUuid, uuids.formatsQUuid]|reply_path -%}
-  {%- set formatsItems = repliesMap[formatsPath]|reply_items -%}
   {%- set formatsList -%}
-      {%- for formatItem in formatsItems -%}
-        {%- set formatPrefix = [formatsPath, formatItem]|reply_path -%}
-        {%- set formatNameReply = repliesMap[[formatPrefix, uuids.formatsNameQUuid]|reply_path] -%}
-        {%- set formatsIsStandardPath = [formatPrefix, uuids.formatsIsStandardQUuid]|reply_path -%}
-        {%- set formatsIsStandardAUuid = repliesMap[formatsIsStandardPath]|reply_str_value -%}
-        {%- set formatsIsLTSuitablePath = [formatPrefix, uuids.formatsIsLTSuitableQUuid]|reply_path -%}
-        {%- set formatsIsLTSuitableAUuid = repliesMap[formatsIsLTSuitablePath]|reply_str_value -%}
-        {%- set formatsVolumePath = [formatPrefix, uuids.formatsVolumeQUuid]|reply_path -%}
-        {%- set formatsVolumeAUuid = repliesMap[formatsVolumePath]|reply_str_value -%}
+      {%- for dataFormat in formats -%}
+        {%- set isStandard = dataFormat.isStandard -%}
         {%- set item -%}
           {# identification #}
-          {%- set formatName = macros.integrationFairSharing(formatNameReply)|trim -%}
+          {%- set formatName = macros.fairsharing(dataFormat.format)|trim -%}
           {%- if formatName -%}
             <div><strong>{{ formatName }}</strong></div>
           {%- endif -%}
           {%- set formatText -%}
             {# standard? #}
-            {%- if formatsIsStandardAUuid == uuids.formatsIsStandardYesAUuid %}
+            {%- if isStandard._value is true %}
               {% trans %}It is a standardized format.{% endtrans %}
-            {%- elif formatsIsStandardAUuid == uuids.formatsIsStandardNoAUuid -%}
-              {%- set formatsWhyNonStandardPath = [formatsIsStandardPath, uuids.formatsIsStandardNoAUuid, uuids.formatsWhyNonStandardQUuid]|reply_path -%}
-              {%- set formatsWhyNonStandardAUuid = repliesMap[formatsWhyNonStandardPath]|reply_str_value -%}
-              {%- if formatsWhyNonStandardAUuid == uuids.formatsWhyNSThereIsNoStandardAUuid %}
+            {%- elif isStandard._value is false -%}
+              {%- set whyNonStandard = isStandard.reason -%}
+              {%- if whyNonStandard._value == 'noStandard' %}
                 {% trans %}It is not a standardized format because there is no standardized format for this data type.{% endtrans %}
-              {%- elif formatsWhyNonStandardAUuid == uuids.formatsWhyNSItIsOptimizedAUuid %}
+              {%- elif whyNonStandard._value == 'optimized' %}
                 {% trans %}It is not a standardized format but it is optimized for processing speed and/or volume.{% endtrans %}
-              {%- elif formatsWhyNonStandardAUuid == uuids.formatsWhyNSAnotherReasonAUuid -%}
-                {%- set formatsWhyNSAnotherReasonPath = [formatsWhyNonStandardPath, uuids.formatsWhyNSAnotherReasonAUuid, uuids.formatsWhyNSAnotherReasonQUuid]|reply_path -%}
-                {%- set formatsWhyNSAnotherReason = repliesMap[formatsWhyNSAnotherReasonPath]|reply_str_value -%}
+              {%- elif whyNonStandard._value == 'other' -%}
+                {%- set formatsWhyNSAnotherReason = whyNonStandard.reason._value -%}
                 {% trans %}It is not a standardized format.{% endtrans %}
                 {%- if formatsWhyNSAnotherReason %}
                   {{ formatsWhyNSAnotherReason|capitalize|trim|dot }}
@@ -57,16 +51,11 @@
   {%- endif -%}
 
   {# Standards used #}
-  {%- set whatUsingPath = [uuids.creatingCUuid, uuids.whatUsingQUuid]|reply_path -%}
-  {%- set whatUsingItems = repliesMap[whatUsingPath]|reply_items -%}
   {%- set whatUsingList -%}
-      {%- for standardItem in whatUsingItems -%}
-        {%- set whatUsingNamePath = [whatUsingPath, standardItem, uuids.whatUsingNameQUuid]|reply_path -%}
-        {%- set whatUsingNameReply = repliesMap[whatUsingNamePath] -%}
-        {%- set whatUsingUrlPath = [whatUsingPath, standardItem, uuids.whatUsingUrlQUuid]|reply_path -%}
-        {%- set whatUsingUrl = repliesMap[whatUsingUrlPath]|reply_str_value -%}
+      {%- for standard in vocabularies -%}
+        {%- set whatUsingUrl = standard.url._value -%}
         {%- set item -%}
-          {%- set whatUsingName = macros.integrationFairSharing(whatUsingNameReply)|trim -%}
+          {%- set whatUsingName = macros.fairsharing(standard.name)|trim -%}
           {%- if whatUsingName %}
           <div><strong>{{ whatUsingName }}</strong></div>
           {%- endif %}
@@ -85,46 +74,34 @@
   {%- endif -%}
 
   {# New vocabularies #}
-  {%- set newTypesPath = [uuids.creatingCUuid, uuids.newTypesQUuid]|reply_path -%}
-  {%- set newTypesAUuid = repliesMap[newTypesPath]|reply_str_value -%}
-  {%- if newTypesAUuid == uuids.newTypesYesAUuid -%}
-    {%- set newTypesVocabsPath = [newTypesPath, uuids.newTypesYesAUuid, uuids.newTypesVocabsQUuid]|reply_path -%}
-    {%- set newTypesVocabsAUuid = repliesMap[newTypesVocabsPath]|reply_str_value -%}
-    {%- if newTypesVocabsAUuid == uuids.newTypesVocabsNoAUuid -%}
+  {%- if newTypes._value is true -%}
+    {%- set newTypesVocabs = newTypes.createVocabularies -%}
+    {%- if newTypesVocabs._value is false -%}
       <p>{% trans %}Although we will be using new types of data, suitable public controlled vocabularies or ontologies exist for those.{% endtrans %}</p>
-    {%- elif newTypesVocabsAUuid == uuids.newTypesVocabsYesAUuid -%}
-      {%- set newTypesVocabsMappingPath = [newTypesVocabsPath, uuids.newTypesVocabsYesAUuid, uuids.newTypesVocabsMappingQUuid]|reply_path -%}
-      {%- set newTypesVocabsMappingAUuid = repliesMap[newTypesVocabsMappingPath]|reply_str_value -%}
-      {%- if newTypesVocabsMappingAUuid == uuids.newTypesVocabsMappingNoAUuid -%}
+    {%- elif newTypesVocabs._value is true -%}
+      {%- set newTypesVocabsMapping = newTypesVocabs.mapping._value -%}
+      {%- if newTypesVocabsMapping is false -%}
       <p>{% trans %}We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of our data.{% endtrans %}</p>
-      {%- elif newTypesVocabsMappingAUuid == uuids.newTypesVocabsMappingYesAUuid -%}
+      {%- elif newTypesVocabsMapping is true -%}
       <p>{% trans %}We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of our data. Such terms will be mapped to existing vocabularies or ontologies.{% endtrans %}</p>
       {%- endif -%}
     {%- endif -%}
   {%- endif -%}
 
   {# Produced datasets (qualified references) #}
-  {%- set producedDataPath = [uuids.preservingCUuid, uuids.producedDataQUuid]|reply_path -%}
-  {%- set producedDataItems = repliesMap[producedDataPath]|reply_items -%}
   {%- set datasets = [] -%}
-  {%- if producedDataItems|length > 0 -%}
-    {%- for i in producedDataItems -%}
-      {%- set pathPrefix = [producedDataPath, i]|reply_path -%}
-      {%- set producedDataName = repliesMap[[pathPrefix, uuids.producedDataNameQUuid]|reply_path]|reply_str_value -%}
+  {%- if producedDatasets|length > 0 -%}
+    {%- for dataset in producedDatasets -%}
+      {%- set producedDataName = dataset.dataset._value -%}
       {# Only published #}
-      {%- set isPublishedDataPath = [pathPrefix, uuids.isPublishedDataQUuid]|reply_path -%}
-      {%- set isPublishedDataA = repliesMap[isPublishedDataPath]|reply_str_value -%}
-      {%- if isPublishedDataA == uuids.isPublishedDataYesAUuid -%}
+      {%- if dataset.published._value is true -%}
         {# Qualified references #}
-        {%- set publishedQReferencesPath = [isPublishedDataPath, uuids.isPublishedDataYesAUuid, uuids.publishedQReferencesQUuid]|reply_path -%}
-        {%- set publishedQReferencesAUuid = repliesMap[publishedQReferencesPath]|reply_str_value -%}
-        {%- if publishedQReferencesAUuid == uuids.publishedQReferencesYesAUuid -%}
-          {%- set publishedQReferencesItemsPath = [publishedQReferencesPath, uuids.publishedQReferencesYesAUuid, uuids.publishedQReferencesItemQUuid ]|reply_path -%}
-          {%- set publishedQReferencesItems = repliesMap[publishedQReferencesItemsPath]|reply_items -%}
+        {%- set qualifiedReferences = dataset.published.qualifiedReferences -%}
+        {%- if qualifiedReferences._value is true -%}
           {%- set qreferences = [] -%}
-          {%- for item in publishedQReferencesItems -%}
-            {%- set refId = repliesMap[[publishedQReferencesItemsPath, item, uuids.publishedQReferenceIdQUuid]|reply_path]|reply_str_value|e -%}
-            {%- set refRel = repliesMap[[publishedQReferencesItemsPath, item, uuids.publishedQReferenceRelQUuid]|reply_path]|reply_str_value|e -%}
+          {%- for item in qualifiedReferences.references -%}
+            {%- set refId = (item.identifier._value or '')|e -%}
+            {%- set refRel = (item.relationship._value or '')|e -%}
             {%- if refId and refRel -%}
               {%- do qreferences.append({
                 'id': refId,

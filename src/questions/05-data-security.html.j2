@@ -1,35 +1,26 @@
+{#- data -#}
+{%- set dataRisks = x.processingData.dataLossLeakVandalismRisks -%}
+{%- set carryHome = dataRisks.membersCarryData -%}
+{%- set personalData = dataRisks.personalDataProtection -%}
+{%- set pseudonymization = personalData.pseudonymization -%}
+{%- set workspace = x.processingData.sharedWorkingSpace -%}
+{%- set coldStorage = x.preservingData.coldStorageDuringProject -%}
+{%- set coldProtect = coldStorage.needsProtection -%}
+{%- set collab = x.creatingData.withDifferentGroups -%}
 <div id="q-data-security" class="question">
   <div class="answer">
-    {%- set risksPath = [uuids.processingCUuid, uuids.risksQUuid]|reply_path -%}
-    {%- set risksAUuid = repliesMap[risksPath]|reply_str_value -%}
     {# Basic risks #}
-    {%- if risksAUuid == uuids.risksExploreAUuid -%}
-      {%- set risksPathPrefix = [uuids.processingCUuid, uuids.risksQUuid, uuids.risksExploreAUuid]|reply_path -%}
-      {%- set risksStoreLabPath = [risksPathPrefix, uuids.risksStoreLabQUuid]|reply_path -%}
-      {%- set risksStoreLabAUuid = repliesMap[risksStoreLabPath]|reply_str_value -%}
-      {%- set risksCarryHomePath = [risksPathPrefix, uuids.risksCarryHomeQUuid]|reply_path -%}
-      {%- set risksCarryHomeAUuid = repliesMap[risksCarryHomePath]|reply_str_value -%}
-      {%- set risksCarryHomeEncPath = [risksCarryHomePath, uuids.risksCarryHomeYesAUuid, uuids.risksCarryHomeEncQUuid]|reply_path -%}
-      {%- set risksCarryHomeEncAUuid = repliesMap[risksCarryHomeEncPath]|reply_str_value -%}
-      {%- set risksCarryHomePassPath = [risksCarryHomePath, uuids.risksCarryHomeYesAUuid, uuids.risksCarryHomePassQUuid]|reply_path -%}
-      {%- set risksCarryHomePassAUuid = repliesMap[risksCarryHomePassPath]|reply_str_value -%}
-      {%- set risksCertificationsPath = [risksPathPrefix, uuids.risksCertificationsQUuid]|reply_path -%}
-      {%- set risksCertificationsAUuid = repliesMap[risksCertificationsPath]|reply_str_value -%}
-      {%- set risksHttpsPath = [risksPathPrefix, uuids.risksHttpsQUuid]|reply_path -%}
-      {%- set risksHttpsAUuid = repliesMap[risksHttpsPath]|reply_str_value -%}
-      {%- set risksInstructedPath = [risksPathPrefix, uuids.risksInstructedQUuid]|reply_path -%}
-      {%- set risksInstructedAUuid = repliesMap[risksInstructedPath]|reply_str_value -%}
+    {%- if dataRisks._value == 'explore' -%}
+      {%- set homeEncrypted = carryHome.encrypted._value is true -%}
+      {%- set homePassword = carryHome.passwordProtected._value is true -%}
+      {%- set storeLab = dataRisks.storeLabExternalHardDrives._value is false -%}
 
-      {%- set homeEncrypted = risksCarryHomeEncAUuid == uuids.risksCarryHomeEncYesAUuid -%}
-      {%- set homePassword = risksCarryHomePassAUuid == uuids.risksCarryHomePassYesAUuid -%}
-      {%- set storeLab = risksStoreLabAUuid == uuids.risksStoreLabNoAUuid -%}
-
-      {%- if storeLab or (risksCarryHomeAUuid == uuids.risksCarryHomeNoAUuid) or (risksCarryHomeAUuid == uuids.risksCarryHomeYesAUuid and (homeEncrypted or homePassword)) or (risksCertificationsAUuid == uuids.risksCertificationsYesAUuid) or (risksHttpsAUuid == uuids.risksHttpsYesAUuid) or (risksInstructedAUuid == uuids.risksInstructedYesAUuid) %}
+      {%- if storeLab or (carryHome._value is false) or (carryHome._value is true and (homeEncrypted or homePassword)) or (dataRisks.certifiedDataCentres._value is true) or (dataRisks.httpsWebServices._value is true) or (dataRisks.membersInstructedAboutRisks._value is true) %}
         <p>
           {%- if storeLab %}
             {% trans %}Project members will not store data or software on computers in the lab or external hard drives connected to those computers.{% endtrans %}
           {% endif -%}
-          {% if risksCarryHomeAUuid == uuids.risksCarryHomeNoAUuid %}
+          {% if carryHome._value is false %}
             {%- if storeLab -%}{% trans %}They{% endtrans %}{%- else -%}{% trans %}Project members{% endtrans %}{%- endif %} {% trans %}will not carry data with them (e.g. on laptops, USB sticks, or other external media).{% endtrans %}
           {% elif homeEncrypted and homePassword %}
             {%- if storeLab -%}{% trans %}They{% endtrans %}{%- else -%}{% trans %}Project members{% endtrans %}{%- endif %} {% trans %}can carry data with them on encrypted data carriers and password-protected laptops.{% endtrans %}
@@ -38,43 +29,30 @@
           {% elif homePassword %}
             {%- if storeLab -%}{% trans %}They{% endtrans %}{%- else -%}{% trans %}Project members{% endtrans %}{%- endif %} {% trans %}can carry data with them on password-protected laptops.{% endtrans %}
           {% endif -%}
-          {%- if risksCertificationsAUuid == uuids.risksCertificationsYesAUuid %}
+          {%- if dataRisks.certifiedDataCentres._value is true %}
             {% trans %}All data centers where project data is stored hold appropriate certifications.{% endtrans %}
           {% endif -%}
-          {%- if risksHttpsAUuid == uuids.risksHttpsYesAUuid %}
+          {%- if dataRisks.httpsWebServices._value is true %}
             {% trans %}All project web services are accessible via secure HTTP (https://...).{% endtrans %}
           {% endif -%}
-          {%- if risksInstructedAUuid == uuids.risksInstructedYesAUuid %}
+          {%- if dataRisks.membersInstructedAboutRisks._value is true %}
             {% trans count=globals.projectsCount %}Project members have been instructed about both generic and specific risks to the project.{% pluralize %}Project members have been instructed about both generic and specific risks to the projects.{% endtrans %}
           {% endif -%}
         </p>
       {%- endif -%}
       {# Information loss, leak, and vandalism #}
-      {%- set risksInfoLossPath = [risksPathPrefix, uuids.risksInfoLossQUuid]|reply_path -%}
-      {%- set risksInfoLossAUuid = repliesMap[risksInfoLossPath]|reply_str_value -%}
-      {%- set risksInfoLeakPath = [risksPathPrefix, uuids.risksInfoLeakQUuid]|reply_path -%}
-      {%- set risksInfoLeakAUuid = repliesMap[risksInfoLeakPath]|reply_str_value -%}
-      {%- set risksInfoVandalismPath = [risksPathPrefix, uuids.risksInfoVandalismQUuid]|reply_path -%}
-      {%- set risksInfoVandalismAUuid = repliesMap[risksInfoVandalismPath]|reply_str_value -%}
-
-      {# Define mapping of UUIDs to qualitative levels #}
+      {# Define mapping of answer codes to qualitative levels #}
       {%- set risk_levels = {
-        uuids.risksInfoLossSmallAUuid: 'small',
-        uuids.risksInfoLossLowAUuid: 'low',
-        uuids.risksInfoLossWillAUuid: 'will',
-        uuids.risksInfoLeakSmallAUuid: 'small',
-        uuids.risksInfoLeakLowAUuid: 'low',
-        uuids.risksInfoLeakWillAUuid: 'will',
-        uuids.risksInfoVandalismSmallAUuid: 'small',
-        uuids.risksInfoVandalismLowAUuid: 'low',
-        uuids.risksInfoVandalismWillAUuid: 'will'
+        'negligible': 'small',
+        'acceptablyLow': 'low',
+        'needWork': 'will'
       } -%}
 
       {# Extract selected levels for each type #}
       {%- set selected = {
-        'loss': risk_levels[risksInfoLossAUuid],
-        'leak': risk_levels[risksInfoLeakAUuid],
-        'vandalism': risk_levels[risksInfoVandalismAUuid]
+        'loss': risk_levels[dataRisks.considerLossImpact._value],
+        'leak': risk_levels[dataRisks.considerLeakImpact._value],
+        'vandalism': risk_levels[dataRisks.considerVandalismImpact._value]
       } -%}
 
       {%- set small = [] -%}
@@ -109,84 +87,61 @@
       {%- endif -%}
 
       {# Personal data #}
-      {%- set risksPersonalDataPath = [risksPathPrefix, uuids.risksPersonalDataQUuid]|reply_path -%}
-      {%- set risksPersonalDataAUuid = repliesMap[risksPersonalDataPath]|reply_str_value -%}
-      {%- if risksPersonalDataAUuid == uuids.risksPersonalDataNotUsingAUuid -%}
+      {%- if personalData._value == 'noPersonalData' -%}
         <p>{% trans %}We are not using any personal information.{% endtrans %}</p>
-      {%- elif risksPersonalDataAUuid == uuids.risksPersonalDataPseudoAUuid -%}
+      {%- elif personalData._value == 'pseudonymizedOnly' -%}
         {% call macros.para() %}
           {% trans %}All personal information will be processed in pseudonymized form only.{% endtrans %}
-          {%- set risksPseudonymizationPath = [risksPersonalDataPath, uuids.risksPersonalDataPseudoAUuid, uuids.risksPseudonymizationQUuid]|reply_path -%}
-          {%- set risksPseudonymizationAUuid = repliesMap[risksPseudonymizationPath]|reply_str_value -%}
-          {%- if risksPseudonymizationAUuid == uuids.risksPseudonymizationInsideAUuid %}
+          {%- if pseudonymization._value == 'insideProjectLimitedPeopleKey' %}
             {% trans %}We pseudonymize inside the project; only a limited number of people can access the keys.{% endtrans %}
-          {%- elif risksPseudonymizationAUuid == uuids.risksPseudonymizationPartyAUuid %}
+          {%- elif pseudonymization._value == 'independentParty' %}
             {% trans %}Pseudonymization is handled by an independent party in order to allow data coupling.{% endtrans %}
-          {%- elif risksPseudonymizationAUuid == uuids.risksPseudonymizationAnotherAUuid -%}
-            {%- set risksPseudonymizationAnotherQUuid = [risksPseudonymizationPath, uuids.risksPseudonymizationAnotherAUuid, uuids.risksPseudonymizationAnotherQUuid]|reply_path -%}
-            {%- set risksPseudonymizationAnother = repliesMap[risksPseudonymizationAnotherQUuid]|reply_str_value %}
+          {%- elif pseudonymization._value == 'other' -%}
+            {%- set risksPseudonymizationAnother = pseudonymization.other._value %}
             {# TRANSLATORS: %(value)s is ": " followed by the answer, or "." (or nothing in a list item) #}{% trans value=(": " ~ risksPseudonymizationAnother|markdown if risksPseudonymizationAnother else ".") %}We have a specific way of pseudonymization{{ value }}{% endtrans %}
           {%- endif -%}
         {% endcall %}
-      {%- elif risksPersonalDataAUuid == uuids.risksPersonalDataAnonymousAUuid -%}
+      {%- elif personalData._value == 'anonymouslyCollected' -%}
         <p>{% trans %}All personal data will be collected anonymously.{% endtrans %}</p>
-      {%- elif risksPersonalDataAUuid == uuids.risksPersonalDataAnonymizedAUuid -%}
+      {%- elif personalData._value == 'anonymisedEarly' -%}
         <p>{% trans %}All personal data will be anonymized as early as possible.{% endtrans %}</p>
       {%- endif -%}
     {%- endif -%}
 
     {# Access control in shared workspace #}
-    {%- set sharedWorkspacePath = [uuids.processingCUuid, uuids.sharedWorkspaceQUuid]|reply_path -%}
-    {%- set sharedWorkspaceAUuid = repliesMap[sharedWorkspacePath]|reply_str_value -%}
-    {%- if sharedWorkspaceAUuid == uuids.sharedWorkspaceYesAUuid -%}
-      {%- set sharedWorkspacePrefix = [uuids.processingCUuid, uuids.sharedWorkspaceQUuid, uuids.sharedWorkspaceYesAUuid]|reply_path -%}
-      {%- set sharedAccessControlPath = [sharedWorkspacePrefix, uuids.sharedAccessControlQUuid]|reply_path -%}
-      {%- set sharedAccessControlAUuid = repliesMap[sharedAccessControlPath]|reply_str_value -%}
-      {%- if sharedAccessControlAUuid == uuids.sharedAccessControlMembersRWAUuid -%}
+    {%- if workspace._value is true -%}
+      {%- set accessControl = workspace.accessControl._value -%}
+      {%- if accessControl == 'onlyMembersReadWrite' -%}
         <p>{% trans %}Only project members have read/write access to the data.{% endtrans %}</p>
-      {%- elif sharedAccessControlAUuid == uuids.sharedAccessControlInstituteRAUuid -%}
+      {%- elif accessControl == 'instituteReadMembersWrite' -%}
         <p>{% trans %}Anyone in the institute has read access to the data; all project members have read/write access.{% endtrans %}</p>
-      {%- elif sharedAccessControlAUuid == uuids.sharedAccessControlMembersRAUuid -%}
+      {%- elif accessControl == 'membersReadSelectedWrite' -%}
         <p>{% trans %}Only project members will have read access; only selected project members will be able to write data.{% endtrans %}</p>
-      {%- elif sharedAccessControlAUuid == uuids.sharedAccessControlMembersRequestAUuid -%}
+      {%- elif accessControl == 'instituteReadMembersRequest' -%}
         <p>{% trans %}Anyone in the institute can read data; only project members can request write access.{% endtrans %}</p>
       {%- endif -%}
     {%- endif -%}
 
     {# Cold storage #}
-    {%- set coldStoragePath = [uuids.preservingCUuid, uuids.coldStorageQUuid]|reply_path -%}
-    {%- set coldStorageAUuid = repliesMap[coldStoragePath]|reply_str_value -%}
-    {%- if coldStorageAUuid == uuids.coldStorageYesAUuid -%}
+    {%- if coldStorage._value is true -%}
       {%- set coldSentences = [] -%}
-      {%- set coldStorageRemoteDisasterPath = [coldStoragePath, uuids.coldStorageYesAUuid, uuids.coldStorageRemoteDisasterQUuid]|reply_path -%}
-      {%- set coldStorageRemoteDisasterAUuid = repliesMap[coldStorageRemoteDisasterPath]|reply_str_value -%}
-      {%- set coldStorageProtectPath = [coldStoragePath, uuids.coldStorageYesAUuid, uuids.coldStorageProtectQUuid]|reply_path -%}
-      {%- set coldStorageProtectAUuid = repliesMap[coldStorageProtectPath]|reply_str_value -%}
-
-      {%- if coldStorageRemoteDisasterAUuid == uuids.coldStorageRemoteDisasterYesAUuid -%}
+      {%- if coldStorage.remoteLocation._value is true -%}
         {%- do coldSentences.append(_("The archive will be stored in a remote location to protect the data against disasters.")) -%}
       {%- endif -%}
 
-      {%- if coldStorageProtectAUuid == uuids.coldStorageProtectYesAUuid -%}
+      {%- if coldProtect._value is true -%}
         {%- do coldSentences.append(_("The archive needs to be protected against loss or theft.")) -%}
 
-        {%- set coldStorageProtectEncPath = [coldStorageProtectPath, uuids.coldStorageProtectYesAUuid, uuids.coldStorageProtectEncQUuid]|reply_path -%}
-        {%- set coldStorageProtectEncAUuid = repliesMap[coldStorageProtectEncPath]|reply_str_value -%}
-        {%- set coldStorageProtectPhysicalPath = [coldStorageProtectPath, uuids.coldStorageProtectYesAUuid, uuids.coldStorageProtectPhysicalQUuid]|reply_path -%}
-        {%- set coldStorageProtectPhysicalAUuid = repliesMap[coldStorageProtectPhysicalPath]|reply_str_value -%}
-
-        {%- if coldStorageProtectEncAUuid == uuids.coldStorageProtectEncNoNeedAUuid -%}
+        {%- if coldProtect.encryption._value == 'notNeeded' -%}
           {%- do coldSentences.append(_("The data does not need protection in terms of encryption.")) -%}
-        {%- elif coldStorageProtectEncAUuid == uuids.coldStorageProtectEncYesAUuid -%}
-          {%- set coldStorageProtectEncKeyPath = [coldStorageProtectEncPath, uuids.coldStorageProtectEncYesAUuid, uuids.coldStorageProtectEncKeyQUuid]|reply_path -%}
-          {%- set coldStorageProtectEncKeyAUuid = repliesMap[coldStorageProtectEncKeyPath]|reply_str_value -%}
-          {%- if coldStorageProtectEncKeyAUuid == uuids.coldStorageProtectEncKeyYesAUuid -%}
+        {%- elif coldProtect.encryption._value == 'yes' -%}
+          {%- if coldProtect.encryption.keyAccessClear._value is true -%}
             {%- do coldSentences.append(_("It will be encrypted and it is clear who has access to the key (also in case of a required data restore).")) -%}
           {%- else -%}
             {%- do coldSentences.append(_("It will be encrypted.")) -%}
           {%- endif -%}
         {%- endif -%}
-        {%- if coldStorageProtectPhysicalAUuid == uuids.coldStorageProtectPhysicalYesAUuid -%}
+        {%- if coldProtect.physicalAccessClear._value is true -%}
           {%- do coldSentences.append(_("It is clear who has physical access to the archives.")) -%}
         {%- endif -%}
       {%- endif -%}
@@ -197,16 +152,12 @@
     {%- endif -%}
 
     {# Collaboration agreement for data access #}
-    {%- set collabPath = [uuids.creatingCUuid, uuids.collabQUuid]|reply_path -%}
-    {%- set collabAUuid = repliesMap[collabPath]|reply_str_value -%}
-    {%- if collabAUuid == uuids.collabNoAUuid -%}
+    {%- if collab._value is false -%}
       <p>{% trans %}We are not running the project in a collaboration between different groups or institutes. Therefore, no collaboration agreement related to data access is needed.{% endtrans %}</p>
-    {%- elif collabAUuid == uuids.collabYesAUuid -%}
-      {%- set collabAgreePath = [collabPath, collabAUuid, uuids.collabAgreeQUuid]|reply_path -%}
-      {%- set collabAgreeAUuid = repliesMap[collabAgreePath]|reply_str_value -%}
-      {%- if collabAgreeAUuid == uuids.collabAgreeNoAUuid -%}
+    {%- elif collab._value is true -%}
+      {%- if collab.hasAgreement._value is false -%}
        <p>{% trans %}We are running the project in a collaboration between different groups and institutes. However, there is no collaboration agreement in the project that describes who can have access to what data.{% endtrans %}</p>
-      {%- elif collabAgreeAUuid == uuids.collabAgreeYesAUuid -%}
+      {%- elif collab.hasAgreement._value is true -%}
         <p>{% trans %}We are running the project in a collaboration between different groups and institutes. A collaboration agreement that describes who can have access to what data in the project is in place.{% endtrans %}</p>
       {%- endif -%}
     {%- endif -%}

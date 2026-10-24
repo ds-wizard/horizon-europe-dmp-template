@@ -1,4 +1,2 @@
 {#- Number of projects, for the singular or plural form of sentences about "the project(s)" -#}
-{%- set projectsPath = [uuids.adminDetailsCUuid, uuids.projectsQUuid]|reply_path -%}
-{%- set projectsItems = repliesMap[projectsPath]|reply_items -%}
-{%- set projectsCount = projectsItems|length if projectsItems|length > 1 else 1 -%}
+{%- set projectsCount = x.administrativeInformation.projects|length if x.administrativeInformation.projects|length > 1 else 1 -%}

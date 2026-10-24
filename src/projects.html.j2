@@ -1,32 +1,26 @@
-{%- set projectsPath = [uuids.adminDetailsCUuid, uuids.projectsQUuid]|reply_path -%}
-{%- set projectsItems = repliesMap[projectsPath]|reply_items -%}
+{#- data -#}
+{%- set projects = x.administrativeInformation.projects -%}
 <div id="dmp-projects">
   <h2>{% trans %}Projects{% endtrans %}</h2>
 
-  {%- if projectsItems|length > 0 %}
+  {%- if projects|length > 0 %}
   <p>{% trans count=globals.projectsCount %}The data and work described in this DMP are for the following project.{% pluralize %}The data and work described in this DMP are for the following projects.{% endtrans %}</p>
   {%- endif %}
 
-  {% for projectsItem in projectsItems %}
+  {% for project in projects %}
     <div class="project">
-    {%- set projectNamePath = [projectsPath, projectsItem, uuids.projectNameQUuid]|reply_path -%}
-    {%- set projectName = repliesMap[projectNamePath]|reply_str_value -%}
+    {%- set projectName = project.name._value -%}
     {%- if projectName -%}
       <h3>{{ projectName }}</h3>
     {%- else -%}
       <h3 class="empty-value">{% trans %}(project name not given){% endtrans %}</h3>
     {%- endif -%}
 
-    {%- set projectAcronymPath = [projectsPath, projectsItem, uuids.projectAcronymQUuid]|reply_path -%}
-    {%- set projectAcronym = repliesMap[projectAcronymPath]|reply_str_value -%}
-    {%- set projectNumberPath = [projectsPath, projectsItem, uuids.projectNumberQUuid]|reply_path -%}
-    {%- set projectNumber = repliesMap[projectNumberPath]|reply_str_value -%}
-    {%- set projectStartPath = [projectsPath, projectsItem, uuids.projectStartQUuid]|reply_path -%}
-    {%- set projectStart = repliesMap[projectStartPath]|reply_str_value -%}
-    {%- set projectEndPath = [projectsPath, projectsItem, uuids.projectEndQUuid]|reply_path -%}
-    {%- set projectEnd = repliesMap[projectEndPath]|reply_str_value -%}
-    {%- set fundersPath = [projectsPath, projectsItem, uuids.fundersQUuid]|reply_path -%}
-    {%- set fundersItems = repliesMap[fundersPath]|reply_items -%}
+    {%- set projectAcronym = project.acronym._value -%}
+    {%- set projectNumber = project.id._value -%}
+    {%- set projectStart = project.startDate._value -%}
+    {%- set projectEnd = project.endDate._value -%}
+    {%- set fundings = project.fundings -%}
       <table class="project-details">
         <colgroup><col width="28%"><col width="72%"></colgroup>
         <tr><th>{% trans %}Acronym{% endtrans %}</th><td>{{ projectAcronym if projectAcronym else _("N/A") }}</td></tr>
@@ -34,16 +28,12 @@
         <tr><th>{% trans %}Start date{% endtrans %}</th><td>{{ projectStart if projectStart else _("N/A") }}</td></tr>
         <tr><th>{% trans %}End date{% endtrans %}</th><td>{{ projectEnd if projectEnd else _("N/A") }}</td></tr>
         <tr><th>{% trans %}Funding{% endtrans %}</th><td>
-          {%- if fundersItems|length > 0 %}
+          {%- if fundings|length > 0 %}
             <ul>
-            {%- for fundersItem in fundersItems %}
-              {%- set funderNamePath = [fundersPath, fundersItem, uuids.funderNameQUuid]|reply_path -%}
-              {%- set funderNameReply = repliesMap[funderNamePath] -%}
-              {%- set grantNumberPath = [fundersPath, fundersItem, uuids.grantNumberQUuid]|reply_path -%}
-              {%- set grantNumber = repliesMap[grantNumberPath]|reply_str_value -%}
-              {%- set funderStatusPath = [fundersPath, fundersItem, uuids.funderStatusQUuid]|reply_path -%}
-              {%- set funderStatus = repliesMap[funderStatusPath]|reply_str_value %}
-              <li>{{ macros.integrationCrossref(funderNameReply) }}: {{ grantNumber if grantNumber else _("grant number not yet given") }} {% if funderStatus == uuids.funderStatusPlannedAUuid %}{% trans %}(planned){% endtrans %}{% elif funderStatus == uuids.funderStatusAppliedAUuid %}{% trans %}(applied){% endtrans %}{% elif funderStatus == uuids.funderStatusGrantedAUuid %}{% trans %}(granted){% endtrans %}{% elif funderStatus == uuids.funderStatusRejectedAUuid %}{% trans %}(rejected){% endtrans %}{% endif %}</li>
+            {%- for funding in fundings %}
+              {%- set grantNumber = funding.grantNumber._value -%}
+              {%- set funderStatus = funding.status._value %}
+              <li>{{ macros.crossref(funding.funder) }}: {{ grantNumber if grantNumber else _("grant number not yet given") }} {% if funderStatus == 'planned' %}{% trans %}(planned){% endtrans %}{% elif funderStatus == 'applied' %}{% trans %}(applied){% endtrans %}{% elif funderStatus == 'granted' %}{% trans %}(granted){% endtrans %}{% elif funderStatus == 'rejected' %}{% trans %}(rejected){% endtrans %}{% endif %}</li>
             {%- endfor %}
             </ul>
           {%- else -%}
@@ -52,8 +42,7 @@
         </td></tr>
       </table>
 
-    {%- set projectAbstractPath = [projectsPath, projectsItem, uuids.projectAbstractQUuid]|reply_path -%}
-    {%- set projectAbstract = repliesMap[projectAbstractPath]|reply_str_value -%}
+    {%- set projectAbstract = project.abstract._value -%}
     {%- if projectAbstract %}
       <section class="abstract">
         {{ projectAbstract|markdown }}
