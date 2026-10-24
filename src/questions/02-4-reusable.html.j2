@@ -4,6 +4,12 @@
 {%- set allOpen = x.givingAccessToData.allOpenOverTime -%}
 {%- set coldStorage = x.preservingData.coldStorageDuringProject -%}
 {%- set validIntegrity = x.processingData.resultsIntegrityValidation -%}
+{%- set assignsLicence = x.creatingData.collectingMetadata.assignsLicence -%}
+{%- set whereRestrictions = x.creatingData.collectingMetadata.whereDataRestrictions -%}
+{%- set useRestrictions = x.creatingData.dataUseRestrictions -%}
+{%- set createsDictionary = x.creatingData.collectingMetadata.createsDictionary -%}
+{%- set monitorIntegrity = x.creatingData.monitorIntegrity -%}
+{%- set referenceData = x.preservingData.createsReferenceData -%}
 <div id="q-reusable" class="question">
   <div class="answer">
     {# Produced datasets #}
@@ -40,6 +46,73 @@
         </li>
       {%- endfor -%}
       </ul>
+    {%- endif -%}
+
+    {# Licences #}
+    {%- if assignsLicence._value is false -%}
+      <p>{% trans %}We will not assign licences to our datasets.{% endtrans %}</p>
+    {%- elif assignsLicence._value is true -%}
+      {%- set licenceAtAllTime = assignsLicence.atAllTime._value -%}
+      {%- if licenceAtAllTime is true -%}
+        <p>{% trans %}We will assign a licence to each of our datasets and store the licences with the data at all times.{% endtrans %}</p>
+      {%- elif licenceAtAllTime is false -%}
+        <p>{% trans %}We will assign a licence to each of our datasets, but the licences will not be stored with the data at all times.{% endtrans %}</p>
+      {%- else -%}
+        <p>{% trans %}We will assign a licence to each of our datasets.{% endtrans %}</p>
+      {%- endif -%}
+    {%- endif -%}
+
+    {# Where restrictions on the usage are kept #}
+    {%- if whereRestrictions._value == 'registry' -%}
+      <p>{% trans %}We will keep any applicable restrictions on the usage of the data in a specialised registry or catalogue.{% endtrans %}</p>
+    {%- elif whereRestrictions._value == 'dms' -%}
+      <p>{% trans %}We will keep any applicable restrictions on the usage of the data closely attached to the data in the data management system.{% endtrans %}</p>
+    {%- elif whereRestrictions._value == 'folder' -%}
+      <p>{% trans %}We will keep any applicable restrictions on the usage of the data in the same folder as the data.{% endtrans %}</p>
+    {%- elif whereRestrictions._value == 'other' -%}
+      {%- set whereRestrictionsOther = whereRestrictions.other._value -%}
+      {%- if whereRestrictionsOther -%}
+        {% call macros.para() %}{% trans value=(whereRestrictionsOther|markdown) %}We will keep any applicable restrictions on the usage of the data as follows: {{ value }}{% endtrans %}{% endcall %}
+      {%- else -%}
+        <p>{% trans %}We will keep any applicable restrictions on the usage of the data in another way.{% endtrans %}</p>
+      {%- endif -%}
+    {%- endif -%}
+
+    {# Data use restrictions #}
+    {%- if useRestrictions._value is false -%}
+      <p>{% trans %}There will be no restrictions on the use of the data.{% endtrans %}</p>
+    {%- elif useRestrictions._value is true -%}
+      {%- set restrictionReasons = [] -%}
+      {%- set restrictionCodes = useRestrictions.restrictions|map(attribute='_value')|list -%}
+      {%- if 'gdpr' in restrictionCodes -%}
+        {%- do restrictionReasons.append(_("the GDPR")) -%}
+      {%- endif -%}
+      {%- if 'ethics' in restrictionCodes -%}
+        {%- do restrictionReasons.append(_("the ethical approval")) -%}
+      {%- endif -%}
+      {%- if 'consent' in restrictionCodes -%}
+        {%- do restrictionReasons.append(_("restrictions in the consent")) -%}
+      {%- endif -%}
+      {%- if 'other' in restrictionCodes -%}
+        {%- do restrictionReasons.append(_("other reasons")) -%}
+      {%- endif -%}
+      {%- if restrictionReasons|length > 0 -%}
+        {#- TRANSLATORS: %(reasons)s is an enumeration of the GDPR, the ethical approval, restrictions in the consent, and other reasons -#}
+        <p>{{ _("There will be restrictions on the use of the data arising from %(reasons)s.", reasons=macros.joinAnd(restrictionReasons)) }}</p>
+      {%- else -%}
+        <p>{% trans %}There will be restrictions on the use of the data.{% endtrans %}</p>
+      {%- endif -%}
+      {%- set restrictionsDescription = useRestrictions.description._value -%}
+      {%- if restrictionsDescription -%}
+        {% call macros.para() %}{% trans value=(restrictionsDescription|markdown) %}The restrictions are as follows: {{ value }}{% endtrans %}{% endcall %}
+      {%- endif -%}
+    {%- endif -%}
+
+    {# Data dictionary #}
+    {%- if createsDictionary._value is true -%}
+      <p>{% trans %}We will create a data dictionary describing the variables in our data.{% endtrans %}</p>
+    {%- elif createsDictionary._value is false -%}
+      <p>{% trans %}We will not create a data dictionary for our data.{% endtrans %}</p>
     {%- endif -%}
 
     {# Measure quality #}
@@ -95,6 +168,24 @@
       {%- endfor -%}
       </ul>
       {%- endif -%}
+    {%- endif -%}
+
+    {# Monitoring data integrity #}
+    {%- if monitorIntegrity._value is false -%}
+      <p>{% trans %}We will not monitor the integrity of the data once it has been collected.{% endtrans %}</p>
+    {%- elif monitorIntegrity._value is true -%}
+      {%- set integritySentences = [_("We will monitor the integrity of the data once it has been collected.")] -%}
+      {%- if monitorIntegrity.checksums._value is true -%}
+        {%- do integritySentences.append(_("We will keep a master list with checksums of the verified data.")) -%}
+      {%- elif monitorIntegrity.checksums._value is false -%}
+        {%- do integritySentences.append(_("We will not keep a master list with checksums of the data.")) -%}
+      {%- endif -%}
+      {%- if monitorIntegrity.detectSwaps._value is true -%}
+        {%- do integritySentences.append(_("We will define a way to detect file or sample swaps, e.g. by measuring something independently.")) -%}
+      {%- elif monitorIntegrity.detectSwaps._value is false -%}
+        {%- do integritySentences.append(_("We will not define a specific way to detect file or sample swaps.")) -%}
+      {%- endif -%}
+      <p>{{ integritySentences|join(" ") }}</p>
     {%- endif -%}
 
     {# Can open data #}
@@ -195,6 +286,57 @@
       {%- endif -%}
       {%- if notOpenSentencesDP|length > 0 -%}
         <p>{{ notOpenSentencesDP|join(" ") }}</p>
+      {%- endif -%}
+    {%- endif -%}
+
+    {# Reference data #}
+    {%- if referenceData._value is false -%}
+      <p>{% trans %}None of our data will form a reference data set for future research by others.{% endtrans %}</p>
+    {%- elif referenceData._value is true -%}
+      <p>{% trans %}Some of our data will form a reference data set for future research by others.{% endtrans %}</p>
+      {%- set refOwnership = referenceData.ownership._value -%}
+      {%- if refOwnership -%}
+        {% call macros.para() %}{% trans value=(refOwnership|markdown) %}The ownership of the reference data and who will be allowed to use it are as follows: {{ value }}{% endtrans %}{% endcall %}
+      {%- endif -%}
+      {%- set refMaintenance = referenceData.maintenance._value -%}
+      {%- if refMaintenance -%}
+        {% call macros.para() %}{% trans value=(refMaintenance|markdown) %}We will maintain the reference data as follows: {{ value }}{% endtrans %}{% endcall %}
+      {%- endif -%}
+      {%- set refRelease = referenceData.releaseSchedule._value -%}
+      {%- if refRelease -%}
+        {% call macros.para() %}{% trans value=(refRelease|markdown) %}The reference data will be released as follows: {{ value }}{% endtrans %}{% endcall %}
+      {%- endif -%}
+      {%- set refLicense = referenceData.standardLicense -%}
+      {%- if refLicense._value is true -%}
+        {%- set refLicenseName = macros.license(refLicense.license)|trim -%}
+        {%- if refLicenseName -%}
+          <p>{% trans license=refLicenseName %}The reference data will be available under the standard licence {{ license }}.{% endtrans %}</p>
+        {%- else -%}
+          <p>{% trans %}The reference data will be available under a standard licence.{% endtrans %}</p>
+        {%- endif -%}
+      {%- elif refLicense._value is false -%}
+        {%- set refConditions = refLicense.conditions._value -%}
+        {%- if refConditions -%}
+          {% call macros.para() %}{% trans value=(refConditions|markdown) %}The reference data will not be available under a standard licence; the conditions for use will be as follows: {{ value }}{% endtrans %}{% endcall %}
+        {%- else -%}
+          <p>{% trans %}The reference data will not be available under a standard licence.{% endtrans %}</p>
+        {%- endif -%}
+      {%- endif -%}
+      {%- set refRepository = referenceData.fromRepository -%}
+      {%- if refRepository._value is true -%}
+        {%- set refRepositoryName = macros.fairsharing(refRepository.repository)|trim -%}
+        {%- if refRepositoryName -%}
+          <p>{% trans repository=refRepositoryName %}The reference data will be available from the existing repository {{ repository }}.{% endtrans %}</p>
+        {%- else -%}
+          <p>{% trans %}The reference data will be available from an existing repository.{% endtrans %}</p>
+        {%- endif -%}
+      {%- elif refRepository._value is false -%}
+        {%- set refWhere = refRepository.where._value -%}
+        {%- if refWhere -%}
+          {% call macros.para() %}{% trans value=(refWhere|markdown) %}The reference data will not be available from an existing repository; we will make it available as follows: {{ value }}{% endtrans %}{% endcall %}
+        {%- else -%}
+          <p>{% trans %}The reference data will not be available from an existing repository.{% endtrans %}</p>
+        {%- endif -%}
       {%- endif -%}
     {%- endif -%}
 

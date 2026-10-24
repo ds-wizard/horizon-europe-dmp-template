@@ -37,6 +37,12 @@
           {%- if formatText|trim -%}
             <p>{{ formatText|trim }}</p>
           {%- endif -%}
+          {# completely described? #}
+          {%- if dataFormat.isDescribed._value is true -%}
+            <p>{% trans %}The format is completely described.{% endtrans %}</p>
+          {%- elif dataFormat.isDescribed._value is false -%}
+            <p>{% trans %}The format is not completely described.{% endtrans %}</p>
+          {%- endif -%}
         {%- endset -%}
         {%- if item|trim %}
         <li>{{ item }}</li>
@@ -85,6 +91,42 @@
       {%- elif newTypesVocabsMapping is true -%}
       <p>{% trans %}We will be using new types of data. For that reason, we will make and publish a vocabulary or ontology for some of our data. Such terms will be mapped to existing vocabularies or ontologies.{% endtrans %}</p>
       {%- endif -%}
+    {%- endif -%}
+    {# Design, description and registries of the new data types #}
+    {%- set newTypesSentences = [] -%}
+    {%- set howDesign = newTypes.howDesign._value -%}
+    {%- if howDesign == 'closeFormat' -%}
+      {%- do newTypesSentences.append(_("To design our new data formats, we will specialise a closely related, more generic and open format.")) -%}
+    {%- elif howDesign == 'ldFormat' -%}
+      {%- do newTypesSentences.append(_("To design our new data formats, we will use a Linked Data format.")) -%}
+    {%- elif howDesign == 'customFormat' -%}
+      {%- do newTypesSentences.append(_("To design our new data formats, we will use a completely custom data format.")) -%}
+    {%- endif -%}
+    {%- if newTypes.describeForOthers._value is true -%}
+      {%- do newTypesSentences.append(_("We will describe our new data formats for others by registering them at a data standards registry.")) -%}
+    {%- elif newTypes.describeForOthers._value is false -%}
+      {%- do newTypesSentences.append(_("We do not need to describe our new data formats for others.")) -%}
+    {%- endif -%}
+    {%- set addFields = newTypes.addFields._value -%}
+    {%- if addFields == 'no' -%}
+      {%- do newTypesSentences.append(_("All of our data types are already described in a data type registry.")) -%}
+    {%- elif addFields == 'newFields' -%}
+      {%- do newTypesSentences.append(_("We will add new data types to an existing data type registry.")) -%}
+    {%- elif addFields == 'newType' -%}
+      {%- do newTypesSentences.append(_("We will create our own data type registry.")) -%}
+    {%- endif -%}
+    {%- set registries = newTypes.registries._value -%}
+    {%- if registries -%}
+      {#- TRANSLATORS: %(value)s is the answer (free text, possibly several paragraphs) -#}
+      {%- do newTypesSentences.append(_("We will use the following data type registries: %(value)s", value=registries|markdown)) -%}
+    {%- endif -%}
+    {%- if newTypesSentences|length > 0 -%}
+      {#- introduce the new types of data unless the paragraph about vocabularies above did -#}
+      {%- set vocabsShown = newTypesVocabs._value is false or (newTypesVocabs._value is true and newTypesVocabs.mapping._value is not none) -%}
+      {%- if not vocabsShown -%}
+        {%- do newTypesSentences.insert(0, _("We will be using new types of data.")) -%}
+      {%- endif -%}
+      {% call macros.para() %}{{ newTypesSentences|join(' ') }}{% endcall %}
     {%- endif -%}
   {%- endif -%}
 

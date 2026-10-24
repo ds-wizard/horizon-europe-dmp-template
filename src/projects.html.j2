@@ -40,6 +40,17 @@
             {% trans %}Did not apply for any funding yet.{% endtrans %}
           {%- endif -%}
         </td></tr>
+        {%- set projectUrl = project.url._value -%}
+        {%- if projectUrl %}
+        <tr><th>{% trans %}Proposal{% endtrans %}</th><td>
+          {%- set projectUrlTrim = projectUrl|trim -%}
+          {%- if projectUrlTrim.startswith(('http://', 'https://')) and ' ' not in projectUrlTrim and '\n' not in projectUrlTrim -%}
+            <a href="{{ projectUrlTrim }}" target="_blank">{{ projectUrlTrim }}</a>
+          {%- else -%}
+            {{ projectUrl }}
+          {%- endif -%}
+        </td></tr>
+        {%- endif %}
       </table>
 
     {%- set projectAbstract = project.abstract._value -%}

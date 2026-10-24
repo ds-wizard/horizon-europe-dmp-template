@@ -234,6 +234,12 @@
         {%- if sentences|length > 0 -%}
           {% call macros.para() %}{{ sentences|join(' ') }}{% endcall %}
         {%- endif -%}
+        {# persistent identifiers within the project #}
+        {%- if fileOrganization.usePids._value is true -%}
+          <p>{% trans %}We will use persistent identifiers to refer to data within the project.{% endtrans %}</p>
+        {%- elif fileOrganization.usePids._value is false -%}
+          <p>{% trans %}We will not use persistent identifiers to refer to data within the project.{% endtrans %}</p>
+        {%- endif -%}
       {%- endif -%}
     {%- endif -%}
   </div>

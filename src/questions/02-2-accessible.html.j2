@@ -111,6 +111,39 @@
                 {# TRANSLATORS: %(value)s is ": " followed by the answer, or "." (or nothing in a list item) #}{% trans value=(": " ~ legalReasonsAuthorizeOther|markdown if legalReasonsAuthorizeOther else ".") %}For the authorization of potential users, we will make special arrangements{{ value }}{% endtrans %}
               {%- endif -%}
             {% endcall %}
+            {# storage, authentication, access criteria and auditing of the restricted data #}
+            {%- set restrictedSentences = [] -%}
+            {%- set restrictedStorage = authenticatedAccess.storage._value -%}
+            {%- if restrictedStorage == 'domainRepo' -%}
+              {%- do restrictedSentences.append(_("The data will be stored in a domain repository that arranges restricted access, such as the European Genome-phenome Archive (EGA).")) -%}
+            {%- elif restrictedStorage == 'institutionalRepo' -%}
+              {%- do restrictedSentences.append(_("The data will be stored in a national or institutional repository that arranges restricted access.")) -%}
+            {%- elif restrictedStorage == 'dedicatedRepo' -%}
+              {%- do restrictedSentences.append(_("The data will be stored in a dedicated repository.")) -%}
+            {%- endif -%}
+            {%- set authentication = authenticatedAccess.authentication -%}
+            {%- if authentication._value == 'usernamePassword' -%}
+              {%- do restrictedSentences.append(_("Potential users will be authenticated with a username and password, possibly augmented with two-factor authentication.")) -%}
+            {%- elif authentication._value == 'sso' -%}
+              {%- do restrictedSentences.append(_("Potential users will be authenticated through a single sign-on system such as eduGAIN.")) -%}
+            {%- elif authentication._value == 'other' -%}
+              {%- set authenticationOther = authentication.other._value -%}
+              {#- TRANSLATORS: %(value)s is ": " followed by the answer, or "." -#}
+              {%- do restrictedSentences.append(_("For the authentication of potential users, we will make special arrangements%(value)s", value=(": " ~ authenticationOther|markdown if authenticationOther else "."))) -%}
+            {%- endif -%}
+            {%- if authenticatedAccess.accessApplicationCriteria._value is true -%}
+              {%- do restrictedSentences.append(_("The criteria for applying for access to the data are openly available.")) -%}
+            {%- elif authenticatedAccess.accessApplicationCriteria._value is false -%}
+              {%- do restrictedSentences.append(_("The criteria for applying for access to the data are not openly available.")) -%}
+            {%- endif -%}
+            {%- if authenticatedAccess.auditReuse._value is true -%}
+              {%- do restrictedSentences.append(_("Auditing of the re-use of the data has been arranged.")) -%}
+            {%- elif authenticatedAccess.auditReuse._value is false -%}
+              {%- do restrictedSentences.append(_("Auditing of the re-use of the data has not been arranged.")) -%}
+            {%- endif -%}
+            {%- if restrictedSentences|length > 0 -%}
+              {% call macros.para() %}{{ restrictedSentences|join(' ') }}{% endcall %}
+            {%- endif -%}
           {%- endif -%}
         {%- endif -%}
 

@@ -220,7 +220,15 @@
       {%- endif -%}
     {%- endif -%}
   {%- endif -%}
-  
+
+  {# Other recurring fees #}
+  {%- set recurringFees = preserving.recurringFees._value -%}
+  {%- if recurringFees is false -%}
+    <p>{% trans %}There are no other recurring fees to keep data or documents available.{% endtrans %}</p>
+  {%- elif recurringFees is true -%}
+    <p>{% trans %}We will pay other recurring fees to keep data or documents available, such as license fees for commercial products.{% endtrans %}</p>
+  {%- endif -%}
+
   {# Budget time and effort #}
   {%- set budgetTimeEffort = preserving.hasDataPublicationBudget -%}
   {%- if budgetTimeEffort._value == true -%}

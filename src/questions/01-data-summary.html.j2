@@ -383,6 +383,48 @@
     <p>{% trans %}We will not be using any existing datasets.{% endtrans %}</p>
   {%- endif -%}
 
+  {# Physical samples #}
+  {%- set samples = x.creatingData.collectsPhysicalSample -%}
+  {%- if samples._value is true -%}
+    {%- set samplesPublic = samples.publicRepository -%}
+    {%- set samplesLocal = samplesPublic.localRepository._value -%}
+    {%- set samplesId = samples.howIdentified._value -%}
+    {%- set samplesWhere = samples.whereStored._value -%}
+    {%- set samplesCrossRef = samples.explicitCrossReferences._value -%}
+    <h4>{% trans %}Physical samples{% endtrans %}</h4>
+    <div>
+    {% call macros.para() %}
+      {% trans %}We will collect physical samples.{% endtrans %}
+      {%- if samplesPublic._value is true %}
+        {% trans %}The samples will be submitted to a public repository.{% endtrans %}
+      {%- elif samplesPublic._value is false %}
+        {% trans %}The samples do not need to be submitted to a public repository.{% endtrans %}
+        {%- if samplesLocal is true %}
+          {% trans %}They will be stored in a local repository such as a biobank.{% endtrans %}
+        {%- elif samplesLocal is false %}
+          {% trans %}They will not be stored in a local repository such as a biobank.{% endtrans %}
+        {%- endif -%}
+      {%- endif -%}
+      {%- if samplesId == 'internal' %}
+        {% trans %}The samples will only get an internal code.{% endtrans %}
+      {%- elif samplesId == 'pid' %}
+        {% trans %}The samples will receive a universally unique persistent identifier (PID).{% endtrans %}
+      {%- endif -%}
+      {%- if samplesCrossRef is true %}
+        {% trans %}We will make explicit cross-references between the physical samples and our digital data.{% endtrans %}
+      {%- elif samplesCrossRef is false %}
+        {% trans %}We will not make explicit cross-references between the physical samples and our digital data.{% endtrans %}
+      {%- endif -%}
+      {%- if samplesWhere %}
+        {% trans value=(samplesWhere|markdown) %}The physical samples will be stored as follows: {{ value }}{% endtrans %}
+      {%- endif -%}
+    {% endcall %}
+    </div>
+  {%- elif samples._value is false -%}
+    <h4>{% trans %}Physical samples{% endtrans %}</h4>
+    <p>{% trans %}We will not collect any physical samples.{% endtrans %}</p>
+  {%- endif -%}
+
   {# Format/Type with volume #}
   {%- set formatsItems = formats -%}
   {%- set formatsList -%}

@@ -4,6 +4,8 @@
 {%- set personalData = dataRisks.personalDataProtection -%}
 {%- set pseudonymization = personalData.pseudonymization -%}
 {%- set workspace = x.processingData.sharedWorkingSpace -%}
+{%- set reliability = workspace.reliability -%}
+{%- set safeguards = x.creatingData.collectsPersonalData.gdpr.safeguards -%}
 {%- set coldStorage = x.preservingData.coldStorageDuringProject -%}
 {%- set coldProtect = coldStorage.needsProtection -%}
 {%- set collab = x.creatingData.withDifferentGroups -%}
@@ -15,7 +17,10 @@
       {%- set homePassword = carryHome.passwordProtected._value is true -%}
       {%- set storeLab = dataRisks.storeLabExternalHardDrives._value is false -%}
 
-      {%- if storeLab or (carryHome._value is false) or (carryHome._value is true and (homeEncrypted or homePassword)) or (dataRisks.certifiedDataCentres._value is true) or (dataRisks.httpsWebServices._value is true) or (dataRisks.membersInstructedAboutRisks._value is true) %}
+      {%- set inCloud = dataRisks.dataInCloudAccounts._value -%}
+      {%- set inMessages = dataRisks.dataInEmailsMessages._value -%}
+
+      {%- if storeLab or (carryHome._value is false) or (carryHome._value is true and (homeEncrypted or homePassword)) or (inCloud is not none) or (inMessages is not none) or (dataRisks.certifiedDataCentres._value is true) or (dataRisks.httpsWebServices._value is true) or (dataRisks.membersInstructedAboutRisks._value is true) %}
         <p>
           {%- if storeLab %}
             {% trans %}Project members will not store data or software on computers in the lab or external hard drives connected to those computers.{% endtrans %}
@@ -28,6 +33,16 @@
             {%- if storeLab -%}{% trans %}They{% endtrans %}{%- else -%}{% trans %}Project members{% endtrans %}{%- endif %} {% trans %}can carry data with them on encrypted data carriers.{% endtrans %}
           {% elif homePassword %}
             {%- if storeLab -%}{% trans %}They{% endtrans %}{%- else -%}{% trans %}Project members{% endtrans %}{%- endif %} {% trans %}can carry data with them on password-protected laptops.{% endtrans %}
+          {% endif -%}
+          {%- if inCloud is false %}
+            {% trans %}Project members will not store project data in cloud accounts.{% endtrans %}
+          {% elif inCloud is true %}
+            {% trans %}Project members will store project data in cloud accounts.{% endtrans %}
+          {% endif -%}
+          {%- if inMessages is false %}
+            {% trans %}Project data and reports will not be sent by e-mail or other messaging services.{% endtrans %}
+          {% elif inMessages is true %}
+            {% trans %}Project data and reports will be sent by e-mail or other messaging services.{% endtrans %}
           {% endif -%}
           {%- if dataRisks.certifiedDataCentres._value is true %}
             {% trans %}All data centers where project data is stored hold appropriate certifications.{% endtrans %}
@@ -96,6 +111,10 @@
             {% trans %}We pseudonymize inside the project; only a limited number of people can access the keys.{% endtrans %}
           {%- elif pseudonymization._value == 'independentParty' %}
             {% trans %}Pseudonymization is handled by an independent party in order to allow data coupling.{% endtrans %}
+            {%- set independentParty = (pseudonymization.independentParty._value or '')|trim -%}
+            {%- if independentParty %}
+              {# TRANSLATORS: %(value)s is the name of the party as the user wrote it, ending with a full stop #}{% trans value=(independentParty|dot) %}The pseudonymization keys are kept by this party: {{ value }}{% endtrans %}
+            {%- endif -%}
           {%- elif pseudonymization._value == 'other' -%}
             {%- set risksPseudonymizationAnother = pseudonymization.other._value %}
             {# TRANSLATORS: %(value)s is ": " followed by the answer, or "." (or nothing in a list item) #}{% trans value=(": " ~ risksPseudonymizationAnother|markdown if risksPseudonymizationAnother else ".") %}We have a specific way of pseudonymization{{ value }}{% endtrans %}
@@ -105,6 +124,36 @@
         <p>{% trans %}All personal data will be collected anonymously.{% endtrans %}</p>
       {%- elif personalData._value == 'anonymisedEarly' -%}
         <p>{% trans %}All personal data will be anonymized as early as possible.{% endtrans %}</p>
+      {%- endif -%}
+    {%- endif -%}
+
+    {# Safeguards for personal data and their transfer #}
+    {%- set gdprExplored = x.creatingData.collectsPersonalData._value is true and x.creatingData.collectsPersonalData.gdpr._value == 'explore' -%}
+    {%- if gdprExplored and safeguards._value == 'specify' -%}
+      {%- set identifiability = safeguards.identifiabilityLevel._value -%}
+      {%- if identifiability == 'anonymized' -%}
+        <p>{% trans %}The stored data are irrevocably anonymized.{% endtrans %}</p>
+      {%- elif identifiability == 'pseudonymized' -%}
+        <p>{% trans %}The stored data are pseudonymized.{% endtrans %}</p>
+      {%- elif identifiability == 'identifiable' -%}
+        <p>{% trans %}The stored data are identifiable.{% endtrans %}</p>
+      {%- endif -%}
+
+      {%- set safeguardsDescription = safeguards.description._value -%}
+      {%- if safeguardsDescription -%}
+        {% call macros.para() %}{% trans value=(safeguardsDescription|markdown) %}We will use the following technical and procedural safeguards: {{ value }}{% endtrans %}{% endcall %}
+      {%- endif -%}
+
+      {%- set transfer = safeguards.transferOutsideEu -%}
+      {%- if transfer._value is false -%}
+        <p>{% trans %}We do not plan to transfer data outside the EU/EEA.{% endtrans %}</p>
+      {%- elif transfer._value is true -%}
+        {%- set transferMeasures = transfer.description._value -%}
+        {%- if transferMeasures -%}
+          {% call macros.para() %}{% trans value=(transferMeasures|markdown) %}We plan to transfer data outside the EU/EEA and these are the measures we will put in place to protect the data: {{ value }}{% endtrans %}{% endcall %}
+        {%- else -%}
+          <p>{% trans %}We plan to transfer data outside the EU/EEA.{% endtrans %}</p>
+        {%- endif -%}
       {%- endif -%}
     {%- endif -%}
 
@@ -120,6 +169,53 @@
       {%- elif accessControl == 'instituteReadMembersRequest' -%}
         <p>{% trans %}Anyone in the institute can read data; only project members can request write access.{% endtrans %}</p>
       {%- endif -%}
+    {%- endif -%}
+
+    {# Backups and recovery #}
+    {%- if workspace._value is false -%}
+      {%- set backupTraceable = workspace.backupTraceable._value -%}
+      {%- if backupTraceable is true -%}
+        <p>{% trans %}Data that project members themselves store are adequately backed up and traceable. Therefore data are protected against both equipment failure and human error.{% endtrans %}</p>
+      {%- elif backupTraceable is false -%}
+        <p>{% trans %}Data that project members themselves store are not adequately backed up and traceable.{% endtrans %}</p>
+      {%- endif -%}
+    {%- elif workspace._value is true and reliability._value == 'explore' -%}
+      {%- set backupSentences = [] -%}
+      {%- set preventLoss = reliability.dataLossPrevention -%}
+      {%- if preventLoss._value == 'sufficient' -%}
+        {%- do backupSentences.append(_("The work space provides sufficient guarantees in terms of preventing a total loss of data.")) -%}
+      {%- elif preventLoss._value == 'duplication' -%}
+        {%- do backupSentences.append(_("All essential data is also stored elsewhere to prevent a total loss of data.")) -%}
+        {%- set software = preventLoss.includeSoftware._value -%}
+        {%- if software == 'noSoftware' -%}
+          {%- do backupSentences.append(_("There is no software in the work space that would need to be restored.")) -%}
+        {%- elif software == 'onlyCopy' -%}
+          {%- do backupSentences.append(_("The software in the work space is only a copy, so it can be restored quickly.")) -%}
+        {%- elif software == 'special' -%}
+          {%- do backupSentences.append(_("We will take special care that the software and configurations in the work space can be restored quickly.")) -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- set backup = reliability.otherBackup._value -%}
+      {%- if backup == 'projectParticipants' -%}
+        {%- do backupSentences.append(_("Backup of project data that is not in the work space is left to the project participants.")) -%}
+      {%- elif backup == 'noDataElsewhere' -%}
+        {%- do backupSentences.append(_("All project data is stored in the work space; there is no data elsewhere that would need backup copies.")) -%}
+      {%- elif backup == 'allBackedUp' -%}
+        {%- do backupSentences.append(_("All project data stored outside of the working area will be adequately backed up.")) -%}
+      {%- elif backup == 'automatedBackups' -%}
+        {%- do backupSentences.append(_("We will make (automated) backups of all data stored outside of the working area.")) -%}
+      {%- endif -%}
+      {%- if backupSentences|length > 0 -%}
+        <p>{{ backupSentences|join(" ") }}</p>
+      {%- endif -%}
+    {%- endif -%}
+
+    {# Contingency plan (when the compute facility is down) #}
+    {%- set contingency = x.processingData.hasContingencyPlan._value -%}
+    {%- if contingency == 'wait' -%}
+      <p>{% trans %}If the compute facility is down, we will wait until the problem is fixed.{% endtrans %}</p>
+    {%- elif contingency == 'alternative' -%}
+      <p>{% trans %}If the compute facility is down, we have an alternative to continue our work.{% endtrans %}</p>
     {%- endif -%}
 
     {# Cold storage #}

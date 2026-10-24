@@ -176,6 +176,134 @@
         {%- endif -%}
 
         {% call macros.para() %}{{ sentences|join(' ') }}{% endcall %}
+
+        {%- if gdpr._value == 'explore' -%}
+          {# rights of the data subjects #}
+          {%- if legalBasis._value == 'consent' -%}
+            {%- set rights = [] -%}
+            {%- for choice in legalBasis.howRights -%}
+              {%- if choice._value == 'accessDuring' -%}
+                {%- do rights.append(_('access the data during the project')) -%}
+              {%- elif choice._value == 'accessAfter' -%}
+                {%- do rights.append(_("access the data after the project's completion")) -%}
+              {%- elif choice._value == 'modifyAfter' -%}
+                {%- do rights.append(_("ask for the data to be modified after the project's completion, which may include their deletion")) -%}
+              {%- elif choice._value == 'accessModifiedDuring' -%}
+                {%- do rights.append(_('ask for data access to be modified during the project')) -%}
+              {%- elif choice._value == 'accessModifiedAfter' -%}
+                {%- do rights.append(_("ask for data access to be modified after the project's completion")) -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if rights|length > 0 %}
+            {#- TRANSLATORS: rights is an enumeration of what the data subjects can do, e.g. "access the data during the project and ask for data access to be modified during the project" #}
+            <p>{% trans rights=macros.joinAnd(rights) %}To exercise their rights to their data, the data subjects can {{ rights }}.{% endtrans %}</p>
+            {%- endif -%}
+          {%- endif -%}
+
+          {# data controllers #}
+          {%- set controllers = gdpr.controllers -%}
+          {%- set controllerNames = [] -%}
+          {%- for controller in controllers.controllers if controller.organisation._value -%}
+            {#- ROR item, or the text of the reply when the item has no ROR names -#}
+            {%- set orgName = macros.ror(controller.organisation)|trim -%}
+            {%- do controllerNames.append('<strong>'|safe ~ (orgName if orgName else controller.organisation._value) ~ '</strong>'|safe) -%}
+          {%- endfor -%}
+          {%- set moreThanOne = controllers.moreThanOne -%}
+          {%- set jointController = moreThanOne.jointController -%}
+          {%- if controllerNames|length > 0 or moreThanOne._value is not none %}
+            <p>
+            {%- if controllerNames|length > 0 %}
+              {#- TRANSLATORS: controllers is an enumeration of organisations #}
+              {% trans count=controllerNames|length, controllers=macros.joinAnd(controllerNames) %}The data controller of the personal data is {{ controllers }}.{% pluralize %}The data controllers of the personal data are {{ controllers }}.{% endtrans %}
+            {%- endif -%}
+            {%- if moreThanOne._value is false and controllerNames|length == 0 %}
+              {% trans %}There is only one data controller of the personal data.{% endtrans %}
+            {%- elif moreThanOne._value is true and controllerNames|length < 2 %}
+              {% trans %}There is more than one data controller of the personal data.{% endtrans %}
+            {%- endif -%}
+            {%- if moreThanOne._value is true -%}
+              {%- if jointController._value is false %}
+                {% trans %}They will not be joint controllers.{% endtrans %}
+              {%- elif jointController._value is true %}
+                {% trans %}They will be joint controllers.{% endtrans %}
+                {%- if jointController.agreement._value is true %}
+                  {% trans %}A joint controllership agreement between them has been established.{% endtrans %}
+                {%- elif jointController.agreement._value is false %}
+                  {% trans %}A joint controllership agreement between them has not been established yet.{% endtrans %}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endif %}
+            </p>
+          {%- endif -%}
+
+          {# data processing agreements #}
+          {%- set dpa = gdpr.dataProcessingAgreement -%}
+          {%- if dpa._value == 'notRelevant' %}
+            <p>{% trans %}Data processing agreements with data processors are not relevant for our project.{% endtrans %}</p>
+          {%- elif dpa._value == 'notYet' %}
+            <p>{% trans %}Data processing agreements between the data controllers and the data processors will be established before the processing starts.{% endtrans %}</p>
+          {%- elif dpa._value == 'yes' -%}
+            {%- set processors = dpa.processors|selectattr('processor._value')|list -%}
+            {%- if processors|length > 0 %}
+            <p>{% trans %}Data processing agreements have been established with the following data processors:{% endtrans %}</p>
+            <ul>
+              {%- for processor in processors %}
+              <li><strong>{{ processor.processor._value }}</strong>
+                {%- if processor.agreement._value %}: {{ processor.agreement._value }}{% endif %}</li>
+              {%- endfor %}
+            </ul>
+            {%- else %}
+            <p>{% trans %}Data processing agreements have been established between the data controllers and the data processors.{% endtrans %}</p>
+            {%- endif -%}
+          {%- endif -%}
+
+          {# DPIA details #}
+          {%- set dpiaDone = gdpr.needDpia.dpiaDone -%}
+          {%- if gdpr.needDpia._value is true -%}
+            {%- if dpiaDone._value is false %}
+            <p>{% trans %}The DPIA has not been performed yet.{% endtrans %}</p>
+            {%- elif dpiaDone._value is true -%}
+              {%- set reasons = [] -%}
+              {%- for choice in dpiaDone.whyNecessary -%}
+                {%- if choice._value == 'vulnerableDataSubjects' -%}
+                  {%- do reasons.append(_('data concerning vulnerable data subjects')) -%}
+                {%- elif choice._value == 'highlyPersonalNature' -%}
+                  {%- do reasons.append(_('sensitive data or data of a highly personal nature')) -%}
+                {%- elif choice._value == 'largeScale' -%}
+                  {%- do reasons.append(_('data processing on a large scale')) -%}
+                {%- elif choice._value == 'legalEffect' -%}
+                  {%- do reasons.append(_('automated decision-making with legal or similarly significant effects on the data subjects')) -%}
+                {%- elif choice._value == 'subjectPerformance' -%}
+                  {%- do reasons.append(_('evaluation or scoring of the data subjects')) -%}
+                {%- elif choice._value == 'systematicMonitoring' -%}
+                  {%- do reasons.append(_('systematic monitoring of the data subjects')) -%}
+                {%- elif choice._value == 'matchingCombining' -%}
+                  {%- do reasons.append(_('matching or combining datasets')) -%}
+                {%- elif choice._value == 'physicalAccessControl' -%}
+                  {%- do reasons.append(_('innovative use of new technological or organisational solutions')) -%}
+                {%- elif choice._value == 'preventsRights' -%}
+                  {%- do reasons.append(_('processing that prevents the data subjects from exercising a right or using a service or a contract')) -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- set dpias = dpiaDone.dpias|selectattr('dataset._value')|list -%}
+              {%- if reasons|length > 0 %}
+              {#- TRANSLATORS: reasons is an enumeration of the kinds of processing that make a DPIA necessary, e.g. "data processing on a large scale and matching or combining datasets" #}
+              <p>{% trans reasons=macros.joinAnd(reasons) %}A DPIA is necessary because the project involves {{ reasons }}.{% endtrans %}</p>
+              {%- endif -%}
+              {%- if dpias|length > 0 %}
+              <p>{% trans %}We have performed DPIAs for the following data:{% endtrans %}</p>
+              <ul>
+                {%- for item in dpias %}
+                <li><strong>{{ item.dataset._value }}</strong>
+                  {%- if item.dpia._value %}: {{ item.dpia._value }}{% endif %}</li>
+                {%- endfor %}
+              </ul>
+              {%- else %}
+              <p>{% trans %}The DPIA has been performed.{% endtrans %}</p>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endif -%}
       {%- endif -%}
 
       {% if ethics._value is false %}
@@ -196,7 +324,89 @@
           {% trans %}It involves human subjects.{% endtrans %}
           {% endif %}
         </p>
+        {%- if humanData is true -%}
+          {%- if ethics.involvesHumanData.consent._value is true %}
+        <p>{% trans %}Informed consent has been collected from the research subjects.{% endtrans %}</p>
+          {%- elif ethics.involvesHumanData.consent._value is false %}
+        <p>{% trans %}Informed consent has not been collected from the research subjects.{% endtrans %}</p>
+          {%- endif -%}
+        {%- endif %}
       {% endif %}
+    {%- endif -%}
+
+    {# Re-used data - personal data and ethical approval #}
+    {%- set reusedDatasets = [] -%}
+    {%- if x.reusingData.hasPreExistingData._value is true -%}
+      {%- for nrefData in x.reusingData.hasPreExistingData.nonReferenceDatasets -%}
+        {%- set nrefDataUse = nrefData.using -%}
+        {%- if nrefDataUse._value is true and (nrefDataUse.includesPersonalData._value is not none or nrefDataUse.needsEthicalApproval._value is not none) -%}
+          {%- do reusedDatasets.append(nrefData) -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+    {%- if reusedDatasets|length > 0 -%}
+      <h4>{% trans %}Re-used data{% endtrans %}</h4>
+      <ul>
+      {%- for nrefData in reusedDatasets -%}
+        {%- set nrefDataName = nrefData.dataset._value -%}
+        {%- set nrefDataUse = nrefData.using -%}
+        {%- set nrefDataPersonal = nrefDataUse.includesPersonalData -%}
+        {%- set nrefDataEthicalApproval = nrefDataUse.needsEthicalApproval._value %}
+        <li>
+          <strong>{{ nrefDataName if nrefDataName else _("(no name given)") }}</strong>
+          {%- if nrefDataPersonal._value is false %}
+          <p>{% trans %}This data do not include personal data.{% endtrans %}</p>
+          {%- elif nrefDataPersonal._value is true %}
+          <p>
+            {% trans %}This data include personal data{% endtrans %}
+            {%- set nrefLegalBasis = nrefDataPersonal.legalBasis -%}
+            {%- if nrefLegalBasis._value is not none -%}
+              {% trans %}, legally based on{% endtrans %}{{+" "}}
+              {%- if nrefLegalBasis._value == 'publicInterest' -%}
+                {% trans %}public interest for processing the data under GDPR.{% endtrans %}
+              {%- elif nrefLegalBasis._value == 'consent' -%}
+                {% trans %}consent given by the research subject for processing the data under GDPR{% endtrans %}
+                {%- if nrefLegalBasis.isCovered._value is not none -%}
+                  {% trans %}, which{% endtrans %}{{+" "}}
+                  {%- if nrefLegalBasis.isCovered._value is true -%}
+                    {% trans %}also covers our reuse.{% endtrans %}
+                  {%- elif nrefLegalBasis.isCovered._value is false -%}
+                    {% trans %}does not cover our reuse; therefore, new consent will be needed.{% endtrans %}
+                  {%- endif -%}
+                {%- else -%}
+                .
+                {%- endif -%}
+              {%- elif nrefLegalBasis._value == 'other' -%}
+                {%- set nrefLegalBasisOther = nrefLegalBasis.other._value -%}
+                {%- if nrefLegalBasisOther == 'legalRequirement' -%}
+                  {% trans %}a legal requirement (meaning a legal obligation to do this data processing).{% endtrans %}
+                {%- elif nrefLegalBasisOther == 'vitalInterest' -%}
+                  {% trans %}a vital interest (meaning it needs to be done to protect the vital interests of the data subject).{% endtrans %}
+                {%- elif nrefLegalBasisOther == 'legitimateInterest' -%}
+                  {% trans %}a legitimate interest (meaning data subjects all expect us to do this data processing because of who we are).{% endtrans %}
+                {%- elif nrefLegalBasisOther == 'contract' -%}
+                  {% trans %}a requirement to fulfill our contract with the data subjects.{% endtrans %}
+                {%- else -%}
+                  {% trans %}a legal basis other than public interest or consent.{% endtrans %}
+                {%- endif -%}
+              {%- endif -%}
+            {%- else -%}
+            .
+            {%- endif %}
+          </p>
+          {%- endif -%}
+          {%- if nrefDataEthicalApproval == 'notApplicable' %}
+          <p>{% trans %}Ethical approval under research ethics laws is not applicable to this data.{% endtrans %}</p>
+          {%- elif nrefDataEthicalApproval == 'covered' %}
+          <p>{% trans %}The existing ethical approval under research ethics laws of this non-reference data covers our reuse.{% endtrans %}</p>
+          {%- elif nrefDataEthicalApproval == 'extension' %}
+          <p>{% trans %}An extension of existing ethical approval under research ethics laws of this non-reference data will be needed.{% endtrans %}</p>
+          {%- elif nrefDataEthicalApproval == 'new' %}
+          <p>{% trans %}New ethical approval under research ethics laws of this non-reference data will be needed to cover our usage of the data.{% endtrans %}</p>
+          {%- endif %}
+        </li>
+      {%- endfor -%}
+      </ul>
     {%- endif -%}
   </div>
 </div>

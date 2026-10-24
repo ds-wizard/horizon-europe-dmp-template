@@ -29,6 +29,10 @@ Starting v1.22.0, AI tools (Codex, Claude Code) are used to assist in the develo
 
 ## Changelog
 
+### 3.1.0
+
+- More of the knowledge model in the plan, following the Horizon Europe questions: the link to the project proposal (projects), physical samples (section 1), persistent identifiers within the project (2.1), how restricted data are stored and accessed (2.2), the design and description of new data formats and whether formats are completely described (2.3), licences, data use restrictions, a data dictionary, integrity monitoring and reference data (2.4), other recurring fees (4), backups and recovery, data in cloud accounts and e-mail, the independent party that keeps pseudonymisation keys, safeguards and transfer of personal data outside the EU/EEA, a contingency plan (5), informed consent, data controllers, data processing agreements, DPIAs, the rights of data subjects and personal data in re-used datasets (6)
+
 ### 3.0.0
 
 - Replies are read by the annotations of the knowledge model (`json.key`, `json.value`) instead of UUIDs; requires the Common DSW Knowledge Model (`dsw.root`) or the Life Sciences DSW Knowledge Model (`dsw.lifesciences`) 2.8.1 or newer
