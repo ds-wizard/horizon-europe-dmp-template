@@ -14,7 +14,7 @@
       {% for version in dc.questionnaire.versions|reverse %}
         <tr>
           <td class="version-name">{{ version.name }}</td>
-          <td class="version-date">{{ version.created_at|datetime_format("%d %b %Y") }}</td>
+          <td class="version-date">{{ macros.formatDate(version.created_at) }}</td>
           <td class="version-changes">{{ version.description }}</td>
         </tr>
       {% else %}

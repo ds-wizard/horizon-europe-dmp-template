@@ -18,7 +18,7 @@
       {% for version in dc.questionnaire.versions if dc.questionnaire.version and version.uuid == dc.questionnaire.version.uuid %}
         <div class="version">{{version.name}}</div>
       {% endfor %}
-      <div class="date">{{ dc.document.created_at|datetime_format("%d %B %Y") }}</div>
+      <div class="date">{{ macros.formatDate(dc.document.created_at, full=true) }}</div>
     </div>
 
     {%- set serviceLink -%}<a href="{{ dc.config.service_url }}" target="_blank">{{ dc.config.service_domain_name }}</a>{%- endset -%}

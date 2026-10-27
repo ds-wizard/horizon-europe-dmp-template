@@ -11,7 +11,7 @@
 {% endfor %}
 {% endif %}
 <br/>
-{{ dc.document.created_at|datetime_format("%d %B %Y") }}
+{{ macros.formatDate(dc.document.created_at, full=true) }}
 <br/>
 <br/>
 <br/>

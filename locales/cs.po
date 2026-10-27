@@ -3809,3 +3809,138 @@ msgstr ""
 "nebudou nosit data s sebou (např. na noteboocích, USB discích nebo jiných "
 "externích médiích)."
 
+
+#: src/macros.html.j2:210
+msgctxt "short month name in a date"
+msgid "Apr"
+msgstr "dub"
+
+#: src/macros.html.j2:206
+msgctxt "month name in a date"
+msgid "April"
+msgstr "dubna"
+
+#: src/macros.html.j2:210
+msgctxt "short month name in a date"
+msgid "Aug"
+msgstr "srp"
+
+#: src/macros.html.j2:206
+msgctxt "month name in a date"
+msgid "August"
+msgstr "srpna"
+
+#: src/macros.html.j2:210
+msgctxt "short month name in a date"
+msgid "Dec"
+msgstr "pro"
+
+#: src/macros.html.j2:206
+msgctxt "month name in a date"
+msgid "December"
+msgstr "prosince"
+
+#: src/macros.html.j2:210
+msgctxt "short month name in a date"
+msgid "Feb"
+msgstr "úno"
+
+#: src/macros.html.j2:206
+msgctxt "month name in a date"
+msgid "February"
+msgstr "února"
+
+#: src/macros.html.j2:210
+msgctxt "short month name in a date"
+msgid "Jan"
+msgstr "led"
+
+#: src/macros.html.j2:206
+msgctxt "month name in a date"
+msgid "January"
+msgstr "ledna"
+
+#: src/macros.html.j2:210
+msgctxt "short month name in a date"
+msgid "Jul"
+msgstr "čvc"
+
+#: src/macros.html.j2:206
+msgctxt "month name in a date"
+msgid "July"
+msgstr "července"
+
+#: src/macros.html.j2:210
+msgctxt "short month name in a date"
+msgid "Jun"
+msgstr "čvn"
+
+#: src/macros.html.j2:206
+msgctxt "month name in a date"
+msgid "June"
+msgstr "června"
+
+#: src/macros.html.j2:210
+msgctxt "short month name in a date"
+msgid "Mar"
+msgstr "bře"
+
+#: src/macros.html.j2:206
+msgctxt "month name in a date"
+msgid "March"
+msgstr "března"
+
+#: src/macros.html.j2:206
+msgctxt "month name in a date"
+msgid "May"
+msgstr "května"
+
+#: src/macros.html.j2:210
+msgctxt "short month name in a date"
+msgid "May"
+msgstr "kvě"
+
+#: src/macros.html.j2:210
+msgctxt "short month name in a date"
+msgid "Nov"
+msgstr "lis"
+
+#: src/macros.html.j2:206
+msgctxt "month name in a date"
+msgid "November"
+msgstr "listopadu"
+
+#: src/macros.html.j2:210
+msgctxt "short month name in a date"
+msgid "Oct"
+msgstr "říj"
+
+#: src/macros.html.j2:206
+msgctxt "month name in a date"
+msgid "October"
+msgstr "října"
+
+#: src/macros.html.j2:210
+msgctxt "short month name in a date"
+msgid "Sep"
+msgstr "zář"
+
+#: src/macros.html.j2:206
+msgctxt "month name in a date"
+msgid "September"
+msgstr "září"
+
+#. the order of a date with the full month name, e.g. "05 October 2026"; [day]
+#. (05), [day_number] (5), [month] (the name), [month_number] (10) and [year]
+#. can be used
+#: src/macros.html.j2:208
+msgctxt "date with a full month name"
+msgid "[day] [month] [year]"
+msgstr "[day_number]. [month] [year]"
+
+#. the order of a short date, e.g. "05 Oct 2026"; [day] (05), [day_number] (5),
+#. [month] (the short name), [month_number] (10) and [year] can be used
+#: src/macros.html.j2:212
+msgctxt "short date"
+msgid "[day] [month] [year]"
+msgstr "[day_number]. [month_number]. [year]"

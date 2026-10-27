@@ -194,3 +194,24 @@
     {{ items[0] }}
   {%- endif -%}
 {%- endmacro -%}
+
+{#- A date (and time) in the language of the document: month names and the order are
+    translated, as strftime only knows English ("%d %b %Y" / "%d %B %Y" in English) -#}
+{%- macro formatDate(value, full=false, time=false) -%}
+  {%- if value -%}
+    {%- set month = value|datetime_format("%m")|int -%}
+    {%- set day = value|datetime_format("%d") -%}
+    {%- set year = value|datetime_format("%Y") -%}
+    {%- if full -%}
+      {%- set months = [pgettext("month name in a date", "January"), pgettext("month name in a date", "February"), pgettext("month name in a date", "March"), pgettext("month name in a date", "April"), pgettext("month name in a date", "May"), pgettext("month name in a date", "June"), pgettext("month name in a date", "July"), pgettext("month name in a date", "August"), pgettext("month name in a date", "September"), pgettext("month name in a date", "October"), pgettext("month name in a date", "November"), pgettext("month name in a date", "December")] -%}
+      {#- TRANSLATORS: the order of a date with the full month name, e.g. "05 October 2026"; [day] (05), [day_number] (5), [month] (the name), [month_number] (10) and [year] can be used -#}
+      {%- set pattern = pgettext("date with a full month name", "[day] [month] [year]") -%}
+    {%- else -%}
+      {%- set months = [pgettext("short month name in a date", "Jan"), pgettext("short month name in a date", "Feb"), pgettext("short month name in a date", "Mar"), pgettext("short month name in a date", "Apr"), pgettext("short month name in a date", "May"), pgettext("short month name in a date", "Jun"), pgettext("short month name in a date", "Jul"), pgettext("short month name in a date", "Aug"), pgettext("short month name in a date", "Sep"), pgettext("short month name in a date", "Oct"), pgettext("short month name in a date", "Nov"), pgettext("short month name in a date", "Dec")] -%}
+      {#- TRANSLATORS: the order of a short date, e.g. "05 Oct 2026"; [day] (05), [day_number] (5), [month] (the short name), [month_number] (10) and [year] can be used -#}
+      {%- set pattern = pgettext("short date", "[day] [month] [year]") -%}
+    {%- endif -%}
+    {{ pattern|replace("[day_number]", day|int|string)|replace("[day]", day)|replace("[month_number]", month|string)|replace("[month]", months[month - 1])|replace("[year]", year) }}
+    {%- if time %} {{ value|datetime_format("%H:%M:%S") }}{% endif -%}
+  {%- endif -%}
+{%- endmacro -%}
