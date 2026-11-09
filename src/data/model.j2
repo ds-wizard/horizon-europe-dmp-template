@@ -7,10 +7,14 @@
      multi-choice question a list of choice objects. Chapters are the top level, e.g.
      x.creatingData. Every annotated question is present, also when it is not answered (_value
      none, [] for lists), so paths along the knowledge model never fail in the templates.
+     Questions a project removes by its question tags are absent from the extraction; their keys
+     are restored from km-keys.j2 as unanswered questions, so these paths do not fail either.
   2. Mapping: answers and choices without json.value get a code from FALLBACK_VALUES.
 
   Templates use x (exported) and compare _value with the json.value of answers and choices.
 -#}
+
+{%- import "src/data/km-keys.j2" as km with context -%}
 
 {#- Codes of answers and choices that have no json.value in the knowledge model (dsw.root 2.8.1);
     remove an entry once the knowledge model annotates it -#}
@@ -50,6 +54,27 @@
   '30d1e85c-0e3e-482f-97f9-22a7658b329e': 'explore',
 } -%}
 
+{#- Adds the keys of keys (km-keys.j2) missing in target as unanswered questions: {'_value': none},
+    lists and multi-choice questions [] -#}
+{%- macro fillMissingKeys(target, keys) -%}
+  {%- for key, nested in keys.items() -%}
+    {%- if key not in target -%}
+      {%- if nested is none or nested is mapping -%}
+        {%- do target.update({key: {'_value': none}}) -%}
+        {%- if nested is mapping -%}{%- do fillMissingKeys(target[key], nested) -%}{%- endif -%}
+      {%- else -%}
+        {%- do target.update({key: []}) -%}
+      {%- endif -%}
+    {%- elif nested is mapping and target[key] is mapping -%}
+      {%- do fillMissingKeys(target[key], nested) -%}
+    {%- elif nested is not none and nested is not mapping and nested|length > 0 and target[key] is sequence and target[key] is not string -%}
+      {%- for item in target[key] if item is mapping -%}
+        {%- do fillMissingKeys(item, nested[0]) -%}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endmacro -%}
+
 {#- Sets the codes of FALLBACK_VALUES in obj and the objects below it -#}
 {%- macro fallback(obj) -%}
   {%- if obj is mapping -%}
@@ -64,6 +89,7 @@
 
 {#- 1. extraction -#}
 {%- set x = dc|extract_replies({'version': '2'}) -%}
+{%- do fillMissingKeys(x, km.keys) -%}
 
 {#- 2. mapping -#}
 {{- fallback(x) -}}
