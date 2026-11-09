@@ -13,7 +13,7 @@
     {%- else -%}
       {# Extract ORCID number from the value string #}
       {%- set value = o._value %}
-      {%- set orcid = value.split('ORCID:')[-1].strip().split()[0]|replace("**", "")|markdown|replace("<p>", "")|replace("</p>", "") if 'ORCID:' in value else None %}
+      {%- set orcid = (value.split('ORCID:')[-1].split() or [''])[0]|replace("**", "")|markdown|replace("<p>", "")|replace("</p>", "") if 'ORCID:' in value else None %}
       {%- if orcid and orcid|length >= 15 -%}
         <span class="contact-orcid">{% trans orcid=orcid %}ORCID: {{ orcid }}{% endtrans %}</span>
       {%- else -%}

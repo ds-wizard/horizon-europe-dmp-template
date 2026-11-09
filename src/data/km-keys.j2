@@ -1,0 +1,812 @@
+{#- json.key annotations of dsw.root:2.8.3 and how they nest. None: a value, {}: an object, []: a list.
+    Generated: regenerate it after a change of the knowledge model. -#}
+{%- set keys = {
+  "administrativeInformation": {
+    "contributors": [{
+      "name": None,
+      "email": None,
+      "orcid": None,
+      "affiliation": None,
+      "roles": [],
+    }],
+    "projects": [{
+      "name": None,
+      "acronym": None,
+      "id": None,
+      "abstract": None,
+      "url": None,
+      "startDate": None,
+      "endDate": None,
+      "fundings": [{
+        "funder": None,
+        "status": None,
+        "grantNumber": None,
+      }],
+      "costs": [{
+        "title": None,
+        "description": None,
+        "currency": None,
+        "amount": None,
+        "allocation": [],
+        "coveredBy": {
+          "grantID": None,
+          "description": None,
+        },
+      }],
+      "requiresEthicalApproval": {
+        "authority": [{
+          "status": None,
+          "caseNumber": None,
+        }],
+      },
+    }],
+    "requiresSpecialist": {
+      "training": None,
+      "expertise": None,
+    },
+    "requiresSpecialHardwareSoftware": {
+      "needs": None,
+    },
+    "policies": [{
+      "name": None,
+      "url": None,
+      "description": None,
+    }],
+  },
+  "reusingData": {
+    "existingDataGuidance": {
+      "naturalSciences": {
+        "particlePhysics": None,
+      },
+      "engineeringTechnology": None,
+      "medicalHealthSciences": {
+        "toxicology": None,
+      },
+      "agriculturalSciences": None,
+      "socialSciences": None,
+      "humanities": None,
+    },
+    "hasPreExistingData": {
+      "referenceDatasets": [{
+        "dataset": None,
+        "pid": None,
+        "using": {
+          "whyNot": {
+            "reason": None,
+          },
+          "owner": None,
+          "conditions": {
+            "conditions": None,
+          },
+          "format": None,
+          "isVersioned": {
+            "version": None,
+            "updateVersion": {
+              "howAvailable": None,
+            },
+          },
+          "reproduce": None,
+          "usage": None,
+        },
+      }],
+      "nonReferenceDatasets": [{
+        "dataset": None,
+        "pid": None,
+        "using": {
+          "whyNot": {
+            "reason": None,
+          },
+          "owner": None,
+          "conditions": {
+            "conditions": None,
+          },
+          "rightsholderCollaborates": {
+            "needsRequest": None,
+          },
+          "includesPersonalData": {
+            "legalBasis": {
+              "isCovered": None,
+              "other": None,
+            },
+          },
+          "needsEthicalApproval": None,
+          "format": None,
+          "access": None,
+          "fixedOrUpdated": None,
+          "useComplete": None,
+          "usage": None,
+        },
+      }],
+      "needHarmonisation": {
+        "available": None,
+      },
+      "needRemadeForComputer": {
+        "available": None,
+        "provideMetadata": {
+          "standards": [{
+            "standard": None,
+          }],
+        },
+      },
+    },
+  },
+  "creatingData": {
+    "collectsPhysicalSample": {
+      "publicRepository": {
+        "localRepository": None,
+      },
+      "howIdentified": None,
+      "whereStored": None,
+      "explicitCrossReferences": None,
+    },
+    "collectingMetadata": {
+      "standards": [{
+        "standard": None,
+      }],
+      "createsDictionary": None,
+      "miaStandardsExist": {
+        "idea": None,
+        "standards": [{
+          "standard": None,
+        }],
+      },
+      "knowsHowWhen": None,
+      "extendsReusability": {
+        "howBalance": None,
+        "exchange": None,
+      },
+      "assignsLicence": {
+        "atAllTime": None,
+      },
+      "whereDataRestrictions": {
+        "other": None,
+      },
+      "howProvenance": {
+        "other": None,
+      },
+      "standardsProvenance": [{
+        "standardProvenance": None,
+      }],
+      "workflowSystem": None,
+    },
+    "usesVocabularies": [{
+      "name": None,
+      "url": None,
+    }],
+    "fileOrganization": {
+      "appointments": {
+        "naming": None,
+      },
+      "keepRelationships": None,
+      "embedFilenameMetadata": None,
+      "usePids": None,
+    },
+    "usesDataFormats": [{
+      "format": None,
+      "isStandard": {
+        "reason": {
+          "reason": None,
+        },
+      },
+      "enablesSharingArchiving": {
+        "convert": None,
+      },
+      "volume": {
+        "valueGb": None,
+        "number": None,
+        "averageSizeGb": None,
+      },
+      "isDescribed": None,
+    }],
+    "usesNewDataTypes": {
+      "addFields": None,
+      "registries": None,
+      "createVocabularies": {
+        "mapping": None,
+      },
+      "howDesign": None,
+      "describeForOthers": None,
+    },
+    "hasMeasuredData": {
+      "datasets": [{
+        "dataset": None,
+        "whoWhere": {
+          "ownership": {
+            "other": None,
+          },
+          "dataPublication": {
+            "other": None,
+          },
+        },
+        "instruments": [{
+          "name": None,
+          "description": None,
+        }],
+        "isStandardAndWellDescribed": None,
+        "needsSpecialCare": {
+          "isFormatEstablished": None,
+          "howTransported": {
+            "sufficient": None,
+          },
+          "guaranteedIntegrity": None,
+          "guaranteedSecurity": None,
+        },
+        "hasQualityProcesses": {
+          "calibration": None,
+          "repeat": None,
+          "standardised": None,
+          "validation": None,
+          "peerReview": None,
+          "vocabularies": None,
+          "other": {
+            "other": None,
+          },
+          "consistency": None,
+        },
+        "whoInterested": {
+          "how": None,
+        },
+      }],
+    },
+    "hasNonMeasuredData": {
+      "questionnaires": None,
+      "caseReportForms": None,
+      "patientRecords": {
+        "access": None,
+      },
+      "datasets": [{
+        "dataset": None,
+        "description": None,
+        "howCaptured": {
+          "who": {
+            "other": None,
+          },
+          "digitization": None,
+        },
+        "whoCollects": {
+          "subjectivity": {
+            "other": None,
+          },
+        },
+        "whoInterested": {
+          "how": None,
+        },
+      }],
+    },
+    "hasIntegrationTool": {
+      "sameFormat": None,
+      "whatSoftware": {
+        "why": None,
+      },
+    },
+    "monitorIntegrity": {
+      "checksums": None,
+      "detectSwaps": None,
+    },
+    "collectsPersonalData": {
+      "gdpr": {
+        "legalBasis": {
+          "whatKind": None,
+          "howInformed": None,
+          "reusersAvailable": None,
+          "procedures": None,
+          "howRights": [],
+          "other": None,
+        },
+        "purpose": None,
+        "controllers": {
+          "controllers": [{
+            "organisation": None,
+          }],
+          "moreThanOne": {
+            "jointController": {
+              "agreement": None,
+            },
+          },
+        },
+        "gdprCategory": {
+          "category": [],
+          "exemptions": [{
+            "exemption": {
+              "other": [{
+                "exemption": None,
+              }],
+            },
+          }],
+        },
+        "dataProcessingAgreement": {
+          "processors": [{
+            "processor": None,
+            "agreement": None,
+          }],
+        },
+        "needDpia": {
+          "dpiaDone": {
+            "dpias": [{
+              "dataset": None,
+              "dpia": None,
+            }],
+            "whyNecessary": [],
+          },
+        },
+        "safeguards": {
+          "identifiabilityLevel": None,
+          "description": None,
+          "transferOutsideEu": {
+            "description": None,
+          },
+        },
+      },
+    },
+    "collectionEthics": {
+      "coveredByEthicalReview": None,
+      "involvesHumanData": {
+        "consent": None,
+      },
+    },
+    "dataUseRestrictions": {
+      "restrictions": [],
+      "description": None,
+    },
+    "collectedDataRights": {
+      "other": None,
+    },
+    "withDifferentGroups": {
+      "hasAgreement": None,
+    },
+  },
+  "processingData": {
+    "sharedWorkingSpace": {
+      "backupTraceable": None,
+      "specialists": None,
+      "workWithData": {
+        "dataDescription": None,
+        "closeToComputeCapacity": None,
+        "otherFormThanArchive": None,
+        "storageChangeNeeds": {
+          "rawDataAvailability": None,
+          "rawDataKeep": {
+            "archiveRawData": None,
+          },
+          "plan": {
+            "temporaryData": {
+              "noBackupNeed": None,
+            },
+          },
+          "intermediateDataVersions": None,
+        },
+        "temporaryArchive": None,
+        "firstDataCome": None,
+        "partnerAccess": {
+          "arrangeAccess": None,
+          "remoteMount": None,
+          "copyOutIn": {
+            "dataIntegrity": None,
+          },
+        },
+      },
+      "reliability": {
+        "dataLossPrevention": {
+          "includeSoftware": None,
+        },
+        "handleOffline": None,
+        "restoreWaitOnFail": None,
+        "restoreWaitOnDamage": None,
+        "otherBackup": None,
+      },
+      "accessControl": None,
+    },
+    "storageNamingConventions": {
+      "storageNeeds": {
+        "gigabytes": None,
+        "largestPart": None,
+      },
+      "filesFolders": {
+        "folderSample": {
+          "convention": None,
+        },
+        "folderAnalysis": {
+          "convention": None,
+        },
+        "folderWorkflowStep": {
+          "convention": None,
+        },
+        "fileNaming": None,
+        "fileVersioningDocs": None,
+      },
+      "objectStore": {
+        "convention": None,
+      },
+      "databaseSystem": {
+        "changeHandling": None,
+      },
+      "appSpecific": None,
+    },
+    "workflowDevelopment": {
+      "parametersBulk": None,
+      "workflowData": {
+        "access": None,
+        "security": {
+          "other": None,
+        },
+      },
+      "existingSoftware": [{
+        "software": None,
+        "origin": None,
+        "version": {
+          "rerun": None,
+        },
+        "experience": None,
+      }],
+      "newSoftware": [{
+        "software": None,
+        "repository": None,
+        "considerExisting": None,
+        "licence": {
+          "other": None,
+          "openSource": None,
+        },
+      }],
+      "workflowEngine": {
+        "automaticProvenance": {
+          "convert": None,
+          "annotate": None,
+        },
+        "highThroughput": None,
+        "considerEngineDevEase": {
+          "contactDevs": None,
+          "particularBackend": None,
+          "adminTools": None,
+        },
+        "considerWorkflowDevEase": {
+          "guiNeed": None,
+          "newToolsSupport": None,
+          "specificProcessing": None,
+          "complexControlStructures": None,
+          "specificDataTypes": None,
+          "nestedWorkflows": None,
+          "collaboration": None,
+        },
+        "considerUseEase": {
+          "whoRun": None,
+          "guiNeed": None,
+          "remoteNeed": None,
+        },
+        "durabilityImportant": {
+          "rerunNeed": None,
+          "versionsControl": None,
+          "exportImport": None,
+        },
+        "professionalHosting": None,
+        "workflowEngine": None,
+      },
+      "measuresForIntegrity": {
+        "onlyOpenSource": None,
+        "checkBySecondDev": None,
+        "handleUpgrades": None,
+        "testCorrectResults": None,
+        "toolsUnderCompleteControl": {
+          "dealDropSupport": None,
+        },
+      },
+      "fairWorkflows": None,
+    },
+    "ensureWhatProcessingRun": {
+      "keepScriptsWorkflowsDocs": None,
+      "metadata": None,
+      "centralRepositoryTools": None,
+      "centralRepositoryReferenceData": None,
+      "standardAutomaticWorkflows": None,
+      "allProMaintained": None,
+    },
+    "resultsIntegrityValidation": {
+      "acrossComputeInfrastructures": None,
+      "instrumentingPipelinesWorkflowsAutomatically": None,
+      "independentDuplicateToolsWorkflows": None,
+      "runPartsRepeatedly": None,
+    },
+    "planComputeCapacity": {
+      "knownCpuMemoryBandwidth": None,
+      "computeArchitecture": None,
+      "sufficientExperience": None,
+      "providerEstablished": None,
+      "computeCloseToStorage": {
+        "networkCapacityPlan": None,
+        "legalTransportProcessing": None,
+      },
+      "trivialParallelism": None,
+      "collabDifferentGroups": {
+        "networkCapacityToLocations": None,
+      },
+    },
+    "dataLossLeakVandalismRisks": {
+      "storeLabExternalHardDrives": None,
+      "membersCarryData": {
+        "encrypted": None,
+        "passwordProtected": None,
+      },
+      "dataInCloudAccounts": None,
+      "dataInEmailsMessages": None,
+      "certifiedDataCentres": None,
+      "httpsWebServices": None,
+      "membersInstructedAboutRisks": None,
+      "considerLossImpact": None,
+      "considerLeakImpact": None,
+      "considerVandalismImpact": None,
+      "personalDataProtection": {
+        "pseudonymization": {
+          "independentParty": None,
+          "other": None,
+        },
+      },
+    },
+    "hasContingencyPlan": None,
+  },
+  "interpretingData": {
+    "interpretationDataFormats": [{
+      "format": None,
+      "structure": {
+        "allDataToCouple": {
+          "thisIsTheWay": None,
+        },
+        "ownTools": None,
+        "columnHeaders": {
+          "unambiguous": None,
+          "dataTypes": None,
+          "allowedDataValues": None,
+        },
+        "clearRowRepresentation": None,
+        "everyRowIdentified": None,
+        "recogniseMissingValues": None,
+        "identifierRelationClear": None,
+        "explicitHeaderRelations": None,
+        "rdfGraph": {
+          "urisResolvable": None,
+        },
+        "other": None,
+      },
+    }],
+    "integratingDataTypes": {
+      "approach": {
+        "ldSources": None,
+        "semanticInteroperability": None,
+        "sameVocabularies": None,
+        "other": None,
+      },
+    },
+    "useOntologies": {
+      "ontologies": [{
+        "name": None,
+        "url": None,
+      }],
+    },
+    "statisticalNormalisationIssues": None,
+    "integratingDataSourcesMoreSamples": {
+      "identicalProtocols": None,
+    },
+    "integratingDataSourcesMoreInfo": {
+      "variablesSelected": None,
+      "preventBiasedSubset": None,
+      "reidentificationDanger": None,
+      "accurateOrComplete": None,
+    },
+    "toolsToCoupleTypes": None,
+    "federatedAnalysis": None,
+    "knowledgeDiscovery": None,
+  },
+  "preservingData": {
+    "producedDatasets": [{
+      "dataset": None,
+      "description": None,
+      "type": {
+        "publication": None,
+      },
+      "identifiers": [{
+        "type": None,
+        "identifier": None,
+      }],
+      "published": {
+        "reason": {
+          "other": None,
+        },
+        "distributions": [{
+          "repository": {
+            "repository": None,
+            "contactBefore": {
+              "other": None,
+            },
+            "longTermSupport": None,
+            "serviceLevel": None,
+            "systemAdmin": None,
+          },
+          "access": None,
+          "licenses": [{
+            "license": {
+              "conditions": None,
+              "licenseUrl": None,
+              "accessReusers": {
+                "other": None,
+              },
+              "inMetadata": None,
+            },
+            "startDate": None,
+          }],
+          "assignPid": {
+            "assigner": None,
+            "pidResolvable": None,
+          },
+        }],
+        "addingCatalogReference": None,
+        "differentVersions": {
+          "recognition": [],
+        },
+        "specificSoftwareNeeded": {
+          "reason": None,
+          "software": [{
+            "name": None,
+            "pid": None,
+            "docsInMetadata": {
+              "reason": None,
+            },
+            "included": None,
+          }],
+        },
+        "when": None,
+        "qualifiedReferences": {
+          "references": [{
+            "identifier": None,
+            "relationship": None,
+          }],
+        },
+      },
+      "retention": {
+        "period": None,
+      },
+      "persistentMetadata": None,
+      "containsPersonalData": None,
+      "containsSensitiveInformation": None,
+    }],
+    "coldStorageDuringProject": {
+      "canRegenerate": None,
+      "when": None,
+      "needsRearchival": {
+        "frequentBackups": None,
+        "recoverHumanError": None,
+      },
+      "archiveStorage": None,
+      "remoteLocation": None,
+      "needsProtection": {
+        "encryption": {
+          "keyAccessClear": None,
+        },
+        "physicalAccessClear": None,
+      },
+      "requiresOnline": {
+        "integrityGuaranteed": None,
+        "requestAccessProcess": None,
+      },
+      "establishedWhoAccess": {
+        "establishedRestoreRequests": None,
+        "canRestoreBigVolume": None,
+        "authorityArranged": None,
+      },
+      "establishedHowLong": None,
+      "longTermUnderstandable": None,
+    },
+    "coldStorageAfterProject": {
+      "paidBy": None,
+      "minimumLifetime": {
+        "years": None,
+        "description": None,
+      },
+      "canExtendPeriod": {
+        "reason": None,
+        "decisionPower": None,
+        "decisionBase": [],
+      },
+      "formatUpgrade": None,
+      "regularMigration": None,
+    },
+    "repositoryFees": {
+      "paying": {
+        "other": None,
+      },
+    },
+    "recurringFees": None,
+    "hasDataPublicationBudget": {
+      "budget": None,
+    },
+    "dataLinking": {
+      "other": None,
+    },
+    "createsReferenceData": {
+      "ownership": None,
+      "maintenance": None,
+      "releaseSchedule": None,
+      "standardLicense": {
+        "conditions": None,
+        "license": None,
+      },
+      "fromRepository": {
+        "where": None,
+        "repository": None,
+      },
+    },
+  },
+  "givingAccessToData": {
+    "asOpenAsPossible": None,
+    "accessViaFreeStandardisedProtocol": {
+      "reason": None,
+      "protocols": None,
+    },
+    "allOpenOverTime": {
+      "legalReasons": {
+        "privacyReasons": {
+          "storageRestrictions": None,
+          "pseudonymization": {
+            "trustedThirdParty": None,
+          },
+          "anonymisation": None,
+          "aggregation": None,
+          "procedure": None,
+        },
+        "ipReasons": {
+          "clearOwnership": None,
+          "powerToMove": None,
+        },
+        "authenticatedAccess": {
+          "storage": None,
+          "authentication": {
+            "other": None,
+          },
+          "authorisation": {
+            "committee": None,
+            "other": None,
+          },
+          "accessApplicationCriteria": None,
+          "auditReuse": None,
+        },
+      },
+      "businessReasons": {
+        "other": None,
+      },
+      "otherReasons": {
+        "other": None,
+      },
+    },
+    "useEmbargo": {
+      "period": None,
+    },
+    "openMetadata": {
+      "explanation": None,
+      "accessInstructions": None,
+      "harvestable": None,
+    },
+  },
+  "otherOutputs": {
+    "howOtherOutputs": None,
+    "hasOtherOutputs": {
+      "hasSoftwarePackages": {
+        "softwarePackages": [{
+          "name": None,
+          "openSource": {
+            "license": None,
+          },
+          "where": None,
+          "catalogue": None,
+        }],
+      },
+      "hasNonSoftwareOutputs": {
+        "outputs": [{
+          "output": None,
+          "howValuable": None,
+          "forWhom": None,
+          "available": {
+            "whyNot": None,
+            "where": None,
+          },
+        }],
+      },
+    },
+  },
+} -%}
